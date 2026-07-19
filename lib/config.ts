@@ -1,3 +1,4 @@
+import type { CSSProperties } from "react";
 import type { ActType, EntityType, EventType } from "./types";
 
 export const featuredLetterIds = [
@@ -36,3 +37,102 @@ export const actTypeMeta: Record<ActType, { label: string; definition: string }>
   INS: { label: "训导", definition: "提出教诲、规劝或学术指导。" },
   NEG: { label: "协商", definition: "讨论条件、安排与可协调事项。" },
 };
+
+type EntityAnnotationStyle = {
+  color: string;
+  hover: string;
+  selected: string;
+  fontWeight: CSSProperties["fontWeight"];
+  fontStyle: CSSProperties["fontStyle"];
+  decoration: CSSProperties["textDecorationLine"];
+  decorationStyle: CSSProperties["textDecorationStyle"];
+};
+
+type EventAnnotationStyle = {
+  accent: string;
+  background: string;
+  hover: string;
+  selected: string;
+  border: string;
+};
+
+type ActionAnnotationStyle = {
+  color: string;
+  border: string;
+  background: string;
+  hover: string;
+  selected: string;
+};
+
+/**
+ * The single visual source of truth for the three annotation layers.
+ * Both the directory legends and the letter text consume these tokens.
+ */
+export const annotationStyles: {
+  entity: Record<EntityType, EntityAnnotationStyle>;
+  event: Record<EventType, EventAnnotationStyle>;
+  action: Record<ActType, ActionAnnotationStyle>;
+} = {
+  entity: {
+    PER: { color: "#8b4c4c", hover: "#f2e8e5", selected: "#ead8d4", fontWeight: 600, fontStyle: "normal", decoration: "none", decorationStyle: "solid" },
+    LOC: { color: "#566b82", hover: "#e9eef1", selected: "#dce5e9", fontWeight: 400, fontStyle: "italic", decoration: "none", decorationStyle: "solid" },
+    BOK: { color: "#8a6b37", hover: "#f2ecde", selected: "#e9dfc9", fontWeight: 400, fontStyle: "normal", decoration: "underline", decorationStyle: "wavy" },
+    VER: { color: "#735f82", hover: "#eee9f1", selected: "#e3daea", fontWeight: 400, fontStyle: "normal", decoration: "underline", decorationStyle: "dashed" },
+    TIM: { color: "#86664d", hover: "#f1ebe4", selected: "#e7dcd1", fontWeight: 400, fontStyle: "italic", decoration: "none", decorationStyle: "solid" },
+    OFF: { color: "#5d6287", hover: "#eaebf1", selected: "#dddfea", fontWeight: 400, fontStyle: "normal", decoration: "none", decorationStyle: "solid" },
+    ORG: { color: "#4f7075", hover: "#e7eeee", selected: "#d9e5e5", fontWeight: 400, fontStyle: "normal", decoration: "none", decorationStyle: "solid" },
+    KIN: { color: "#966471", hover: "#f1e8ea", selected: "#e8d9dd", fontWeight: 400, fontStyle: "normal", decoration: "none", decorationStyle: "solid" },
+    AST: { color: "#477064", hover: "#e6eeea", selected: "#d6e4de", fontWeight: 400, fontStyle: "normal", decoration: "underline", decorationStyle: "solid" },
+  },
+  event: {
+    BIB: { accent: "#746d91", background: "#efedf4", hover: "#e7e4ef", selected: "#ddd9e9", border: "#d9d5e3" },
+    ACA: { accent: "#557985", background: "#eaf0f1", hover: "#e0eaec", selected: "#d4e2e5", border: "#cfdee1" },
+    SOC: { accent: "#956d71", background: "#f3eaea", hover: "#eddfdf", selected: "#e5d3d4", border: "#e3d5d5" },
+    POL: { accent: "#88764f", background: "#f1eee4", hover: "#eae5d6", selected: "#e1dac5", border: "#dfd9c9" },
+    FAM: { accent: "#687d70", background: "#eaf0eb", hover: "#e1e9e3", selected: "#d5e1d8", border: "#d3dfd6" },
+  },
+  action: {
+    REQ: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    DSP: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    INF: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    PRS: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    MNT: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    INS: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    NEG: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+  },
+};
+
+export function entityStyleVariables(type: EntityType): CSSProperties {
+  const style = annotationStyles.entity[type];
+  return {
+    "--annotation-color": style.color,
+    "--annotation-hover": style.hover,
+    "--annotation-selected": style.selected,
+    "--annotation-weight": style.fontWeight,
+    "--annotation-style": style.fontStyle,
+    "--annotation-decoration": style.decoration,
+    "--annotation-decoration-style": style.decorationStyle,
+  } as CSSProperties;
+}
+
+export function eventStyleVariables(type: EventType): CSSProperties {
+  const style = annotationStyles.event[type];
+  return {
+    "--annotation-accent": style.accent,
+    "--annotation-background": style.background,
+    "--annotation-hover": style.hover,
+    "--annotation-selected": style.selected,
+    "--annotation-border": style.border,
+  } as CSSProperties;
+}
+
+export function actionStyleVariables(type: ActType): CSSProperties {
+  const style = annotationStyles.action[type];
+  return {
+    "--annotation-color": style.color,
+    "--annotation-border": style.border,
+    "--annotation-background": style.background,
+    "--annotation-hover": style.hover,
+    "--annotation-selected": style.selected,
+  } as CSSProperties;
+}

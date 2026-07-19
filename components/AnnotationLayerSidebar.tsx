@@ -1,5 +1,12 @@
 import Link from "next/link";
-import { actTypeMeta, entityTypeMeta, eventTypeMeta } from "@/lib/config";
+import {
+  actionStyleVariables,
+  actTypeMeta,
+  entityStyleVariables,
+  entityTypeMeta,
+  eventStyleVariables,
+  eventTypeMeta,
+} from "@/lib/config";
 import { dataset } from "@/lib/data-adapter";
 import type { ActType, EntityType, EventType } from "@/lib/types";
 
@@ -20,9 +27,8 @@ function DirectoryContents() {
             const stats = dataset.entityStats[code];
             const meta = entityTypeMeta[code];
             return (
-              <Link className={`category-row entity-${code.toLowerCase()}`} href={`/category/entity/${code}`} key={code}>
-                <span className="category-swatch" aria-hidden="true" />
-                <span className="category-main"><strong>{meta.label}</strong><small>{code}</small></span>
+              <Link className="category-row entity-row" href={`/category/entity/${code}`} key={code}>
+                <span className="category-main entity-legend" style={entityStyleVariables(code)}><strong>{meta.label}</strong><small>{code}</small></span>
                 <span className="category-count">
                   {stats.canonicalCount
                     ? <>{stats.canonicalCount} 个规范实体 · {stats.mentionCount} 次出现</>
@@ -45,8 +51,7 @@ function DirectoryContents() {
             const stats = dataset.eventStats[code];
             return (
               <Link className="category-row event-row" href={`/category/event/${code}`} key={code}>
-                <span className="event-line" aria-hidden="true" />
-                <span className="category-main"><strong>{eventTypeMeta[code].label}</strong><small>{code}</small></span>
+                <span className="category-main event-legend" style={eventStyleVariables(code)}><strong>{eventTypeMeta[code].label}</strong><small>{code}</small></span>
                 <span className="category-count">{stats.eventCount} 个事件 · 涉及 {stats.letterCount} 封信</span>
                 <span className="category-arrow" aria-hidden="true">→</span>
               </Link>
@@ -63,8 +68,7 @@ function DirectoryContents() {
         <div className="category-list">
           {actOrder.map((code) => (
             <Link className="category-row act-row" href={`/category/act/${code}`} key={code}>
-              <span className="act-sample" aria-hidden="true">{code}</span>
-              <span className="category-main"><strong>{actTypeMeta[code].label}</strong><small>{code}</small></span>
+              <span className="category-main act-legend" style={actionStyleVariables(code)}><strong>{actTypeMeta[code].label}</strong><small>{code}</small></span>
               <span className="category-count">暂无段落标注数据</span>
               <span className="category-arrow" aria-hidden="true">→</span>
             </Link>

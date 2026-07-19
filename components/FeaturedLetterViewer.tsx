@@ -51,7 +51,7 @@ export function FeaturedLetterViewer() {
         <AnnotatedLetterText letter={letter} showEntity={layers.entity} showEvent={layers.event} showAct={layers.act} />
         <footer className="source-citation">
           <span>来源</span><p>{letter.source ?? "暂无来源字段"}</p>
-          <Link href={`/letter/${encodeURIComponent(letter.id)}`}>阅读本信详情 →</Link>
+          <Link className="letter-detail-link" href={`/letter/${encodeURIComponent(letter.id)}`}>查看完整书信信息 <i aria-hidden="true">→</i></Link>
         </footer>
       </article>
     </section>

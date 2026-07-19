@@ -76,6 +76,15 @@ export function getEntity(type: EntityType, canonical: string) {
   return dataset.entityCatalog.find((entry) => entry.type === type && entry.canonical === canonical) ?? null;
 }
 
+/** The catalog's stable composite key. Surface text is intentionally excluded. */
+export function getEntityKey(entity: Pick<EntityCatalogEntry, "type" | "canonical">) {
+  return `${entity.type}:${entity.canonical}`;
+}
+
+export function getEntityHref(entity: Pick<EntityCatalogEntry, "type" | "canonical">) {
+  return `/entity/${entity.type}/${encodeURIComponent(entity.canonical)}`;
+}
+
 export function getEntityOccurrences(entry: EntityCatalogEntry) {
   return entry.letterIds.flatMap((letterId) => {
     const letter = getLetter(letterId);
