@@ -9,6 +9,7 @@ import type {
   EventType,
   Letter,
   SearchResult,
+  SearchScope,
   TopicSummary,
 } from "./types";
 
@@ -57,31 +58,44 @@ export function getLetterExcerpt(letter: Letter, length = 116) {
 }
 
 export function formatLetterDate(letter: Letter) {
+  if (letter.dateLabel) return letter.dateLabel;
   const parts = [letter.year ? `${letter.year}年` : "公历时间暂无数据", letter.ganzhiDate].filter(Boolean);
   return parts.join(" · ");
 }
 
-export function searchLetters(rawQuery: string, limit = 30): SearchResult[] {
+export const searchScopeLabels: Record<SearchScope, string> = {
+  fulltext: "全文",
+  recipient: "收信人",
+  source: "来源",
+};
+
+export function searchLetters(rawQuery: string, scope: SearchScope = "fulltext", limit = 30): SearchResult[] {
   const query = rawQuery.trim().toLocaleLowerCase("zh-CN");
   if (!query) return [];
   const results: SearchResult[] = [];
   for (const letter of dataset.letters) {
-    const searchable = [letter.id, letter.number, letter.year ?? "", letter.recipient, letter.ganzhiDate ?? "", letter.text].join("\n");
-    if (!searchable.toLocaleLowerCase("zh-CN").includes(query)) continue;
-    const textLower = letter.text.toLocaleLowerCase("zh-CN");
-    const rawIndex = textLower.indexOf(query);
-    const index = rawIndex >= 0 ? rawIndex : 0;
-    const start = Math.max(0, index - 34);
-    const end = Math.min(letter.text.length, index + Math.max(query.length, 1) + 56);
+    const field = scope === "recipient" ? letter.recipient : scope === "source" ? letter.source ?? "" : letter.text;
+    const rawIndex = field.toLocaleLowerCase("zh-CN").indexOf(query);
+    if (rawIndex < 0) continue;
+    const start = scope === "fulltext" ? Math.max(0, rawIndex - 34) : 0;
+    const end = scope === "fulltext" ? Math.min(field.length, rawIndex + Math.max(query.length, 1) + 56) : field.length;
     results.push({
-      letter,
-      snippet: `${start > 0 ? "……" : ""}${letter.text.slice(start, end)}${end < letter.text.length ? "……" : ""}`,
-      matchStart: rawIndex >= 0 ? index - start + (start > 0 ? 2 : 0) : -1,
-      matchLength: rawIndex >= 0 ? query.length : 0,
+      letter: normalizeLetter(letter),
+      snippet: `${start > 0 ? "……" : ""}${field.slice(start, end)}${end < field.length ? "……" : ""}`,
+      matchStart: scope === "fulltext" ? rawIndex : rawIndex,
+      snippetMatchStart: rawIndex - start + (start > 0 ? 2 : 0),
+      matchLength: rawQuery.trim().length,
+      matchField: scope,
     });
     if (results.length >= limit) break;
   }
   return results;
+}
+
+export function getSearchResultHref(result: SearchResult, query: string) {
+  const params = new URLSearchParams({ q: query, scope: result.matchField });
+  if (result.matchField === "fulltext") params.set("at", String(result.matchStart));
+  return `/letter/${encodeURIComponent(result.letter.id)}?${params.toString()}`;
 }
 
 export function getEntityCategory(type: EntityType): EntityCatalogEntry[] {

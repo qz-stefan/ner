@@ -8,9 +8,14 @@ export interface Letter {
   year: string | null;
   recipient: string;
   text: string;
+  dateLabel: string | null;
   ganzhiDate: string | null;
   source: string | null;
+  summary: string | null;
 }
+
+export type SearchScope = "fulltext" | "recipient" | "source";
+export type SearchMatchField = "fulltext" | "recipient" | "source";
 
 export interface EntityMention {
   type: EntityType;
@@ -61,7 +66,9 @@ export interface SearchResult {
   letter: Letter;
   snippet: string;
   matchStart: number;
+  snippetMatchStart: number;
   matchLength: number;
+  matchField: SearchMatchField;
 }
 
 export interface TopicDefinition {

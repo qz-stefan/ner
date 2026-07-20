@@ -10,12 +10,21 @@ const personRoot = path.join(
 );
 const placeRoot = path.join(sourceRoot, "NER/NER_first/LOC/letters 地名");
 const eventRoot = path.join(sourceRoot, "NER/NER_second/evt8 2");
+const structuredLettersPath = path.join(sourceRoot, "ye_project/data/letters.json");
+const theoryPath = path.join(
+  sourceRoot,
+  "yedehui_theory/yedehui_副本/理论/叶德辉书信交际意图标注_理论与方法.md",
+);
 const outputPath = path.join(projectRoot, "data/generated.json");
+const projectContentPath = path.join(projectRoot, "data/project-content.json");
 const standardEntityRoots = {
   OFF: path.join(sourceRoot, "NER/NER_first/OFF"),
   AST: path.join(sourceRoot, "NER/NER_first/AST"),
   TIM: path.join(sourceRoot, "NER/NER_first/TIM"),
   KIN: path.join(sourceRoot, "NER/NER_first/KIN"),
+  BOK: path.join(sourceRoot, "NER/NER_first/BOK"),
+  VER: path.join(sourceRoot, "NER/NER_first/VER"),
+  ORG: path.join(sourceRoot, "NER/NER_first/ORG"),
 };
 
 const readText = (filePath) => fs.readFileSync(filePath, "utf8").trim();
@@ -44,14 +53,25 @@ const extractGanzhiDate = (text) => {
   return matches.at(-1)?.[1] ?? null;
 };
 
+const structuredLetters = fs.existsSync(structuredLettersPath)
+  ? JSON.parse(fs.readFileSync(structuredLettersPath, "utf8"))
+  : [];
+const structuredLetterByNumber = new Map(
+  structuredLetters.map((letter) => [String(letter.id).padStart(3, "0"), letter]),
+);
+
 const letters = letterFiles.map((filename) => {
   const metadata = parseFilename(filename);
   const text = readText(path.join(lettersRoot, filename));
+  const structured = structuredLetterByNumber.get(metadata.number);
   return {
     ...metadata,
+    recipient: structured?.recipient || metadata.recipient,
     text,
+    dateLabel: structured?.date || null,
     ganzhiDate: extractGanzhiDate(text),
-    source: null,
+    source: structured?.source || structured?.sourse || structured?.sourece || null,
+    summary: structured?.notes || null,
   };
 });
 
@@ -229,7 +249,41 @@ const output = {
 
 fs.mkdirSync(path.dirname(outputPath), { recursive: true });
 fs.writeFileSync(outputPath, `${JSON.stringify(output)}\n`);
+
+const extractBetween = (text, start, end) => {
+  const startIndex = text.indexOf(start);
+  if (startIndex < 0) return "";
+  const contentStart = startIndex + start.length;
+  const endIndex = end ? text.indexOf(end, contentStart) : text.length;
+  return text.slice(contentStart, endIndex < 0 ? text.length : endIndex);
+};
+
+const cleanMarkdown = (text) => text
+  .replace(/^```[^\n]*\n?/gm, "")
+  .replace(/^#{1,6}\s+/gm, "")
+  .replace(/^>\s?/gm, "")
+  .replace(/^\s*\|?(?:\s*:?-+:?\s*\|)+\s*$/gm, "")
+  .replace(/^\|(.+)\|\s*$/gm, (_, cells) => cells.split("|").map((cell) => cell.trim()).join(" ｜ "))
+  .replace(/\*\*([^*]+)\*\*/g, "$1")
+  .replace(/`([^`]+)`/g, "$1")
+  .replace(/^---+\s*$/gm, "")
+  .replace(/\n{3,}/g, "\n\n")
+  .trim();
+
+if (fs.existsSync(theoryPath)) {
+  const theory = fs.readFileSync(theoryPath, "utf8");
+  const projectContent = {
+    introduction: cleanMarkdown(extractBetween(theory, "## 一、我们在做什么", "## 二、理论框架")),
+    background: cleanMarkdown(extractBetween(theory, "### 2.1 为什么这个项目在理论上是成立的", "### 2.2 理论来源与分工")),
+    sources: cleanMarkdown(extractBetween(theory, "### 2.2 理论来源与分工", "### 2.3 理论架构图")),
+    entityStandards: cleanMarkdown(extractBetween(theory, "### 3.1 第一层：实体层（NER）", "### 3.2 第二层：事件层（EVT）")),
+    annotationLayers: cleanMarkdown(extractBetween(theory, "### 3.2 第二层：事件层（EVT）", "## 五、标注流程")),
+    usage: cleanMarkdown(extractBetween(theory, "## 五、标注流程", "## 六、研究产出")),
+  };
+  fs.writeFileSync(projectContentPath, `${JSON.stringify(projectContent, null, 2)}\n`);
+}
 console.log(`Generated ${outputPath}`);
+console.log(`Generated ${projectContentPath}`);
 console.log(
   JSON.stringify(
     {

@@ -23,7 +23,7 @@ export function TopicDetailPage({ slug }: { slug: string }) {
 
   return (
     <main className="topic-detail-page site-container">
-      <Link className="back-link" href="/topics">← 返回实体专题检索</Link>
+      <Link className="back-link" href="/topics">← 返回实体分类检索</Link>
       <header className="topic-detail-heading">
         <div><span>{topic.englishLabel} · ENTITY TOPIC</span><h1>{topic.name}专题</h1><p>{topic.description}</p></div>
         <dl><div><dt>{topic.entityCount ?? "—"}</dt><dd>{topic.kind === "event" ? "事件类型" : "规范实体"}</dd></div><div><dt>{topic.mentionCount ?? "—"}</dt><dd>{topic.kind === "event" ? "标注事件" : "出现次数"}</dd></div><div><dt>{topic.letterCount ?? "—"}</dt><dd>相关书信</dd></div></dl>

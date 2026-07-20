@@ -12,7 +12,7 @@ const sections = [
 export function AboutProjectPage() {
   return (
     <main className="about-page site-container">
-      <header className="about-heading"><span>ABOUT THE PROJECT</span><h1>关于项目</h1><p>本页内容将由项目资料文件统一读取。</p></header>
+      <header className="about-heading"><span>ABOUT THE PROJECT</span><h1>项目介绍</h1><p>以下内容由项目文件夹中的《叶德辉书信交际意图标注：理论与方法》整理生成，保留研究者提供的理论、分类与流程说明。</p></header>
       <div className="about-sections">
         {sections.map((section, index) => {
           const content = projectContent[section.key];

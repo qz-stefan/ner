@@ -31,13 +31,13 @@ export function FeaturedLetterViewer() {
       <div className="annotation-controls" aria-label="标注显示控制">
         <span>标注显示</span>
         <button type="button" aria-pressed={layers.entity} className={layers.entity ? "selected" : ""} onClick={() => toggleLayer("entity")}>
-          <i className="control-dot entity-dot" /> 实体层 {layers.entity ? "✓" : ""}
+          <i className="control-dot entity-dot" /> 第一层标注 {layers.entity ? "✓" : ""}
         </button>
         <button type="button" aria-pressed={layers.event} className={layers.event ? "selected" : ""} onClick={() => toggleLayer("event")}>
-          <i className="control-dot event-dot" /> 事件层 {layers.event ? "✓" : ""}
+          <i className="control-dot event-dot" /> 第二层标注 {layers.event ? "✓" : ""}
         </button>
         <button type="button" aria-pressed={layers.act} className={layers.act ? "selected" : ""} onClick={() => toggleLayer("act")} title="现有语料暂缺行动层标注数据">
-          <i className="control-dot act-dot" /> 行动层 {layers.act ? "✓" : ""}
+          <i className="control-dot act-dot" /> 第三层标注 {layers.act ? "✓" : ""}
         </button>
         <button className="hide-all" type="button" onClick={() => setLayers({ entity: false, event: false, act: false })}>隐藏全部标注</button>
       </div>

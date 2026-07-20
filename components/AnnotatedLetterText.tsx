@@ -14,9 +14,10 @@ interface Props {
   showAct: boolean;
   rangeStart?: number;
   rangeEnd?: number;
+  searchMatch?: { start: number; length: number } | null;
 }
 
-export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, rangeStart = 0, rangeEnd = letter.text.length }: Props) {
+export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, rangeStart = 0, rangeEnd = letter.text.length, searchMatch = null }: Props) {
   const [finePointer, setFinePointer] = useState(false);
   const [preview, setPreview] = useState<{ entity: EntityMention; anchor: HTMLElement; id: string } | null>(null);
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -96,6 +97,19 @@ export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, ra
     rememberReturnPosition();
   }
 
+  function renderTextSlice(from: number, to: number): ReactNode[] {
+    if (!searchMatch || searchMatch.start < 0 || searchMatch.length <= 0) return [letter.text.slice(from, to)];
+    const matchEnd = searchMatch.start + searchMatch.length;
+    if (matchEnd <= from || searchMatch.start >= to) return [letter.text.slice(from, to)];
+    const visibleStart = Math.max(from, searchMatch.start);
+    const visibleEnd = Math.min(to, matchEnd);
+    const nodes: ReactNode[] = [];
+    if (visibleStart > from) nodes.push(letter.text.slice(from, visibleStart));
+    nodes.push(<mark id={visibleStart === searchMatch.start ? "search-match" : undefined} className="search-match" key={`match-${visibleStart}`}>{letter.text.slice(visibleStart, visibleEnd)}</mark>);
+    if (visibleEnd < to) nodes.push(letter.text.slice(visibleEnd, to));
+    return nodes;
+  }
+
   function renderEntities(from: number, to: number): ReactNode[] {
     const nodes: ReactNode[] = [];
     let cursor = from;
@@ -104,7 +118,7 @@ export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, ra
       .sort((a, b) => a.start - b.start || b.end - a.end);
     mentions.forEach((mention, index) => {
       if (mention.start < cursor) return;
-      if (mention.start > cursor) nodes.push(letter.text.slice(cursor, mention.start));
+      if (mention.start > cursor) nodes.push(...renderTextSlice(cursor, mention.start));
       const anchorId = `entity-${letter.id}-${mention.start}`.replace(/[^\w-]/g, "-");
       nodes.push(
         <Link
@@ -122,13 +136,13 @@ export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, ra
           onBlur={finePointer ? scheduleClose : undefined}
           onClick={(event) => handleEntityClick(event, mention)}
         >
-          {letter.text.slice(mention.start, mention.end)}
+          {renderTextSlice(mention.start, mention.end)}
           <span className="sr-only">，规范实体{mention.canonical}</span>
         </Link>,
       );
       cursor = mention.end;
     });
-    if (cursor < to) nodes.push(letter.text.slice(cursor, to));
+    if (cursor < to) nodes.push(...renderTextSlice(cursor, to));
     return nodes;
   }
 

@@ -10,16 +10,16 @@ import {
 import { dataset } from "@/lib/data-adapter";
 import type { ActType, EntityType, EventType } from "@/lib/types";
 
-const entityOrder: EntityType[] = ["PER", "LOC", "BOK", "VER", "TIM", "OFF", "ORG", "KIN", "AST"];
-const eventOrder: EventType[] = ["BIB", "ACA", "SOC", "POL", "FAM"];
-const actOrder: ActType[] = ["REQ", "DSP", "INF", "PRS", "MNT", "INS", "NEG"];
+const entityOrder = Object.keys(dataset.entityStats) as EntityType[];
+const eventOrder = Object.keys(dataset.eventStats) as EventType[];
+const actOrder = Object.keys(dataset.actStats) as ActType[];
 
 function DirectoryContents() {
   return (
     <div className="directory-contents">
       <details className="layer-section layer-entity" open>
         <summary>
-          <span><b>01</b><strong>实体层 <em>NER</em></strong><small>信里提到了谁、哪里、什么书？</small></span>
+          <span><b>01</b><strong>第一层标注 <em>NER</em></strong><small>实体层：信里提到了谁、哪里、什么书？</small></span>
           <i aria-hidden="true">＋</i>
         </summary>
         <div className="category-list">
@@ -43,7 +43,7 @@ function DirectoryContents() {
 
       <details className="layer-section layer-event">
         <summary>
-          <span><b>02</b><strong>事件层 <em>EVT</em></strong><small>信里发生了什么？</small></span>
+          <span><b>02</b><strong>第二层标注 <em>EVT</em></strong><small>事件层：信里发生了什么？</small></span>
           <i aria-hidden="true">＋</i>
         </summary>
         <div className="category-list">
@@ -62,7 +62,7 @@ function DirectoryContents() {
 
       <details className="layer-section layer-act">
         <summary>
-          <span><b>03</b><strong>行动层 <em>ACT</em></strong><small>这一段为什么写？</small></span>
+          <span><b>03</b><strong>第三层标注 <em>ACT</em></strong><small>行动层：这一段为什么写？</small></span>
           <i aria-hidden="true">＋</i>
         </summary>
         <div className="category-list">
