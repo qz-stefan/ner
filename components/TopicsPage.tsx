@@ -20,24 +20,8 @@ export function TopicsPage() {
       <header className="topics-heading">
         <span>ANNOTATION CLASSIFICATION</span>
         <h1>实体分类检索</h1>
-        <p>依照项目真实标注数据，将第一层实体、第二层事件与第三层行动分开呈现。先由图例认识第一层类别，再进入各层专题查看条目、出现次数与相关书信。</p>
+        <p>依照项目真实标注数据，将第一层实体、第二层事件与第三层行动分开呈现，可进入各层专题查看条目、出现次数与相关书信。</p>
       </header>
-
-      <section className="classification-legend" aria-labelledby="classification-legend-title">
-        <div className="classification-legend-heading">
-          <span>LEGEND · 第一层</span>
-          <h2 id="classification-legend-title">实体分类图例</h2>
-          <p>颜色与字形同首页原文标注一致；点击图例可直接进入对应专题。</p>
-        </div>
-        <div className="classification-legend-list">
-          {entityCodes.map((code) => (
-            <Link href={`/category/entity/${code}`} className="classification-legend-item" key={code}>
-              <span className="entity-legend" style={entityStyleVariables(code)}><strong>{entityTypeMeta[code].label}</strong><small>{code}</small></span>
-              <span>{dataset.entityStats[code].mentionCount.toLocaleString("zh-CN")} 次</span>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       <div className="classification-layers">
         <section className="classification-layer" aria-labelledby="first-layer-title">

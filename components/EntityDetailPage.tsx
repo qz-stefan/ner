@@ -5,6 +5,7 @@ import { useState } from "react";
 import { entityTypeMeta, eventTypeMeta } from "@/lib/config";
 import { formatLetterDate, getEntity, getEntityOccurrences, getRelatedEntities, getRelatedEvents } from "@/lib/data-adapter";
 import type { EntityType } from "@/lib/types";
+import { TopicHero } from "@/components/TopicHero";
 
 export function EntityDetailPage({ type, name }: { type: EntityType; name: string }) {
   const entry = getEntity(type, name);
@@ -17,10 +18,15 @@ export function EntityDetailPage({ type, name }: { type: EntityType; name: strin
   return (
     <main className="entity-detail-page site-container">
       <Link className="back-link" href={`/category/entity/${type}`}>← 返回{entityTypeMeta[type].label}索引</Link>
-      <header className="detail-hero">
-        <div><span>{entityTypeMeta[type].label} · {type}</span><h1>{entry.canonical}</h1><p>{entityTypeMeta[type].prompt}。当前页面仅呈现语料中可验证的规范名、异名与共现记录。</p></div>
-        <dl><div><dt>{entry.count}</dt><dd>全库出现次数</dd></div><div><dt>{entry.letterIds.length}</dt><dd>涉及书信</dd></div></dl>
-      </header>
+      <TopicHero
+        eyebrow={`${entityTypeMeta[type].label} · ${type}`}
+        title={entry.canonical}
+        description={`${entityTypeMeta[type].prompt}。当前页面仅呈现语料中可验证的规范名、异名与共现记录。`}
+        metrics={[
+          { value: entry.count.toLocaleString("zh-CN"), label: "次出现" },
+          { value: entry.letterIds.length.toLocaleString("zh-CN"), label: "封书信" },
+        ]}
+      />
       <section className="entity-facts">
         <div><span>标准名称</span><p>{entry.canonical}</p></div>
         <div><span>异名或简称</span><p>{entry.aliases.length ? entry.aliases.join("、") : "暂无数据"}</p></div>

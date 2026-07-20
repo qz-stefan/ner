@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useMemo, useState } from "react";
 import { eventTypeMeta } from "@/lib/config";
 import { formatLetterDate, getAllEvents, getEntityCategory, getTopicBySlug } from "@/lib/data-adapter";
+import { TopicHero } from "@/components/TopicHero";
 
 export function TopicDetailPage({ slug }: { slug: string }) {
   const topic = getTopicBySlug(slug);
@@ -24,10 +25,16 @@ export function TopicDetailPage({ slug }: { slug: string }) {
   return (
     <main className="topic-detail-page site-container">
       <Link className="back-link" href="/topics">← 返回实体分类检索</Link>
-      <header className="topic-detail-heading">
-        <div><span>{topic.englishLabel} · ENTITY TOPIC</span><h1>{topic.name}专题</h1><p>{topic.description}</p></div>
-        <dl><div><dt>{topic.entityCount ?? "—"}</dt><dd>{topic.kind === "event" ? "事件类型" : "规范实体"}</dd></div><div><dt>{topic.mentionCount ?? "—"}</dt><dd>{topic.kind === "event" ? "标注事件" : "出现次数"}</dd></div><div><dt>{topic.letterCount ?? "—"}</dt><dd>相关书信</dd></div></dl>
-      </header>
+      <TopicHero
+        eyebrow={`${topic.englishLabel} · ENTITY TOPIC`}
+        title={`${topic.name}专题`}
+        description={topic.description}
+        metrics={[
+          { value: topic.entityCount ?? "—", label: topic.kind === "event" ? "种事件类型" : "个规范实体" },
+          { value: topic.mentionCount ?? "—", label: topic.kind === "event" ? "个标注事件" : "次出现" },
+          { value: topic.letterCount ?? "—", label: "封相关书信" },
+        ]}
+      />
       <label className="topic-search"><span>专题内检索</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`搜索${topic.name}……`} /></label>
 
       {topic.kind === "entity" ? (
