@@ -1,5 +1,5 @@
 import type { CSSProperties } from "react";
-import type { ActType, EntityType, EventType } from "./types";
+import type { ActType, EntityType, EventType, TopicDefinition } from "./types";
 
 export const featuredLetterIds = [
   "171_1913_缪荃孙",
@@ -19,6 +19,23 @@ export const entityTypeMeta: Record<EntityType, { label: string; prompt: string 
   KIN: { label: "亲属", prompt: "亲属关系与亲属称谓" },
   AST: { label: "星命", prompt: "星命与术数相关表达" },
 };
+
+/**
+ * 实体专题总入口的唯一配置源。后续新增专题时，只需在这里补充定义，
+ * 总入口和专题路由会自动读取同一份配置。
+ */
+export const topicDefinitions: TopicDefinition[] = [
+  { id: "person", name: "人物", slug: "people", englishLabel: "PER", kind: "entity", entityCode: "PER", description: entityTypeMeta.PER.prompt },
+  { id: "place", name: "地点", slug: "places", englishLabel: "LOC", kind: "entity", entityCode: "LOC", description: entityTypeMeta.LOC.prompt },
+  { id: "organization", name: "机构", slug: "organizations", englishLabel: "ORG", kind: "entity", entityCode: "ORG", description: entityTypeMeta.ORG.prompt },
+  { id: "time", name: "时间", slug: "times", englishLabel: "TIM", kind: "entity", entityCode: "TIM", description: entityTypeMeta.TIM.prompt },
+  { id: "office", name: "官职", slug: "offices", englishLabel: "OFF", kind: "entity", entityCode: "OFF", description: entityTypeMeta.OFF.prompt },
+  { id: "book", name: "书籍", slug: "books", englishLabel: "BOK", kind: "entity", entityCode: "BOK", description: entityTypeMeta.BOK.prompt },
+  { id: "edition", name: "版本", slug: "editions", englishLabel: "VER", kind: "entity", entityCode: "VER", description: entityTypeMeta.VER.prompt },
+  { id: "event", name: "事件", slug: "events", englishLabel: "EVT", kind: "event", description: "书信中标注的文献、学术、交往、时局与家族事件" },
+  { id: "astrology", name: "星命", slug: "astrology", englishLabel: "AST", kind: "entity", entityCode: "AST", description: entityTypeMeta.AST.prompt },
+  { id: "kinship", name: "亲属", slug: "kinship", englishLabel: "KIN", kind: "entity", entityCode: "KIN", description: entityTypeMeta.KIN.prompt },
+];
 
 export const eventTypeMeta: Record<EventType, { label: string; definition: string }> = {
   BIB: { label: "文献活动", definition: "购书、借书、索取拓片、刻印、版本评价、著书计划与撰书进展。" },

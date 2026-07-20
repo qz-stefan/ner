@@ -16,7 +16,7 @@ export function LetterDetailPage({ id }: { id: string }) {
 
   return (
     <main className="letter-detail-page site-container">
-      <Link className="back-link" href="/">← 返回实体标注主页</Link>
+      <Link className="back-link" href="/letters">← 返回全部书信</Link>
       <header className="letter-detail-heading"><span>LETTER {letter.number}</span><h1>致{letter.recipient}</h1><time>{formatLetterDate(letter)}</time></header>
       <div className="detail-controls">
         <button type="button" className={showTranslation ? "selected" : ""} aria-pressed={showTranslation} onClick={() => setShowTranslation(!showTranslation)}>显示白话文翻译 {showTranslation ? "✓" : ""}</button>

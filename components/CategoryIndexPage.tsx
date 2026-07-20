@@ -38,7 +38,7 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
     return queryMatch && facetMatch;
   });
 
-  if (!meta) return <div className="page-state">未找到这个专项索引。</div>;
+  if (!meta) return <div className="page-state">未找到对应的实体专题。</div>;
 
   const layerLabel = layer === "entity" ? "实体层 NER" : layer === "event" ? "事件层 EVT" : "行动层 ACT";
   const totalLabel = layer === "entity"
@@ -50,14 +50,14 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
 
   return (
     <main className="index-page site-container">
-      <Link className="back-link" href="/">← 返回实体标注主页</Link>
+      <Link className="back-link" href="/topics">← 返回实体专题检索</Link>
       <header className="index-hero">
-        <div><span>{layerLabel} · {code}</span><h1>{meta.label}索引</h1><p>{"prompt" in meta ? meta.prompt : meta.definition}</p></div>
+        <div><span>{layerLabel} · {code}</span><h1>{meta.label}专题</h1><p>{"prompt" in meta ? meta.prompt : meta.definition}</p></div>
         <dl><div><dt>{totalLabel}</dt><dd>全库标注规模</dd></div><div><dt>{letterLabel}</dt><dd>涉及书信</dd></div></dl>
       </header>
 
-      <section className="index-tools" aria-label="专项索引工具">
-        <label><span>专项内部检索</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`搜索${meta.label}……`} /></label>
+      <section className="index-tools" aria-label="专题检索工具">
+        <label><span>专题内部检索</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`搜索${meta.label}……`} /></label>
         <div className="facet-row" aria-label="子类别">
           {facets.map((facet) => <button type="button" className={activeFacet === facet ? "selected" : ""} onClick={() => setActiveFacet(facet)} key={facet}>{facet}</button>)}
         </div>

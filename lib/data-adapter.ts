@@ -1,5 +1,5 @@
 import rawDataset from "@/data/generated.json";
-import { actTypeMeta, entityTypeMeta, eventTypeMeta, featuredLetterIds } from "./config";
+import { actTypeMeta, entityTypeMeta, eventTypeMeta, featuredLetterIds, topicDefinitions } from "./config";
 import type {
   ActType,
   Dataset,
@@ -9,6 +9,7 @@ import type {
   EventType,
   Letter,
   SearchResult,
+  TopicSummary,
 } from "./types";
 
 export const dataset = rawDataset as unknown as Dataset;
@@ -38,6 +39,21 @@ export function getLetter(id: string) {
 
 export function getFeaturedLetters() {
   return featuredLetterIds.map(getLetter).filter((letter): letter is Letter => Boolean(letter));
+}
+
+export function getAllLetters() {
+  return dataset.letters.map(normalizeLetter).sort((a, b) => a.number.localeCompare(b.number, "zh-CN"));
+}
+
+export function getLetterEntitySummary(letterId: string) {
+  const mentions = normalizeEntityAnnotation(letterId);
+  const types = [...new Set(mentions.map((mention) => mention.type))];
+  return { count: mentions.length, types };
+}
+
+export function getLetterExcerpt(letter: Letter, length = 116) {
+  const text = normalizeLetter(letter).text.replace(/\s+/g, " ");
+  return `${text.slice(0, length)}${text.length > length ? "……" : ""}`;
 }
 
 export function formatLetterDate(letter: Letter) {
@@ -102,6 +118,42 @@ export function getEventsByType(type: EventType) {
     if (!letter) return [];
     return events.filter((event) => event.type === type).map((event) => ({ letter, event }));
   });
+}
+
+export function getAllEvents() {
+  return Object.entries(dataset.eventsByLetter).flatMap(([letterId, events]) => {
+    const letter = getLetter(letterId);
+    return letter ? events.map((event) => ({ letter, event })) : [];
+  });
+}
+
+export function getTopicSummaries(): TopicSummary[] {
+  const allEvents = getAllEvents();
+  const eventLetters = new Set(allEvents.map(({ letter }) => letter.id)).size;
+  return topicDefinitions.map((topic) => {
+    if (topic.kind === "event") {
+      return {
+        ...topic,
+        entityCount: Object.keys(eventTypeMeta).length,
+        mentionCount: allEvents.length,
+        letterCount: eventLetters,
+        status: allEvents.length ? "available" : "organizing",
+      };
+    }
+    const stats = topic.entityCode ? dataset.entityStats[topic.entityCode] : null;
+    const available = Boolean(stats?.canonicalCount || stats?.mentionCount);
+    return {
+      ...topic,
+      entityCount: stats?.canonicalCount ?? 0,
+      mentionCount: stats?.mentionCount ?? 0,
+      letterCount: stats?.letterCount ?? 0,
+      status: available ? "available" : "organizing",
+    };
+  });
+}
+
+export function getTopicBySlug(slug: string) {
+  return getTopicSummaries().find((topic) => topic.slug === slug) ?? null;
 }
 
 export function getRelatedEntities(entry: EntityCatalogEntry, limit = 12) {

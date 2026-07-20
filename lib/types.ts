@@ -63,3 +63,20 @@ export interface SearchResult {
   matchStart: number;
   matchLength: number;
 }
+
+export interface TopicDefinition {
+  id: string;
+  name: string;
+  slug: string;
+  englishLabel: string;
+  kind: "entity" | "event";
+  entityCode?: EntityType;
+  description: string;
+}
+
+export interface TopicSummary extends TopicDefinition {
+  entityCount: number | null;
+  mentionCount: number | null;
+  letterCount: number | null;
+  status: "available" | "organizing";
+}

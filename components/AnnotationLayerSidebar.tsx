@@ -75,7 +75,7 @@ function DirectoryContents() {
           ))}
         </div>
       </details>
-      <p className="directory-note">目录项目均为专项索引入口，同时对应正文中的标注图例；不会筛选右侧书信。</p>
+      <p className="directory-note">目录项目均为专题入口，同时对应正文中的标注图例；不会筛选右侧书信。</p>
     </div>
   );
 }
@@ -88,7 +88,7 @@ export function AnnotationLayerSidebar() {
         <DirectoryContents />
       </aside>
       <details className="mobile-directory">
-        <summary><span>三层标注体系目录</span><small>展开浏览专项索引</small><b aria-hidden="true">＋</b></summary>
+        <summary><span>三层标注体系目录</span><small>展开浏览专题入口</small><b aria-hidden="true">＋</b></summary>
         <DirectoryContents />
       </details>
     </>

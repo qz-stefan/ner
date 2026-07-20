@@ -1,6 +1,19 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const navigation = [
+  { href: "/", label: "首页", matches: (path: string) => path === "/" },
+  { href: "/letters", label: "书信", matches: (path: string) => path.startsWith("/letters") || path.startsWith("/letter/") },
+  { href: "/annotation", label: "实体标注", matches: (path: string) => path.startsWith("/annotation") },
+  { href: "/topics", label: "实体专题检索", matches: (path: string) => path.startsWith("/topics") || path.startsWith("/category/") || path.startsWith("/entity/") },
+  { href: "/about", label: "关于项目", matches: (path: string) => path.startsWith("/about") },
+] as const;
 
 export function SiteHeader() {
+  const pathname = usePathname();
+
   return (
     <header className="site-header">
       <div className="header-inner">
@@ -12,11 +25,10 @@ export function SiteHeader() {
           </span>
         </Link>
         <nav aria-label="主导航">
-          <Link href="/">首页</Link>
-          <Link href="/">书信</Link>
-          <Link className="active" href="/" aria-current="page">实体标注</Link>
-          <Link href="/category/entity/PER">专题索引</Link>
-          <Link href="/#about">关于项目</Link>
+          {navigation.map((item) => {
+            const active = item.matches(pathname);
+            return <Link className={active ? "active" : undefined} href={item.href} aria-current={active ? "page" : undefined} key={item.href}>{item.label}</Link>;
+          })}
         </nav>
         <span className="header-mark">书札中的<br />学术与交游</span>
       </div>
