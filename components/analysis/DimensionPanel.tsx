@@ -617,7 +617,7 @@ export function DimensionPanel({
             disabled={!selectableAxisKeys.length || !config.rowKey || Boolean(chartReason)}
             className="h-11 w-full bg-[var(--purple)] px-7 text-[12px] font-medium text-white transition hover:bg-[var(--purple-deep)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] disabled:cursor-not-allowed disabled:bg-[#b7b1bd] disabled:text-white sm:w-auto"
           >
-            开始分析
+            <span className="text-white">开始分析</span>
           </button>
         </div>
       </div>
