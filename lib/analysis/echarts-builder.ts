@@ -5,7 +5,6 @@ import {
   GridComponent,
   LegendComponent,
   TitleComponent,
-  ToolboxComponent,
   TooltipComponent,
   VisualMapComponent,
 } from "echarts/components";
@@ -25,7 +24,6 @@ echarts.use([
   TooltipComponent,
   LegendComponent,
   GridComponent,
-  ToolboxComponent,
   DataZoomComponent,
   VisualMapComponent,
   TitleComponent,
@@ -51,31 +49,41 @@ function flatLabels(headers: PivotResult["rowHeaders"]): string[] {
   );
 }
 
-function commonToolbox() {
-  return {
-    right: 8,
-    feature: {
-      saveAsImage: {
-        title: "保存图片",
-        name: "叶德辉书信维度分析",
-        pixelRatio: 2,
-      },
-    },
-  };
-}
-
 function categoryZoom(labelCount: number) {
   if (labelCount <= 16) return undefined;
+  const end = Math.max(12, 1600 / labelCount);
   return [
-    { type: "inside" as const, start: 0, end: Math.max(12, 1600 / labelCount) },
     {
       type: "slider" as const,
-      height: 14,
-      bottom: 34,
+      height: 18,
+      left: 60,
+      right: 28,
+      bottom: 58,
       start: 0,
-      end: Math.max(12, 1600 / labelCount),
+      end,
     },
+    { type: "inside" as const, start: 0, end },
   ];
+}
+
+function scrollLegend(data?: string[]) {
+  return {
+    type: "scroll" as const,
+    data,
+    left: 18,
+    right: 18,
+    bottom: 14,
+    height: 26,
+    orient: "horizontal" as const,
+    itemWidth: 18,
+    itemHeight: 12,
+    itemGap: 14,
+    pageIconSize: 12,
+    pageButtonGap: 6,
+    pageButtonItemGap: 6,
+    pageTextStyle: { fontSize: 12 },
+    textStyle: { fontSize: 12 },
+  };
 }
 
 function buildStackedBar(result: PivotResult): EChartsOption {
@@ -87,18 +95,17 @@ function buildStackedBar(result: PivotResult): EChartsOption {
       color: CHART_COLORS,
       textStyle: { fontFamily: CHART_FONT },
       tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-      grid: { left: 44, right: 22, top: 38, bottom: rowLabels.length > 12 ? 88 : 48, containLabel: true },
-      toolbox: commonToolbox(),
+      grid: { left: 58, right: 28, top: 52, bottom: 130, containLabel: true },
       dataZoom: categoryZoom(rowLabels.length),
       xAxis: {
         type: "category",
         data: rowLabels,
-        axisLabel: { rotate: rowLabels.length > 10 ? 42 : 0, color: "#777178" },
+        axisLabel: { rotate: rowLabels.length > 10 ? 42 : 0, color: "#777178", fontSize: 12 },
         axisLine: { lineStyle: { color: "#d9d4ca" } },
       },
       yAxis: {
         type: "value",
-        axisLabel: { color: "#777178" },
+        axisLabel: { color: "#777178", fontSize: 12 },
         splitLine: { lineStyle: { color: "#ebe7df" } },
       },
       series: [{
@@ -114,19 +121,18 @@ function buildStackedBar(result: PivotResult): EChartsOption {
     color: CHART_COLORS,
     textStyle: { fontFamily: CHART_FONT },
     tooltip: { trigger: "axis", axisPointer: { type: "shadow" } },
-    legend: { data: rowLabels, type: "scroll", bottom: 2, textStyle: { fontSize: 11 } },
-    grid: { left: 44, right: 22, top: 38, bottom: columnLabels.length > 16 ? 82 : 58, containLabel: true },
-    toolbox: commonToolbox(),
+    legend: scrollLegend(rowLabels),
+    grid: { left: 58, right: 28, top: 52, bottom: 130, containLabel: true },
     dataZoom: categoryZoom(columnLabels.length),
     xAxis: {
       type: "category",
       data: columnLabels,
-      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178" },
+      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178", fontSize: 12 },
       axisLine: { lineStyle: { color: "#d9d4ca" } },
     },
     yAxis: {
       type: "value",
-      axisLabel: { color: "#777178" },
+      axisLabel: { color: "#777178", fontSize: 12 },
       splitLine: { lineStyle: { color: "#ebe7df" } },
     },
     series: rowLabels.map((label, index) => ({
@@ -165,24 +171,23 @@ function buildHeatmap(result: PivotResult): EChartsOption {
     grid: {
       left: rowLabels.some((label) => label.length > 8) ? 118 : 82,
       right: 28,
-      bottom: columnLabels.length > 12 ? 104 : 70,
-      top: 24,
+      bottom: 130,
+      top: 52,
       containLabel: false,
     },
-    toolbox: commonToolbox(),
     dataZoom: categoryZoom(columnLabels.length),
     xAxis: {
       type: "category",
       data: columnLabels,
       splitArea: { show: true, areaStyle: { color: ["#fffef9", "#fbfaf5"] } },
-      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178" },
+      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178", fontSize: 12 },
       axisLine: { lineStyle: { color: "#d9d4ca" } },
     },
     yAxis: {
       type: "category",
       data: rowLabels,
       splitArea: { show: true, areaStyle: { color: ["#fffef9", "#fbfaf5"] } },
-      axisLabel: { color: "#777178", width: 105, overflow: "truncate" },
+      axisLabel: { color: "#777178", width: 105, overflow: "truncate", fontSize: 12 },
       axisLine: { lineStyle: { color: "#d9d4ca" } },
     },
     visualMap: {
@@ -191,9 +196,9 @@ function buildHeatmap(result: PivotResult): EChartsOption {
       calculable: true,
       orient: "horizontal",
       left: "center",
-      bottom: 2,
+      bottom: 14,
       inRange: { color: ["#f3f1eb", "#c8d1d6", "#5b798d"] },
-      textStyle: { color: "#777178", fontSize: 10 },
+      textStyle: { color: "#777178", fontSize: 12 },
     },
     series: [{
       type: "heatmap",
@@ -211,20 +216,19 @@ function buildLine(result: PivotResult): EChartsOption {
     color: CHART_COLORS,
     textStyle: { fontFamily: CHART_FONT },
     tooltip: { trigger: "axis" },
-    legend: { data: rowLabels, type: "scroll", bottom: 2, textStyle: { fontSize: 11 } },
-    grid: { left: 42, right: 22, top: 38, bottom: columnLabels.length > 16 ? 82 : 58, containLabel: true },
-    toolbox: commonToolbox(),
+    legend: scrollLegend(rowLabels),
+    grid: { left: 58, right: 28, top: 52, bottom: 130, containLabel: true },
     dataZoom: categoryZoom(columnLabels.length),
     xAxis: {
       type: "category",
       data: columnLabels,
       boundaryGap: false,
-      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178" },
+      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178", fontSize: 12 },
       axisLine: { lineStyle: { color: "#d9d4ca" } },
     },
     yAxis: {
       type: "value",
-      axisLabel: { color: "#777178" },
+      axisLabel: { color: "#777178", fontSize: 12 },
       splitLine: { lineStyle: { color: "#ebe7df" } },
     },
     series: rowLabels.map((label, index) => ({
@@ -250,8 +254,7 @@ function buildPie(result: PivotResult, rose: boolean): EChartsOption {
     color: CHART_COLORS,
     textStyle: { fontFamily: CHART_FONT },
     tooltip: { trigger: "item", formatter: "{b}<br/>{c}（{d}%）" },
-    legend: { type: "scroll", bottom: 2, textStyle: { fontSize: 11 } },
-    toolbox: commonToolbox(),
+    legend: scrollLegend(),
     series: [{
       type: "pie",
       radius: rose ? ["18%", "68%"] : ["40%", "68%"],
@@ -299,17 +302,18 @@ function buildSankey(result: PivotResult): EChartsOption {
     color: CHART_COLORS,
     textStyle: { fontFamily: CHART_FONT },
     tooltip: { trigger: "item", triggerOn: "mousemove" },
-    toolbox: commonToolbox(),
     series: [{
       type: "sankey",
-      left: 18,
-      right: 20,
-      top: 38,
-      bottom: 20,
+      left: 28,
+      right: 72,
+      top: 52,
+      bottom: 32,
+      nodeWidth: 18,
+      nodeGap: 12,
       layoutIterations: 32,
       emphasis: { focus: "adjacency" },
       lineStyle: { color: "gradient", curveness: 0.5, opacity: 0.35 },
-      label: { color: "#5f5960", fontSize: 11 },
+      label: { show: true, color: "#5f5960", fontSize: 12, overflow: "truncate", width: 96 },
       data: nodes,
       links,
     }],
@@ -334,8 +338,7 @@ function buildRadar(result: PivotResult): EChartsOption {
     color: CHART_COLORS,
     textStyle: { fontFamily: CHART_FONT },
     tooltip: {},
-    legend: useColumns ? { type: "scroll", bottom: 2, data: columnLabels } : undefined,
-    toolbox: commonToolbox(),
+    legend: useColumns ? scrollLegend(columnLabels) : undefined,
     radar: {
       indicator: rowLabels.map((label, index) => ({ name: label, max: maxValues[index] })),
       center: ["50%", "49%"],
@@ -365,19 +368,18 @@ function buildScatter(result: PivotResult): EChartsOption {
         return `${seriesName ?? ""}<br/>${columnLabels[Number(value[0])] ?? ""}：${Number(value[1] ?? 0).toLocaleString("zh-CN")}`;
       },
     },
-    legend: { data: rowLabels, type: "scroll", bottom: 2, textStyle: { fontSize: 11 } },
-    grid: { left: 42, right: 22, top: 38, bottom: columnLabels.length > 16 ? 82 : 58, containLabel: true },
-    toolbox: commonToolbox(),
+    legend: scrollLegend(rowLabels),
+    grid: { left: 58, right: 28, top: 52, bottom: 130, containLabel: true },
     dataZoom: categoryZoom(columnLabels.length),
     xAxis: {
       type: "category",
       data: columnLabels,
-      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178" },
+      axisLabel: { rotate: columnLabels.length > 10 ? 42 : 0, color: "#777178", fontSize: 12 },
       axisLine: { lineStyle: { color: "#d9d4ca" } },
     },
     yAxis: {
       type: "value",
-      axisLabel: { color: "#777178" },
+      axisLabel: { color: "#777178", fontSize: 12 },
       splitLine: { lineStyle: { color: "#ebe7df" } },
     },
     series: rowLabels.map((label, rowIndex) => ({

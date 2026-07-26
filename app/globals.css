@@ -1,5 +1,10 @@
 @import "tailwindcss";
 
+@theme {
+  --font-serif: "Noto Serif SC", "Songti SC", STSong, SimSun, serif;
+  --font-sans: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+}
+
 :root {
   --ink: #27242a;
   --muted: #777178;

@@ -44,12 +44,12 @@ function EmptyPanel({
   description: string;
 }) {
   return (
-    <section className="grid min-h-64 place-items-center border border-[var(--line)] bg-[var(--surface)] px-8 py-12 text-center font-[var(--font-serif)]">
+    <section className="grid min-h-64 place-items-center border border-[var(--line)] bg-[var(--surface)] px-8 py-12 text-center font-serif">
       <div>
-        <span className="mx-auto grid size-10 place-items-center border border-[var(--line)] font-[var(--font-serif)] text-[15px] text-[var(--purple)]">
+        <span className="mx-auto grid size-10 place-items-center border border-[var(--line)] font-serif text-[15px] text-[var(--purple)]">
           {symbol}
         </span>
-        <p className="mt-4 font-[var(--font-serif)] text-[15px] text-[var(--ink)]">{title}</p>
+        <p className="mt-4 font-serif text-[15px] text-[var(--ink)]">{title}</p>
         <p className="mt-1.5 text-[10px] leading-5 text-[var(--muted)]">{description}</p>
       </div>
     </section>
@@ -98,7 +98,7 @@ export function PivotTable({
 
   if (loading) {
     return (
-      <section className="border border-[var(--line)] bg-[var(--surface)] p-8 font-[var(--font-serif)]">
+      <section className="border border-[var(--line)] bg-[var(--surface)] p-8 font-serif">
         <div className="animate-pulse space-y-3">
           <div className="h-3 w-1/3 bg-[var(--paper-deep)]" />
           <div className="h-44 bg-[var(--paper)]" />
@@ -131,6 +131,7 @@ export function PivotTable({
   const hasNestedRows = rows.some((row) => row.subLabel !== null);
   const hasNestedColumns = result.columnHeaders.some((header) => Boolean(header.children?.length));
   const maxCell = Math.max(...result.cells.flat(), 1);
+  const tableWidth = 280 + (hasNestedRows ? 160 : 0) + columnLabels.length * 80 + 92;
   const rowGroupCounts = new Map<string, number>();
   for (const row of rows) {
     rowGroupCounts.set(row.mainLabel, (rowGroupCounts.get(row.mainLabel) ?? 0) + 1);
@@ -138,11 +139,11 @@ export function PivotTable({
   const metricLabel = METRICS.find((metric) => metric.id === config.metric)?.label ?? "数值";
 
   return (
-    <section className="min-w-0 border border-[var(--line)] bg-[var(--surface)] font-[var(--font-serif)] shadow-[0_4px_18px_rgba(39,36,42,.035)]">
-      <header className="flex min-h-14 items-center justify-between gap-3 border-b border-[var(--line)] px-4 py-3">
+    <section className="flex h-full min-h-0 min-w-0 flex-col overflow-hidden border border-[var(--line)] bg-[var(--surface)] font-serif shadow-[0_4px_18px_rgba(39,36,42,.035)]">
+      <header className="flex h-24 shrink-0 items-center justify-between gap-3 border-b border-[var(--line)] px-4">
         <div>
           <span className="text-[8px] font-bold tracking-[.14em] text-[var(--purple)]">数据视图</span>
-          <h2 className="mt-1 font-[var(--font-serif)] text-[16px] tracking-[.03em]">数据透视表</h2>
+          <h2 className="mt-1 font-serif text-[16px] tracking-[.03em]">数据透视表</h2>
         </div>
         <div className="flex flex-wrap items-center justify-end gap-2">
           <span className="text-[9px] text-[var(--green)]" aria-live="polite">
@@ -151,37 +152,48 @@ export function PivotTable({
           <button
             type="button"
             onClick={handleCopy}
-            className="border border-[var(--line-dark)] px-2.5 py-1.5 font-[var(--font-serif)] text-[9px] text-[var(--purple)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
+            className="h-8 border border-[var(--line-dark)] px-2.5 font-serif text-[9px] text-[var(--purple)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
           >
             复制表格
           </button>
           <button
             type="button"
             onClick={onExportCsv}
-            className="border border-[var(--line-dark)] px-2.5 py-1.5 font-[var(--font-serif)] text-[9px] text-[var(--purple)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
+            className="h-8 border border-[var(--line-dark)] px-2.5 font-serif text-[9px] text-[var(--purple)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
           >
             导出 CSV
           </button>
         </div>
       </header>
 
-      <div className="max-h-[65vh] overflow-auto">
-        <table className="min-w-full border-collapse text-[30px] [&_td]:!text-[16px] [&_th]:!text-[16px]">
+      <div className="min-h-0 w-full max-w-full flex-1 overflow-auto [scrollbar-color:rgba(79,71,126,.28)_transparent] [scrollbar-width:thin] [&::-webkit-scrollbar]:h-2 [&::-webkit-scrollbar]:w-2 [&::-webkit-scrollbar-thumb]:bg-[rgba(79,71,126,.28)] [&::-webkit-scrollbar-track]:bg-transparent">
+        <table
+          className="table-fixed border-collapse leading-[1.45] [&_td]:!text-[15px] [&_th]:!text-[15px]"
+          style={{ width: tableWidth, minWidth: tableWidth }}
+        >
           <caption className="sr-only">
             自选维度分析数据透视表，度量指标为{metricLabel}
           </caption>
+          <colgroup>
+            <col style={{ width: 280 }} />
+            {hasNestedRows ? <col style={{ width: 160 }} /> : null}
+            {columnLabels.map((label, index) => (
+              <col key={`${label}-${index}`} style={{ width: 80 }} />
+            ))}
+            <col style={{ width: 92 }} />
+          </colgroup>
           <thead>
             <tr>
               <th
                 rowSpan={hasNestedColumns ? 2 : 1}
-                className="sticky left-0 top-0 z-30 w-32 min-w-32 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-3 py-2 text-left font-medium text-[var(--purple-deep)]"
+                className="sticky left-0 top-0 z-30 h-[52px] w-[280px] min-w-[240px] max-w-[320px] border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-4 py-2.5 align-middle text-left font-medium text-[var(--purple-deep)]"
               >
                 {hasNestedRows ? "主维度" : "维度"}
               </th>
               {hasNestedRows && (
                 <th
                   rowSpan={hasNestedColumns ? 2 : 1}
-                  className="sticky left-32 top-0 z-30 min-w-28 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-3 py-2 text-left font-medium text-[var(--purple-deep)]"
+                  className="sticky left-[280px] top-0 z-30 h-[52px] w-40 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-3 py-2.5 align-middle text-left font-medium text-[var(--purple-deep)]"
                 >
                   子维度
                 </th>
@@ -191,7 +203,7 @@ export function PivotTable({
                   <th
                     key={`${header.label}-${index}`}
                     colSpan={header.children.length}
-                    className="sticky top-0 z-20 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-3 py-2 text-center font-medium whitespace-nowrap text-[var(--purple-deep)]"
+                    className="sticky top-0 z-20 h-[52px] border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-2 py-2.5 align-middle text-center font-medium whitespace-nowrap text-[var(--purple-deep)]"
                   >
                     {header.label}
                   </th>
@@ -199,7 +211,7 @@ export function PivotTable({
                   <th
                     key={`${header.label}-${index}`}
                     rowSpan={hasNestedColumns ? 2 : 1}
-                    className="sticky top-0 z-20 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-3 py-2 text-center font-medium whitespace-nowrap text-[var(--purple-deep)]"
+                    className="sticky top-0 z-20 h-[52px] w-20 border-b border-r border-[var(--line)] bg-[var(--paper-deep)] px-2 py-2.5 align-middle text-center font-medium whitespace-nowrap text-[var(--purple-deep)]"
                   >
                     {header.label}
                   </th>
@@ -207,7 +219,7 @@ export function PivotTable({
               )}
               <th
                 rowSpan={hasNestedColumns ? 2 : 1}
-                className="sticky right-0 top-0 z-30 border-b border-l border-[var(--line-dark)] bg-[#e9e5da] px-3 py-2 text-center font-semibold whitespace-nowrap text-[var(--purple-deep)]"
+                className="sticky top-0 z-20 h-[52px] w-[92px] border-b border-l border-[var(--line-dark)] bg-[#e9e5da] px-2 py-2.5 align-middle text-center font-medium whitespace-nowrap text-[var(--purple-deep)]"
               >
                 合计
               </th>
@@ -218,7 +230,7 @@ export function PivotTable({
                   (header.children ?? []).map((child, childIndex) => (
                     <th
                       key={`${headerIndex}-${childIndex}`}
-                      className="sticky top-[33px] z-20 border-b border-r border-[var(--line)] bg-[#f5f2ea] px-3 py-1.5 text-center text-[9px] font-normal whitespace-nowrap text-[var(--muted)]"
+                      className="sticky top-[52px] z-20 h-[52px] w-20 border-b border-r border-[var(--line)] bg-[#f5f2ea] px-2 py-2.5 text-center align-middle font-normal whitespace-nowrap text-[var(--muted)]"
                     >
                       {child.label}
                     </th>
@@ -237,23 +249,33 @@ export function PivotTable({
                     <th
                       scope="rowgroup"
                       rowSpan={hasNestedRows ? rowGroupCounts.get(row.mainLabel) : 1}
-                      className={`sticky left-0 z-10 w-32 min-w-32 border-b border-r border-[var(--line)] px-3 py-2 text-left font-[var(--font-serif)] font-medium whitespace-nowrap ${stripedClass}`}
+                      className={`sticky left-0 z-10 h-12 w-[280px] min-w-[240px] max-w-[320px] border-b border-r border-[var(--line)] px-4 py-2.5 align-middle text-left font-serif font-medium ${stripedClass}`}
                     >
-                      {row.mainLabel}
+                      <span
+                        title={row.mainLabel}
+                        className="block max-w-[280px] overflow-hidden whitespace-normal leading-[1.55] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
+                      >
+                        {row.mainLabel}
+                      </span>
                     </th>
                   )}
                   {hasNestedRows && (
                     <th
                       scope="row"
-                      className={`sticky left-32 z-10 min-w-28 border-b border-r border-[var(--line)] px-3 py-2 text-left text-[9px] font-normal whitespace-nowrap text-[var(--muted)] ${stripedClass}`}
+                      className={`sticky left-[280px] z-10 h-12 w-40 border-b border-r border-[var(--line)] px-3 py-2.5 align-middle text-left font-normal text-[var(--muted)] ${stripedClass}`}
                     >
-                      {row.subLabel}
+                      <span
+                        title={row.subLabel ?? undefined}
+                        className="block overflow-hidden whitespace-normal leading-[1.55] [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:2]"
+                      >
+                        {row.subLabel}
+                      </span>
                     </th>
                   )}
                   {row.values.map((value, columnIndex) => (
                     <td
                       key={columnIndex}
-                      className="border-b border-r border-[var(--line)] px-3 py-2 text-center tabular-nums"
+                      className="h-12 w-20 border-b border-r border-[var(--line)] px-2 py-2.5 align-middle text-center tabular-nums"
                       style={{
                         backgroundColor: value > 0
                           ? `rgba(91, 121, 141, ${Math.max(0.04, value / maxCell * 0.2).toFixed(3)})`
@@ -263,7 +285,7 @@ export function PivotTable({
                       {value > 0 ? value.toLocaleString("zh-CN") : "—"}
                     </td>
                   ))}
-                  <td className="sticky right-0 z-10 border-b border-l border-[var(--line-dark)] bg-[#f5f2ea] px-3 py-2 text-center font-semibold tabular-nums">
+                  <td className="h-12 w-[92px] border-b border-l border-[var(--line-dark)] bg-[#f5f2ea] px-2 py-2.5 align-middle text-center font-medium tabular-nums">
                     {row.total > 0 ? row.total.toLocaleString("zh-CN") : "—"}
                   </td>
                 </tr>
@@ -272,19 +294,19 @@ export function PivotTable({
             <tr>
               <th
                 colSpan={hasNestedRows ? 2 : 1}
-                className="sticky bottom-0 left-0 z-30 border-r border-t border-[var(--line-dark)] bg-[#e9e5da] px-3 py-2 text-left font-[var(--font-serif)] font-semibold text-[var(--purple-deep)]"
+                className="sticky bottom-0 left-0 z-30 h-[52px] border-r border-t border-[var(--line-dark)] bg-[#e9e5da] px-4 py-2.5 align-middle text-left font-serif font-medium text-[var(--purple-deep)]"
               >
                 合计
               </th>
               {result.columnTotals.map((value, columnIndex) => (
                 <td
                   key={columnIndex}
-                  className="sticky bottom-0 z-20 border-r border-t border-[var(--line-dark)] bg-[#e9e5da] px-3 py-2 text-center font-semibold tabular-nums"
+                  className="sticky bottom-0 z-20 h-[52px] w-20 border-r border-t border-[var(--line-dark)] bg-[#e9e5da] px-2 py-2.5 align-middle text-center font-medium tabular-nums"
                 >
                   {value > 0 ? value.toLocaleString("zh-CN") : "—"}
                 </td>
               ))}
-              <td className="sticky bottom-0 right-0 z-30 border-l border-t border-[var(--line-dark)] bg-[#ddd7c9] px-3 py-2 text-center font-bold tabular-nums text-[var(--purple-deep)]">
+              <td className="sticky bottom-0 z-20 h-[52px] w-[92px] border-l border-t border-[var(--line-dark)] bg-[#ddd7c9] px-2 py-2.5 align-middle text-center font-medium tabular-nums text-[var(--purple-deep)]">
                 {result.grandTotal.toLocaleString("zh-CN")}
               </td>
             </tr>
@@ -292,7 +314,7 @@ export function PivotTable({
         </table>
       </div>
 
-      <footer className="flex items-center justify-between border-t border-[var(--line)] px-4 py-2 text-[9px] text-[var(--muted)]">
+      <footer className="flex h-9 shrink-0 items-center justify-between border-t border-[var(--line)] px-4 text-[12px] text-[var(--muted)]">
         <span>{rows.length.toLocaleString("zh-CN")} 行 × {columnLabels.length.toLocaleString("zh-CN")} 列</span>
         <span>指标：{metricLabel}</span>
       </footer>

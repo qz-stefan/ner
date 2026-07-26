@@ -245,7 +245,7 @@ export function AnalysisPage() {
               ) : null}
             </header>
 
-            <div className="grid min-w-0 gap-5 xl:grid-cols-2">
+            <div className="grid min-w-0 auto-rows-[640px] items-stretch gap-6 min-[1200px]:h-[clamp(620px,72vh,760px)] min-[1200px]:auto-rows-fr min-[1200px]:grid-cols-2">
               <PivotTable
                 result={analysis.result}
                 config={analysis.config}
