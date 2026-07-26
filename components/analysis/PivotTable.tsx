@@ -166,7 +166,7 @@ export function PivotTable({
       </header>
 
       <div className="max-h-[65vh] overflow-auto">
-        <table className="min-w-full border-collapse text-[11px]">
+        <table className="min-w-full border-collapse text-[30px]">
           <caption className="sr-only">
             自选维度分析数据透视表，度量指标为{metricLabel}
           </caption>
