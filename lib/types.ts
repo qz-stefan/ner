@@ -51,11 +51,31 @@ export interface EntityCatalogEntry {
   letterIds: string[];
 }
 
+export interface ActMention {
+  id: string;
+  letterId: string;
+  type: ActType;
+  subtype: string | null;
+  mode: string;
+  start: number;
+  end: number;
+  originalText: string;
+  headText: string | null;
+  speaker: string[];
+  addressee: string[];
+  orientation: string | null;
+  contentDomains: string[];
+  eventLinks: { eventId: string; relation: string; confidence: string }[];
+  eventLinkStatus: string | null;
+  annotationStatus: string;
+}
+
 export interface Dataset {
   generatedAt: string;
   letters: Letter[];
   entitiesByLetter: Record<string, EntityMention[]>;
   eventsByLetter: Record<string, EventMention[]>;
+  actsByLetter: Record<string, ActMention[]>;
   entityCatalog: EntityCatalogEntry[];
   entityStats: Record<EntityType, { canonicalCount: number; mentionCount: number; letterCount: number }>;
   eventStats: Record<EventType, { eventCount: number; letterCount: number }>;

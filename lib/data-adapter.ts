@@ -29,8 +29,22 @@ export function normalizeEventAnnotation(letterId: string) {
   return (dataset.eventsByLetter[letterId] ?? []).filter((event) => event.start >= 0);
 }
 
-export function normalizeActAnnotation() {
-  return [] as never[];
+export function normalizeActAnnotation(letterId: string) {
+  return (dataset.actsByLetter?.[letterId] ?? []).filter((act) => act.start >= 0);
+}
+
+export function getActAnnotationsForRange(letterId: string, rangeStart: number, rangeEnd: number) {
+  return normalizeActAnnotation(letterId).filter(
+    (act) => act.start < rangeEnd && act.end > rangeStart,
+  );
+}
+
+export function getActsByType(type: string) {
+  return Object.entries(dataset.actsByLetter ?? {}).flatMap(([letterId, acts]) => {
+    const letter = getLetter(letterId);
+    if (!letter) return [];
+    return acts.filter((act) => act.type === type).map((act) => ({ letter, act }));
+  });
 }
 
 export function getLetter(id: string) {

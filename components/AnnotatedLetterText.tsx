@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Fragment, MouseEvent, ReactNode, useCallback, useEffect, useRef, useState } from "react";
+import { Fragment, MouseEvent, ReactNode, useCallback, useEffect, useImperativeHandle, useRef, useState, forwardRef } from "react";
 import { getEntityHref, getEntityKey, normalizeEntityAnnotation, normalizeEventAnnotation } from "@/lib/data-adapter";
 import { entityStyleVariables, entityTypeMeta, eventStyleVariables, eventTypeMeta } from "@/lib/config";
 import type { EntityMention, Letter } from "@/lib/types";
@@ -11,186 +11,145 @@ interface Props {
   letter: Letter;
   showEntity: boolean;
   showEvent: boolean;
-  showAct: boolean;
   rangeStart?: number;
   rangeEnd?: number;
   searchMatch?: { start: number; length: number } | null;
 }
 
-export function AnnotatedLetterText({ letter, showEntity, showEvent, showAct, rangeStart = 0, rangeEnd = letter.text.length, searchMatch = null }: Props) {
+interface TextFragment {
+  start: number; end: number; text: string;
+  entityMention: EntityMention | null;
+  eventId: string | null;
+}
+
+export const AnnotatedLetterText = forwardRef<HTMLDivElement, Props>(function AnnotatedLetterText({
+  letter, showEntity, showEvent,
+  rangeStart = 0, rangeEnd = letter.text.length,
+  searchMatch = null,
+}: Props, ref) {
   const [finePointer, setFinePointer] = useState(false);
   const [preview, setPreview] = useState<{ entity: EntityMention; anchor: HTMLElement; id: string } | null>(null);
   const openTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const entities = showEntity ? normalizeEntityAnnotation(letter.id).filter((item) => item.start >= rangeStart && item.end <= rangeEnd) : [];
-  const events = showEvent ? normalizeEventAnnotation(letter.id).filter((item) => item.start >= rangeStart && item.end <= rangeEnd) : [];
+  const innerRef = useRef<HTMLDivElement>(null);
 
-  const clearTimers = useCallback(() => {
-    if (openTimer.current) clearTimeout(openTimer.current);
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    openTimer.current = null;
-    closeTimer.current = null;
-  }, []);
+  useImperativeHandle(ref, () => innerRef.current!);
 
-  const closePreview = useCallback(() => {
-    clearTimers();
-    setPreview(null);
-  }, [clearTimers]);
+  const entities = showEntity ? normalizeEntityAnnotation(letter.id).filter((i) => i.start >= rangeStart && i.end <= rangeEnd) : [];
+  const events = showEvent ? normalizeEventAnnotation(letter.id).filter((i) => i.start >= rangeStart && i.end <= rangeEnd) : [];
 
+  const clearTimers = useCallback(() => { if (openTimer.current) clearTimeout(openTimer.current); if (closeTimer.current) clearTimeout(closeTimer.current); openTimer.current = null; closeTimer.current = null; }, []);
+  const closePreview = useCallback(() => { clearTimers(); setPreview(null); }, [clearTimers]);
   const openPreview = useCallback((entity: EntityMention, anchor: HTMLElement, delay = 0) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     if (openTimer.current) clearTimeout(openTimer.current);
     const id = `entity-preview-${letter.id}-${entity.start}`.replace(/[^\w-]/g, "-");
     openTimer.current = setTimeout(() => setPreview({ entity, anchor, id }), delay);
   }, [letter.id]);
-
-  const scheduleClose = useCallback(() => {
-    if (openTimer.current) clearTimeout(openTimer.current);
-    if (closeTimer.current) clearTimeout(closeTimer.current);
-    closeTimer.current = setTimeout(() => setPreview(null), 160);
-  }, []);
+  const scheduleClose = useCallback(() => { if (openTimer.current) clearTimeout(openTimer.current); if (closeTimer.current) clearTimeout(closeTimer.current); closeTimer.current = setTimeout(() => setPreview(null), 160); }, []);
 
   useEffect(() => {
-    const media = window.matchMedia("(hover: hover) and (pointer: fine)");
-    const update = () => setFinePointer(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
+    const m = window.matchMedia("(hover: hover) and (pointer: fine)");
+    const u = () => setFinePointer(m.matches); u();
+    m.addEventListener("change", u); return () => m.removeEventListener("change", u);
   }, []);
-
   useEffect(() => () => clearTimers(), [clearTimers]);
-
   useEffect(() => {
     try {
-      const stored = window.sessionStorage.getItem("ye-entity-return-position");
-      if (!stored) return;
-      const position = JSON.parse(stored) as { letterId?: string; scrollY?: number };
-      if (position.letterId !== letter.id) return;
+      const s = window.sessionStorage.getItem("ye-entity-return-position"); if (!s) return;
+      const p = JSON.parse(s) as { letterId?: string; scrollY?: number };
+      if (p.letterId !== letter.id) return;
       window.sessionStorage.removeItem("ye-entity-return-position");
-      requestAnimationFrame(() => window.scrollTo({ top: position.scrollY ?? 0 }));
-    } catch {
-      // Browser history restoration remains available when storage is unavailable.
-    }
+      requestAnimationFrame(() => window.scrollTo({ top: p.scrollY ?? 0 }));
+    } catch { /* ok */ }
   }, [letter.id]);
 
   function rememberReturnPosition() {
-    try {
-      window.sessionStorage.setItem("ye-entity-return-position", JSON.stringify({
-        letterId: letter.id,
-        scrollY: window.scrollY,
-      }));
-    } catch {
-      // Entity navigation must never depend on storage availability.
-    }
+    try { window.sessionStorage.setItem("ye-entity-return-position", JSON.stringify({ letterId: letter.id, scrollY: window.scrollY })); } catch { /* ok */ }
   }
 
   function handleEntityClick(event: MouseEvent<HTMLAnchorElement>, mention: EntityMention) {
-    const anchor = event.currentTarget;
-    const supportsHover = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-    const isKeyboardActivation = event.detail === 0;
-    if (!supportsHover && !isKeyboardActivation && preview?.anchor !== anchor) {
-      event.preventDefault();
-      event.stopPropagation();
-      openPreview(mention, anchor);
-      return;
-    }
+    const a = event.currentTarget;
+    const sh = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+    if (!sh && event.detail !== 0 && preview?.anchor !== a) { event.preventDefault(); event.stopPropagation(); openPreview(mention, a); return; }
     rememberReturnPosition();
   }
 
   function renderTextSlice(from: number, to: number): ReactNode[] {
+    if (from >= to) return [];
     if (!searchMatch || searchMatch.start < 0 || searchMatch.length <= 0) return [letter.text.slice(from, to)];
-    const matchEnd = searchMatch.start + searchMatch.length;
-    if (matchEnd <= from || searchMatch.start >= to) return [letter.text.slice(from, to)];
-    const visibleStart = Math.max(from, searchMatch.start);
-    const visibleEnd = Math.min(to, matchEnd);
-    const nodes: ReactNode[] = [];
-    if (visibleStart > from) nodes.push(letter.text.slice(from, visibleStart));
-    nodes.push(<mark id={visibleStart === searchMatch.start ? "search-match" : undefined} className="search-match" key={`match-${visibleStart}`}>{letter.text.slice(visibleStart, visibleEnd)}</mark>);
-    if (visibleEnd < to) nodes.push(letter.text.slice(visibleEnd, to));
-    return nodes;
+    const me = searchMatch.start + searchMatch.length;
+    if (me <= from || searchMatch.start >= to) return [letter.text.slice(from, to)];
+    const vs = Math.max(from, searchMatch.start), ve = Math.min(to, me);
+    const n: ReactNode[] = [];
+    if (vs > from) n.push(letter.text.slice(from, vs));
+    n.push(<mark id={vs === searchMatch.start ? "search-match" : undefined} className="search-match" key={`mk-${vs}`}>{letter.text.slice(vs, ve)}</mark>);
+    if (ve < to) n.push(letter.text.slice(ve, to));
+    return n;
   }
 
-  function renderEntities(from: number, to: number): ReactNode[] {
-    const nodes: ReactNode[] = [];
-    let cursor = from;
-    const mentions = entities
-      .filter((mention) => mention.start >= from && mention.end <= to)
-      .sort((a, b) => a.start - b.start || b.end - a.end);
-    mentions.forEach((mention, index) => {
-      if (mention.start < cursor) return;
-      if (mention.start > cursor) nodes.push(...renderTextSlice(cursor, mention.start));
-      const anchorId = `entity-${letter.id}-${mention.start}`.replace(/[^\w-]/g, "-");
-      nodes.push(
-        <Link
-          className={`entity-annotation entity-${mention.type.toLowerCase()}`}
-          style={entityStyleVariables(mention.type)}
-          key={`${mention.type}-${mention.start}-${index}`}
-          id={anchorId}
-          href={getEntityHref(mention)}
-          data-entity-id={getEntityKey(mention)}
-          aria-label={`查看${entityTypeMeta[mention.type].label}实体：${mention.canonical}`}
-          aria-describedby={preview?.anchor.id === anchorId ? preview.id : undefined}
-          onMouseEnter={(event) => finePointer && openPreview(mention, event.currentTarget, 125)}
-          onMouseLeave={finePointer ? scheduleClose : undefined}
-          onFocus={(event) => finePointer && openPreview(mention, event.currentTarget)}
-          onBlur={finePointer ? scheduleClose : undefined}
-          onClick={(event) => handleEntityClick(event, mention)}
-        >
-          {renderTextSlice(mention.start, mention.end)}
-          <span className="sr-only">，规范实体{mention.canonical}</span>
-        </Link>,
-      );
-      cursor = mention.end;
-    });
-    if (cursor < to) nodes.push(...renderTextSlice(cursor, to));
-    return nodes;
-  }
-
-  function renderText() {
-    if (!events.length) return renderEntities(rangeStart, rangeEnd);
-    const nodes: ReactNode[] = [];
-    let cursor = rangeStart;
-    events
-      .sort((a, b) => a.start - b.start)
-      .forEach((event) => {
-        if (event.start < cursor) return;
-        if (event.start > cursor) nodes.push(...renderEntities(cursor, event.start));
-        nodes.push(
-          <span
-            className={`event-range event-${event.type.toLowerCase()}`}
-            style={eventStyleVariables(event.type)}
-            data-event={`${eventTypeMeta[event.type].label} · ${event.type}`}
-            key={event.id}
-            tabIndex={0}
-            aria-label={`${eventTypeMeta[event.type].label}事件范围`}
-          >
-            {renderEntities(event.start, event.end)}
-          </span>,
-        );
-        cursor = event.end;
+  function computeFragments(): TextFragment[] {
+    const b = new Set<number>(); b.add(rangeStart); b.add(rangeEnd);
+    for (const e of entities) { b.add(e.start); b.add(e.end); }
+    for (const ev of events) { b.add(ev.start); b.add(ev.end); }
+    const sorted = [...b].filter((n) => n >= rangeStart && n <= rangeEnd).sort((a, b) => a - b);
+    const frags: TextFragment[] = [];
+    for (let i = 0; i < sorted.length - 1; i++) {
+      const s = sorted[i], e = sorted[i + 1]; if (s >= e) continue;
+      frags.push({ start: s, end: e, text: letter.text.slice(s, e),
+        entityMention: entities.find((en) => en.start <= s && en.end >= e) ?? null,
+        eventId: events.find((ev) => ev.start <= s && ev.end >= e)?.id ?? null,
       });
-    if (cursor < rangeEnd) nodes.push(...renderEntities(cursor, rangeEnd));
+    }
+    return frags;
+  }
+
+  function renderFragments(): ReactNode[] {
+    const frags = computeFragments();
+    const nodes: ReactNode[] = [];
+    for (const frag of frags) {
+      let content: ReactNode = renderTextSlice(frag.start, frag.end);
+
+      // Layer 1: entity
+      if (frag.entityMention) {
+        const m = frag.entityMention;
+        const aid = `entity-${letter.id}-${m.start}`.replace(/[^\w-]/g, "-");
+        content = (
+          <Link className={`entity-annotation entity-${m.type.toLowerCase()}`} style={entityStyleVariables(m.type)}
+            key={`${m.type}-${m.start}`} id={aid} href={getEntityHref(m)} data-entity-id={getEntityKey(m)}
+            aria-label={`查看${entityTypeMeta[m.type].label}实体：${m.canonical}`}
+            aria-describedby={preview?.anchor.id === aid ? preview.id : undefined}
+            onMouseEnter={(ev) => finePointer && openPreview(m, ev.currentTarget, 125)}
+            onMouseLeave={finePointer ? scheduleClose : undefined}
+            onFocus={(ev) => finePointer && openPreview(m, ev.currentTarget)} onBlur={finePointer ? scheduleClose : undefined}
+            onClick={(ev) => handleEntityClick(ev, m)}>
+            {content}<span className="sr-only">，规范实体{m.canonical}</span>
+          </Link>
+        );
+      }
+
+      // Layer 2: event highlighter
+      if (frag.eventId) {
+        const ev = events.find((e) => e.id === frag.eventId)!;
+        content = (
+          <span className={`event-range event-${ev.type.toLowerCase()}`} style={eventStyleVariables(ev.type)}
+            key={ev.id} tabIndex={0}
+            data-event={`${eventTypeMeta[ev.type].label} · ${ev.type}`}
+            aria-label={`${eventTypeMeta[ev.type].label}事件范围`}>
+            {content}
+          </span>
+        );
+      }
+
+      nodes.push(content);
+    }
     return nodes;
   }
 
   return (
-    <div className={`annotated-text ${showAct ? "act-visible" : ""}`}>
-      {showAct && rangeStart === 0 ? (
-        <span className="act-gutter-empty" title="现有数据中尚无行动层段落标注">
-          <strong>行动层</strong><i>暂无标注</i>
-        </span>
-      ) : null}
-      <p>{renderText().map((node, index) => <Fragment key={index}>{node}</Fragment>)}</p>
-      {preview ? (
-        <EntityPreviewCard
-          anchor={preview.anchor}
-          entity={preview.entity}
-          isFinePointer={finePointer}
-          previewId={preview.id}
-          onClose={closePreview}
-          onNavigate={rememberReturnPosition}
-        />
-      ) : null}
+    <div className="annotated-text" ref={innerRef}>
+      <p>{renderFragments().map((n, i) => <Fragment key={i}>{n}</Fragment>)}</p>
+      {preview ? <EntityPreviewCard anchor={preview.anchor} entity={preview.entity} isFinePointer={finePointer} previewId={preview.id} onClose={closePreview} onNavigate={rememberReturnPosition} /> : null}
     </div>
   );
-}
+});

@@ -1,59 +1,203 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { entityTypeMeta, eventTypeMeta } from "@/lib/config";
-import { getCategoryMeta, getEntityCategory, getEventsByType } from "@/lib/data-adapter";
-import type { EntityType, EventType } from "@/lib/types";
-import { TopicHero } from "@/components/TopicHero";
+import { useCallback, useMemo, useState } from "react";
+import { entityTypeMeta, eventTypeMeta, actTypeMeta } from "@/lib/config";
+import { formatLetterDate, getCategoryMeta, getEntityCategory, getEventsByType, getActsByType } from "@/lib/data-adapter";
+import { getTextInitial, ALPHABET } from "@/lib/pinyin";
+import { getSearchPlaceholder, getSecondaryCategories } from "@/lib/topic-config";
+import type { SecondaryCategory } from "@/lib/topic-config";
+import type { ActType, EntityCatalogEntry, EntityType, EventType } from "@/lib/types";
+import { TopicHeader } from "@/components/TopicHeader";
+import { TopicSearch } from "@/components/TopicSearch";
+import { AlphabetIndex } from "@/components/AlphabetIndex";
+import { SecondaryCategoryFilter } from "@/components/SecondaryCategoryFilter";
+import type { FilterMode } from "@/components/SecondaryCategoryFilter";
+import { ActiveFilterSummary } from "@/components/ActiveFilterSummary";
+import { AlphabetGroupedEntityList } from "@/components/AlphabetGroupedEntityList";
 
 export function CategoryIndexPage({ layer, code }: { layer: string; code: string }) {
   const meta = getCategoryMeta(layer, code);
+
   const [query, setQuery] = useState("");
-  const [activeFacet, setActiveFacet] = useState("全部");
-  const entityEntries = useMemo(
-    () => layer === "entity" ? getEntityCategory(code as EntityType) : [],
-    [code, layer],
-  );
-  const eventEntries = useMemo(
-    () => layer === "event" ? getEventsByType(code as EventType) : [],
+  const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
+  const [filterMode, setFilterMode] = useState<FilterMode>("single");
+
+  // Entity data (only for entity layer)
+  const allEntries: EntityCatalogEntry[] = useMemo(
+    () => (layer === "entity" ? getEntityCategory(code as EntityType) : []),
     [code, layer],
   );
 
-  const facets = useMemo(() => {
-    if (layer === "entity") {
-      return ["全部", ...new Set(entityEntries.flatMap((entry) => entry.subtypes).filter(Boolean))].slice(0, 14);
+  // Event data (only for event layer)
+  const allEvents = useMemo(
+    () => (layer === "event" ? getEventsByType(code as EventType) : []),
+    [code, layer],
+  );
+
+  // Act data (only for act layer)
+  const allActs = useMemo(
+    () => (layer === "act" ? getActsByType(code as ActType) : []),
+    [code, layer],
+  );
+
+  // Secondary category config
+  const categories: SecondaryCategory[] = useMemo(() => {
+    if (layer !== "entity") return [];
+    return getSecondaryCategories(code as EntityType);
+  }, [layer, code]);
+
+  const categoryLabelMap: Record<string, string> = useMemo(() => {
+    const map: Record<string, string> = {};
+    for (const cat of categories) map[cat.code] = cat.label;
+    return map;
+  }, [categories]);
+
+  // Filter: search + letter + categories (AND)
+  const filteredEntries = useMemo(() => {
+    let result = allEntries;
+    const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+    if (normalizedQuery) {
+      result = result.filter((entry) =>
+        [entry.canonical, ...entry.aliases].join(" ").toLocaleLowerCase("zh-CN").includes(normalizedQuery),
+      );
     }
-    if (layer === "event") return ["全部", ...new Set(eventEntries.map(({ event }) => event.stage).filter(Boolean) as string[])];
-    return ["全部"];
-  }, [entityEntries, eventEntries, layer]);
+    if (selectedLetter !== null) {
+      result = result.filter((entry) => getTextInitial(entry.canonical) === selectedLetter);
+    }
+    if (selectedCategories.length > 0) {
+      result = result.filter((entry) =>
+        entry.subtypes.length
+          ? entry.subtypes.some((s) => selectedCategories.includes(s))
+          : selectedCategories.includes("__unclassified__"),
+      );
+    }
+    return result;
+  }, [allEntries, query, selectedLetter, selectedCategories]);
 
-  const filteredEntities = entityEntries.filter((entry) => {
-    const queryMatch = !query || [entry.canonical, ...entry.aliases].join(" ").includes(query);
-    const facetMatch = activeFacet === "全部" || entry.subtypes.includes(activeFacet);
-    return queryMatch && facetMatch;
-  });
-  const filteredEvents = eventEntries.filter(({ letter, event }) => {
-    const queryMatch = !query || `${letter.recipient}${letter.id}${event.originalText}`.includes(query);
-    const facetMatch = activeFacet === "全部" || event.stage === activeFacet;
-    return queryMatch && facetMatch;
-  });
+  // Letter counts (considering search + categories, not letter itself)
+  const letterCounts: Record<string, number> = useMemo(() => {
+    let base = allEntries;
+    const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+    if (normalizedQuery) {
+      base = base.filter((entry) =>
+        [entry.canonical, ...entry.aliases].join(" ").toLocaleLowerCase("zh-CN").includes(normalizedQuery),
+      );
+    }
+    if (selectedCategories.length > 0) {
+      base = base.filter((entry) =>
+        entry.subtypes.length
+          ? entry.subtypes.some((s) => selectedCategories.includes(s))
+          : selectedCategories.includes("__unclassified__"),
+      );
+    }
+    const counts: Record<string, number> = {};
+    for (const letter of ALPHABET) counts[letter] = 0;
+    for (const entry of base) {
+      const init = getTextInitial(entry.canonical);
+      if (counts[init] !== undefined) counts[init]++;
+    }
+    return counts;
+  }, [allEntries, query, selectedCategories]);
+
+  // Category counts (considering search + letter, not category itself)
+  const categoryCounts: Record<string, number> = useMemo(() => {
+    let base = allEntries;
+    const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+    if (normalizedQuery) {
+      base = base.filter((entry) =>
+        [entry.canonical, ...entry.aliases].join(" ").toLocaleLowerCase("zh-CN").includes(normalizedQuery),
+      );
+    }
+    if (selectedLetter !== null) {
+      base = base.filter((entry) => getTextInitial(entry.canonical) === selectedLetter);
+    }
+    const counts: Record<string, number> = {};
+    for (const cat of categories) {
+      counts[cat.code] = base.filter((entry) => entry.subtypes.includes(cat.code)).length;
+    }
+    return counts;
+  }, [allEntries, query, selectedLetter, categories]);
+
+  // Filtered events
+  const filteredEvents = useMemo(() => {
+    const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+    if (!normalizedQuery) return allEvents;
+    return allEvents.filter(({ letter, event }) =>
+      `${letter.recipient}${letter.year ?? ""}${event.originalText}`
+        .toLocaleLowerCase("zh-CN")
+        .includes(normalizedQuery),
+    );
+  }, [allEvents, query]);
+
+  // Filtered acts
+  const filteredActs = useMemo(() => {
+    const normalizedQuery = query.trim().toLocaleLowerCase("zh-CN");
+    if (!normalizedQuery) return allActs;
+    return allActs.filter(({ letter, act }) =>
+      `${letter.recipient}${letter.year ?? ""}${act.originalText}${act.subtype ?? ""}`
+        .toLocaleLowerCase("zh-CN")
+        .includes(normalizedQuery),
+    );
+  }, [allActs, query]);
+
+  // Category toggle with single/multi logic
+  const handleCategoryToggle = useCallback(
+    (catCode: string) => {
+      if (filterMode === "single") {
+        setSelectedCategories((prev) => (prev.includes(catCode) ? [] : [catCode]));
+      } else {
+        setSelectedCategories((prev) =>
+          prev.includes(catCode) ? prev.filter((c) => c !== catCode) : [...prev, catCode],
+        );
+      }
+    },
+    [filterMode],
+  );
+
+  const handleModeChange = useCallback(
+    (mode: FilterMode) => {
+      if (mode === "single" && filterMode === "multi") {
+        setSelectedCategories((prev) => (prev.length > 0 ? [prev[prev.length - 1]] : []));
+      }
+      setFilterMode(mode);
+    },
+    [filterMode],
+  );
+
+  const handleClearCategories = useCallback(() => setSelectedCategories([]), []);
+  const handleClearAll = useCallback(() => {
+    setQuery("");
+    setSelectedLetter(null);
+    setSelectedCategories([]);
+  }, []);
 
   if (!meta) return <div className="page-state">未找到对应的实体专题。</div>;
 
-  const layerLabel = layer === "entity" ? "第一层标注 · 实体层 NER" : layer === "event" ? "第二层标注 · 事件层 EVT" : "第三层标注 · 行动层 ACT";
-  const totalValue = layer === "entity"
-    ? ("canonicalCount" in meta.stats ? meta.stats.canonicalCount : 0)
-    : layer === "event"
-      ? ("eventCount" in meta.stats ? meta.stats.eventCount : 0)
-      : ("paragraphCount" in meta.stats ? meta.stats.paragraphCount : 0);
+  const layerLabel =
+    layer === "entity"
+      ? "第一层标注 · 实体层 NER"
+      : layer === "event"
+        ? "第二层标注 · 事件层 EVT"
+        : "第三层标注 · 行动层 ACT";
+
+  const totalValue =
+    layer === "entity"
+      ? "canonicalCount" in meta.stats ? meta.stats.canonicalCount : 0
+      : layer === "event"
+        ? "eventCount" in meta.stats ? meta.stats.eventCount : 0
+        : "paragraphCount" in meta.stats ? meta.stats.paragraphCount : 0;
+
   const totalUnit = layer === "entity" ? "个规范条目" : layer === "event" ? "个事件" : "个段落";
   const letterCount = "letterCount" in meta.stats ? meta.stats.letterCount : 0;
+  const placeholder = getSearchPlaceholder(meta.label);
 
   return (
     <main className="index-page site-container">
       <Link className="back-link" href="/topics">← 返回实体分类检索</Link>
-      <TopicHero
+
+      <TopicHeader
         eyebrow={`${layerLabel} · ${code}`}
         title={`${meta.label}专题`}
         description={"prompt" in meta ? meta.prompt : meta.definition}
@@ -63,39 +207,80 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
         ]}
       />
 
-      <section className="index-tools" aria-label="专题检索工具">
-        <label><span>专题内部检索</span><input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`搜索${meta.label}……`} /></label>
-        <div className="facet-row" aria-label="子类别">
-          {facets.map((facet) => <button type="button" className={activeFacet === facet ? "selected" : ""} onClick={() => setActiveFacet(facet)} key={facet}>{facet}</button>)}
-        </div>
-      </section>
+      <TopicSearch value={query} onChange={setQuery} placeholder={placeholder} />
 
-      {layer === "entity" ? (
-        filteredEntities.length ? <section className="entity-index-list" aria-label={`${meta.label}条目`}>
-          {filteredEntities.map((entry) => (
-            <Link href={`/entity/${entry.type}/${encodeURIComponent(entry.canonical)}`} key={`${entry.type}-${entry.canonical}`}>
-              <span className={`index-mark entity-${entry.type.toLowerCase()}`}>{entry.type}</span>
-              <span><strong>{entry.canonical}</strong><small>{entry.aliases.length ? `异名：${entry.aliases.slice(0, 3).join("、")}` : entityTypeMeta[entry.type].prompt}</small></span>
-              <span className="entry-stat">{entry.count} 次出现<br />{entry.letterIds.length} 封信</span>
-              <i aria-hidden="true">→</i>
-            </Link>
-          ))}
-        </section> : <EmptyIndex />
-      ) : null}
+      {/* Entity layer: full filtering + grouped list */}
+      {layer === "entity" && (
+        <>
+          <AlphabetIndex
+            counts={letterCounts}
+            selected={selectedLetter}
+            onSelect={setSelectedLetter}
+            totalCount={allEntries.length}
+          />
 
-      {layer === "event" ? (
-        filteredEvents.length ? <section className="event-index-list">
-          {filteredEvents.slice(0, 120).map(({ letter, event }) => (
-            <article key={`${letter.id}-${event.id}`}>
-              <span>{eventTypeMeta[event.type].label}<b>{event.type}</b></span>
-              <div><p>{event.originalText}</p><small>{event.stage ?? "状态暂无数据"} · 致{letter.recipient} · {letter.id}</small></div>
-              <Link href={`/letter/${encodeURIComponent(letter.id)}`}>查看原信 →</Link>
-            </article>
-          ))}
-        </section> : <EmptyIndex />
-      ) : null}
+          {categories.length > 0 && (
+            <SecondaryCategoryFilter
+              categories={categories}
+              categoryCounts={categoryCounts}
+              selected={selectedCategories}
+              onToggle={handleCategoryToggle}
+              mode={filterMode}
+              onModeChange={handleModeChange}
+              onClear={handleClearCategories}
+              totalCount={allEntries.length}
+            />
+          )}
 
-      {layer === "act" ? <EmptyIndex message="行动层数据目录当前为空；页面入口、字段和段落级视觉已预留，接入真实 ACT 文件后将自动显示。" /> : null}
+          <ActiveFilterSummary
+            totalCount={allEntries.length}
+            filteredCount={filteredEntries.length}
+            selectedLetter={selectedLetter}
+            selectedCategories={selectedCategories}
+            categoryMap={categoryLabelMap}
+            keyword={query}
+            onClearAll={handleClearAll}
+            topicLabel={meta.label}
+          />
+
+          <AlphabetGroupedEntityList entries={filteredEntries} categoryLabelMap={categoryLabelMap} />
+        </>
+      )}
+
+      {/* Event layer */}
+      {layer === "event" && (
+        filteredEvents.length ? (
+          <section className="event-index-list" style={{ marginTop: 24 }}>
+            {filteredEvents.slice(0, 120).map(({ letter, event }) => (
+              <article key={`${letter.id}-${event.id}`}>
+                <span>{eventTypeMeta[event.type].label}<b>{event.type}</b></span>
+                <div>
+                  <p>{event.originalText}</p>
+                  <small>{event.stage ?? "状态暂无数据"} · 致{letter.recipient} · {formatLetterDate(letter)}</small>
+                </div>
+                <Link href={`/letter/${encodeURIComponent(letter.id)}`}>查看原信 →</Link>
+              </article>
+            ))}
+          </section>
+        ) : <EmptyIndex />
+      )}
+
+      {layer === "act" && (
+        filteredActs.length ? (
+          <section className="event-index-list" style={{ marginTop: 24 }}>
+            {filteredActs.slice(0, 200).map(({ letter, act }) => (
+              <article key={act.id}>
+                <span>{actTypeMeta[act.type].label}<b>{act.type}</b></span>
+                <div>
+                  <p>{act.originalText}</p>
+                  <small>{act.subtype ? `${act.subtype} · ` : ""}{act.mode} · 致{letter.recipient} · {formatLetterDate(letter)}</small>
+                </div>
+                <Link href={`/letter/${encodeURIComponent(letter.id)}`}>查看原信 →</Link>
+              </article>
+            ))}
+          </section>
+        ) : <EmptyIndex />
+      )}
     </main>
   );
 }

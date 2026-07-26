@@ -102,11 +102,11 @@ export const annotationStyles: {
     AST: { color: "#477064", hover: "#e6eeea", selected: "#d6e4de", fontWeight: 400, fontStyle: "normal", decoration: "underline", decorationStyle: "solid" },
   },
   event: {
-    BIB: { accent: "#746d91", background: "#efedf4", hover: "#e7e4ef", selected: "#ddd9e9", border: "#d9d5e3" },
-    ACA: { accent: "#557985", background: "#eaf0f1", hover: "#e0eaec", selected: "#d4e2e5", border: "#cfdee1" },
-    SOC: { accent: "#956d71", background: "#f3eaea", hover: "#eddfdf", selected: "#e5d3d4", border: "#e3d5d5" },
-    POL: { accent: "#88764f", background: "#f1eee4", hover: "#eae5d6", selected: "#e1dac5", border: "#dfd9c9" },
-    FAM: { accent: "#687d70", background: "#eaf0eb", hover: "#e1e9e3", selected: "#d5e1d8", border: "#d3dfd6" },
+    BIB: { accent: "#746d91", background: "rgba(145, 118, 154, 0.24)", hover: "rgba(145, 118, 154, 0.30)", selected: "rgba(145, 118, 154, 0.34)", border: "rgba(145, 118, 154, 0.28)" },
+    ACA: { accent: "#557985", background: "rgba(99, 139, 151, 0.24)", hover: "rgba(99, 139, 151, 0.30)", selected: "rgba(99, 139, 151, 0.34)", border: "rgba(99, 139, 151, 0.28)" },
+    SOC: { accent: "#956d71", background: "rgba(162, 125, 100, 0.24)", hover: "rgba(162, 125, 100, 0.30)", selected: "rgba(162, 125, 100, 0.34)", border: "rgba(162, 125, 100, 0.28)" },
+    POL: { accent: "#88764f", background: "rgba(145, 131, 98, 0.24)", hover: "rgba(145, 131, 98, 0.30)", selected: "rgba(145, 131, 98, 0.34)", border: "rgba(145, 131, 98, 0.28)" },
+    FAM: { accent: "#687d70", background: "rgba(110, 132, 118, 0.24)", hover: "rgba(110, 132, 118, 0.30)", selected: "rgba(110, 132, 118, 0.34)", border: "rgba(110, 132, 118, 0.28)" },
   },
   action: {
     REQ: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },

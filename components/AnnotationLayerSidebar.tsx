@@ -66,13 +66,20 @@ function DirectoryContents() {
           <i aria-hidden="true">＋</i>
         </summary>
         <div className="category-list">
-          {actOrder.map((code) => (
-            <Link className="category-row act-row" href={`/category/act/${code}`} key={code}>
-              <span className="category-main act-legend" style={actionStyleVariables(code)}><strong>{actTypeMeta[code].label}</strong><small>{code}</small></span>
-              <span className="category-count">暂无段落标注数据</span>
-              <span className="category-arrow" aria-hidden="true">→</span>
-            </Link>
-          ))}
+          {actOrder.map((code) => {
+            const stats = dataset.actStats[code];
+            return (
+              <Link className="category-row act-row" href={`/category/act/${code}`} key={code}>
+                <span className="category-main act-legend" style={actionStyleVariables(code)}><strong>{actTypeMeta[code].label}</strong><small>{code}</small></span>
+                <span className="category-count">
+                  {stats.paragraphCount > 0
+                    ? <>{stats.paragraphCount} 个段落 · {stats.letterCount} 封信</>
+                    : <>暂无段落标注数据</>}
+                </span>
+                <span className="category-arrow" aria-hidden="true">→</span>
+              </Link>
+            );
+          })}
         </div>
       </details>
       <p className="directory-note">目录项目均为专题入口，同时对应正文中的标注图例；不会筛选右侧书信。</p>

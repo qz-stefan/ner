@@ -6,6 +6,7 @@ import { usePathname } from "next/navigation";
 const navigation = [
   { href: "/", label: "首页", matches: (path: string) => path === "/" },
   { href: "/topics", label: "实体分类检索", matches: (path: string) => path.startsWith("/topics") || path.startsWith("/category/") || path.startsWith("/entity/") },
+  { href: "/analysis", label: "维度分析", matches: (path: string) => path.startsWith("/analysis") },
   { href: "/letters", label: "书信检索", matches: (path: string) => path.startsWith("/letters") || path.startsWith("/letter/") },
   { href: "/about", label: "项目介绍", matches: (path: string) => path.startsWith("/about") },
 ] as const;
