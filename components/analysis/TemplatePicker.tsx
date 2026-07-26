@@ -44,7 +44,7 @@ export function TemplatePicker({
         aria-controls={menuId}
         className="h-9 border border-[var(--purple)] bg-[var(--purple)] px-3 text-[11px] text-white transition hover:bg-[var(--purple-deep)] hover:text-white focus:bg-[var(--purple-deep)] focus:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] active:bg-[var(--purple-deep)] active:text-white"
       >
-        预设模板{" "}
+        <span className="text-white">预设模板</span>{" "}
         <span aria-hidden="true" className="inline-block text-white transition-transform">
           {open ? "⌃" : "⌄"}
         </span>
