@@ -35,7 +35,7 @@ export function TemplatePicker({
   }, []);
 
   return (
-    <div className="relative font-[var(--font-serif)]" ref={containerRef}>
+    <div className="relative font-serif" ref={containerRef}>
       <button
         type="button"
         onClick={() => setOpen((value) => !value)}

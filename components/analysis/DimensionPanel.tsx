@@ -36,7 +36,7 @@ interface AxisAssignment {
 let filterIdCounter = 0;
 
 const fieldClass =
-  "h-10 w-full border border-[var(--line-dark)] bg-[var(--surface)] px-3 font-[var(--font-serif)] text-[11px] text-[var(--ink)] outline-none transition focus:border-[var(--purple)] focus-visible:ring-1 focus-visible:ring-[var(--purple)] disabled:cursor-not-allowed disabled:opacity-55";
+  "h-[52px] w-full border border-[var(--line-dark)] bg-[var(--surface)] px-3 font-serif text-[16px] text-[var(--ink)] outline-none transition focus:border-[var(--purple)] focus-visible:ring-1 focus-visible:ring-[var(--purple)] disabled:cursor-not-allowed disabled:opacity-55";
 
 function axisCandidates(selected: DimensionKey[]): DimensionKey[] {
   return selected.filter((key) => !isEntitySubtypeDimension(key));
@@ -92,7 +92,7 @@ function ChoiceChip({
       aria-pressed={selected}
       aria-label={ariaLabel}
       onClick={onToggle}
-      className={`inline-flex min-h-9 max-w-full items-center gap-2 border px-3 py-1.5 font-[var(--font-serif)] text-[12px] leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] active:translate-y-px ${
+      className={`inline-flex min-h-9 max-w-full items-center gap-2 border px-3 py-1.5 font-serif text-[12px] leading-5 transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] active:translate-y-px ${
         selected
           ? "border-[var(--purple)] bg-[var(--purple-pale)] text-[var(--purple-deep)]"
           : "border-[var(--line)] bg-[var(--surface)] text-[var(--ink)] hover:border-[var(--line-dark)] hover:bg-[rgba(255,254,249,.72)]"
@@ -105,7 +105,7 @@ function ChoiceChip({
       ) : null}
       <span className="min-w-0">{label}</span>
       {code ? (
-        <span className="font-[var(--font-sans)] text-[8px] font-extrabold tracking-[.16em] text-[var(--muted)]">
+        <span className="font-sans text-[8px] font-extrabold tracking-[.16em] text-[var(--muted)]">
           {code}
         </span>
       ) : null}
@@ -240,186 +240,154 @@ export function DimensionPanel({
     config.columnKey,
   );
 
+  const showDetailScope = activeEntityItems.length > 0;
+
   return (
-    <section className="font-[var(--font-serif)] text-[var(--ink)]">
-      <div className="space-y-8">
-        <section aria-labelledby="analysis-dimensions-heading">
-          <div className="mb-4 flex flex-wrap items-baseline justify-between gap-2 border-b border-[var(--line)] pb-3">
-            <h2
-              id="analysis-dimensions-heading"
-              className="text-[20px] font-semibold tracking-[.04em] text-[var(--ink)] sm:text-[22px]"
-            >
-              选择分析维度
-            </h2>
-            <p className="text-[10px] text-[var(--muted)]">
-              选择一项或多项，系统会自动安排数据透视表的行与列
-            </p>
+    <section className="font-serif text-[var(--ink)]">
+      <div className="space-y-[20px]">
+        {/* 大标题 */}
+        <div className="mb-0">
+          <h2 className="text-[20px] font-semibold tracking-[.04em] text-[var(--ink)] sm:text-[22px]">
+            选择分析维度
+          </h2>
+        </div>
+
+        {/* 统一维度面板 */}
+        <div className="space-y-[20px]">
+
+          {/* 综合：年份、时期、收信人 */}
+          <div className="grid gap-3 sm:grid-cols-[108px_minmax(0,1fr)] sm:items-start">
+            <h3 className="pt-1.5 text-[13px] font-medium text-[var(--purple-deep)]">综合</h3>
+            <div className="flex min-w-0 flex-wrap gap-2.5">
+              {timeGroup?.items.map((item) => (
+                <ChoiceChip
+                  key={item.key}
+                  label={item.label}
+                  selected={selected.has(item.key)}
+                  onToggle={() => handleToggleItem(item)}
+                />
+              ))}
+            </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="grid gap-3 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-start">
-              <h3 className="pt-2 text-[13px] font-medium text-[var(--purple-deep)]">时间</h3>
-              <div className="flex min-w-0 flex-wrap gap-2">
-                {timeGroup?.items.map((item) => (
+          {/* 实体类型 */}
+          <div className="grid gap-3 sm:grid-cols-[108px_minmax(0,1fr)] sm:items-start">
+            <h3 className="pt-1.5 text-[13px] font-medium text-[var(--purple-deep)]">实体类型</h3>
+            <div className="flex min-w-0 flex-wrap gap-2.5">
+              {entityItems.map((item) => {
+                const code = item.key.split(":")[1];
+                const label = item.label.replace(/（[^）]+）$/, "");
+                return (
                   <ChoiceChip
                     key={item.key}
-                    label={item.label}
+                    label={label}
+                    code={code}
                     selected={selected.has(item.key)}
                     onToggle={() => handleToggleItem(item)}
                   />
-                ))}
-              </div>
+                );
+              })}
             </div>
+          </div>
 
-            <div className="grid gap-3 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-start">
-              <h3 className="pt-2 text-[13px] font-medium text-[var(--purple-deep)]">实体类型</h3>
-              <div className="flex min-w-0 flex-wrap gap-2">
-                {entityItems.map((item) => {
-                  const code = item.key.split(":")[1];
-                  const label = item.label.replace(/（[^）]+）$/, "");
+          {/* 细分范围：只在选中实体类型时显示，不用分割线 */}
+          {showDetailScope && (
+            <div className="grid gap-3 sm:grid-cols-[108px_minmax(0,1fr)] sm:items-start">
+              <div className="pt-1.5">
+                <h3 className="text-[13px] font-medium text-[var(--purple-deep)]">细分范围</h3>
+                <p className="mt-0.5 text-[10px] leading-4 text-[var(--muted)]">
+                  可选；未选择细分项时，默认包含全部内容。
+                </p>
+              </div>
+              <div className="min-w-0">
+                {activeEntityItems.map((parent) => {
+                  const children = parent.children ?? [];
+                  const hasSelectedChild = children.some((child) => selected.has(child.key));
+                  const parentLabel = parent.label.replace(/（[^）]+）$/, "");
+                  const parentCode = parent.key.split(":")[1];
                   return (
-                    <ChoiceChip
-                      key={item.key}
-                      label={label}
-                      code={code}
-                      selected={selected.has(item.key)}
-                      onToggle={() => handleToggleItem(item)}
-                    />
+                    <div key={parent.key} className="mb-3 last:mb-0">
+                      <p className="mb-1.5 text-[11px] font-medium text-[var(--muted)]">
+                        {parentLabel}
+                        <span className="ml-1.5 font-sans text-[8px] font-extrabold tracking-[.16em] text-[var(--muted)]">
+                          {parentCode}
+                        </span>
+                      </p>
+                      {children.length ? (
+                        <div className="flex min-w-0 flex-wrap gap-2">
+                          <ChoiceChip
+                            label={`全部${parentLabel}`}
+                            selected={!hasSelectedChild}
+                            onToggle={() => handleSelectAllSubtypes(parent)}
+                            ariaLabel={`分析全部${parentLabel}`}
+                          />
+                          {children.map((child) => (
+                            <ChoiceChip
+                              key={child.key}
+                              label={child.label}
+                              selected={selected.has(child.key)}
+                              onToggle={() => handleToggleSubtype(parent, child)}
+                            />
+                          ))}
+                        </div>
+                      ) : (
+                        <p className="text-[10px] text-[var(--muted)]">
+                          该维度暂未设置细分项，将按全部内容分析。
+                        </p>
+                      )}
+                    </div>
                   );
                 })}
               </div>
             </div>
-          </div>
-        </section>
-
-        <section
-          aria-labelledby="analysis-subtypes-heading"
-          className="border-t border-[var(--line)] pt-7"
-        >
-          <div className="mb-4 flex flex-wrap items-baseline gap-x-3 gap-y-1">
-            <h2
-              id="analysis-subtypes-heading"
-              className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]"
-            >
-              细分范围
-            </h2>
-            <p className="text-[10px] leading-5 text-[var(--muted)]">
-              可选；未选择细分项时，默认包含该维度下的全部内容。
-            </p>
-          </div>
-
-          {activeEntityItems.length ? (
-            <div className="divide-y divide-[var(--line)] border-y border-[var(--line)]">
-              {activeEntityItems.map((parent) => {
-                const children = parent.children ?? [];
-                const hasSelectedChild = children.some((child) => selected.has(child.key));
-                const parentLabel = parent.label.replace(/（[^）]+）$/, "");
-                const parentCode = parent.key.split(":")[1];
-                return (
-                  <div
-                    key={parent.key}
-                    className="grid gap-3 py-4 sm:grid-cols-[112px_minmax(0,1fr)]"
-                  >
-                    <div className="pt-2">
-                      <p className="text-[13px] font-medium text-[var(--purple-deep)]">
-                        {parentLabel}
-                        <span className="ml-2 font-[var(--font-sans)] text-[8px] font-extrabold tracking-[.16em] text-[var(--muted)]">
-                          {parentCode}
-                        </span>
-                      </p>
-                    </div>
-                    {children.length ? (
-                      <div className="flex min-w-0 flex-wrap gap-2">
-                        <ChoiceChip
-                          label={`全部${parentLabel}`}
-                          selected={!hasSelectedChild}
-                          onToggle={() => handleSelectAllSubtypes(parent)}
-                          ariaLabel={`分析全部${parentLabel}`}
-                        />
-                        {children.map((child) => (
-                          <ChoiceChip
-                            key={child.key}
-                            label={child.label}
-                            selected={selected.has(child.key)}
-                            onToggle={() => handleToggleSubtype(parent, child)}
-                          />
-                        ))}
-                      </div>
-                    ) : (
-                      <p className="pt-2 text-[10px] text-[var(--muted)]">
-                        该维度暂未设置细分项，将按全部内容分析。
-                      </p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="border border-dashed border-[var(--line)] px-4 py-4 text-[10px] text-[var(--muted)]">
-              请先选择至少一个实体分析维度。
-            </p>
           )}
-        </section>
 
-        <section
-          aria-labelledby="event-act-heading"
-          className="border-t border-[var(--line)] pt-7"
-        >
-          <h2
-            id="event-act-heading"
-            className="mb-4 text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]"
-          >
-            事件与行为
-          </h2>
-          <div className="grid gap-x-10 gap-y-4 xl:grid-cols-2">
-            <div className="grid gap-3 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-start">
-              <h3 className="pt-2 text-[13px] font-medium text-[var(--purple-deep)]">事件类型</h3>
-              <div className="flex min-w-0 flex-wrap gap-2">
-                {eventGroup?.items.map((item) => (
-                  <ChoiceChip
-                    key={item.key}
-                    label={item.label}
-                    selected={selected.has(item.key)}
-                    onToggle={() => handleToggleItem(item)}
-                  />
-                ))}
-              </div>
-            </div>
-            <div className="grid gap-3 sm:grid-cols-[76px_minmax(0,1fr)] sm:items-start">
-              <h3 className="pt-2 text-[13px] font-medium text-[var(--purple-deep)]">行为类型</h3>
-              <div className="flex min-w-0 flex-wrap gap-2">
-                {actGroup?.items.map((item) => (
-                  <ChoiceChip
-                    key={item.key}
-                    label={item.label}
-                    selected={selected.has(item.key)}
-                    onToggle={() => handleToggleItem(item)}
-                  />
-                ))}
-              </div>
+          {/* 事件类型 */}
+          <div className="grid gap-3 sm:grid-cols-[108px_minmax(0,1fr)] sm:items-start">
+            <h3 className="pt-1.5 text-[13px] font-medium text-[var(--purple-deep)]">事件类型</h3>
+            <div className="flex min-w-0 flex-wrap gap-2.5">
+              {eventGroup?.items.map((item) => (
+                <ChoiceChip
+                  key={item.key}
+                  label={item.label}
+                  selected={selected.has(item.key)}
+                  onToggle={() => handleToggleItem(item)}
+                />
+              ))}
             </div>
           </div>
-        </section>
 
-        <section
-          aria-labelledby="axis-config-heading"
-          className="border-t border-[var(--line)] pt-7"
-        >
-          <div className="mb-4">
-            <h2
-              id="axis-config-heading"
-              className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]"
-            >
+          {/* 行为类型 */}
+          <div className="grid gap-3 sm:grid-cols-[108px_minmax(0,1fr)] sm:items-start">
+            <h3 className="pt-1.5 text-[13px] font-medium text-[var(--purple-deep)]">行为类型</h3>
+            <div className="flex min-w-0 flex-wrap gap-2.5">
+              {actGroup?.items.map((item) => (
+                <ChoiceChip
+                  key={item.key}
+                  label={item.label}
+                  selected={selected.has(item.key)}
+                  onToggle={() => handleToggleItem(item)}
+                />
+              ))}
+            </div>
+          </div>
+
+        </div>
+
+        {/* 行列配置 */}
+        <section aria-labelledby="axis-config-heading" className="pt-2">
+          <div className="mb-3">
+            <h2 id="axis-config-heading" className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]">
               行列配置
             </h2>
-            <p className="mt-1 text-[10px] text-[var(--muted)]">
+            <p className="mt-1 text-[15px] leading-6 text-[var(--muted)]">
               可调整数据透视表结构、统计口径与图表表达。
             </p>
           </div>
 
           <div className="grid gap-4 border border-[var(--line)] bg-[rgba(240,236,226,.46)] p-4 md:grid-cols-2 xl:grid-cols-4">
-            <label className="block text-[10px] text-[var(--muted)]">
-              <span className="mb-1.5 block">行</span>
+            <label className="block">
+              <span className="mb-1.5 block text-[16px] leading-6 text-[var(--muted)]">行</span>
               <select
                 value={config.rowKey ?? ""}
                 disabled={!selectableAxisKeys.length}
@@ -435,8 +403,8 @@ export function DimensionPanel({
               </select>
             </label>
 
-            <label className="block text-[10px] text-[var(--muted)]">
-              <span className="mb-1.5 block">列</span>
+            <label className="block">
+              <span className="mb-1.5 block text-[16px] leading-6 text-[var(--muted)]">列</span>
               <select
                 value={config.columnKey ?? ""}
                 disabled={!selectableAxisKeys.length}
@@ -454,8 +422,8 @@ export function DimensionPanel({
               </select>
             </label>
 
-            <label className="block text-[10px] text-[var(--muted)]">
-              <span className="mb-1.5 block">统计指标</span>
+            <label className="block">
+              <span className="mb-1.5 block text-[16px] leading-6 text-[var(--muted)]">统计指标</span>
               <select
                 value={config.metric}
                 onChange={(event) => update({
@@ -469,8 +437,8 @@ export function DimensionPanel({
               </select>
             </label>
 
-            <label className="block text-[10px] text-[var(--muted)]">
-              <span className="mb-1.5 block">图表类型</span>
+            <label className="block">
+              <span className="mb-1.5 block text-[16px] leading-6 text-[var(--muted)]">图表类型</span>
               <select
                 value={config.chartType}
                 onChange={(event) => update({ chartType: event.target.value as ChartType })}
@@ -493,12 +461,12 @@ export function DimensionPanel({
 
             {constraintKeys.length ? (
               <div className="md:col-span-2 xl:col-span-4">
-                <p className="text-[9px] text-[var(--muted)]">其余维度将作为限定条件：</p>
+                <p className="text-[15px] leading-6 text-[var(--muted)]">其余维度将作为限定条件：</p>
                 <div className="mt-2 flex flex-wrap gap-1.5">
                   {constraintKeys.map((key) => (
                     <span
                       key={key}
-                      className="border border-[var(--line-dark)] bg-[var(--surface)] px-2 py-1 text-[9px] text-[var(--purple-deep)]"
+                      className="border border-[var(--line-dark)] bg-[var(--surface)] px-2 py-1 text-[15px] text-[var(--purple-deep)]"
                     >
                       {getDimensionKeyLabel(key)}
                     </span>
@@ -508,28 +476,23 @@ export function DimensionPanel({
             ) : null}
 
             {chartReason ? (
-              <p className="text-[9px] text-[var(--red)] md:col-span-2 xl:col-span-4">
+              <p className="text-[15px] leading-6 text-[var(--red)] md:col-span-2 xl:col-span-4">
                 当前图表不可用：{chartReason}
               </p>
             ) : null}
           </div>
         </section>
 
-        <section
-          aria-labelledby="filter-heading"
-          className="border-t border-[var(--line)] pt-7"
-        >
+        {/* 筛选条件 */}
+        <section aria-labelledby="filter-heading" className="pt-2">
           <div className="mb-3 flex items-center justify-between gap-4">
             <div>
-              <h2
-                id="filter-heading"
-                className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]"
-              >
+              <h2 id="filter-heading" className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]">
                 筛选条件
               </h2>
-              <p className="mt-1 text-[9px] text-[var(--muted)]">可选，多条条件按“且”关系应用</p>
+              <p className="mt-1 text-[15px] leading-6 text-[var(--muted)]">可选，多条条件按“且”关系应用</p>
             </div>
-            <span className="text-[9px] text-[#9a949a]">{config.filters.length} 条</span>
+            <span className="text-[15px] text-[#9a949a]">{config.filters.length} 条</span>
           </div>
 
           {config.filters.length ? (
@@ -544,7 +507,7 @@ export function DimensionPanel({
               ))}
             </div>
           ) : (
-            <p className="border border-dashed border-[var(--line)] px-3 py-3 text-center text-[9px] text-[#9a949a]">
+            <p className="border border-dashed border-[var(--line)] px-3 py-3 text-center text-[15px] text-[#9a949a]">
               当前显示全部数据
             </p>
           )}
@@ -553,60 +516,57 @@ export function DimensionPanel({
             <button
               type="button"
               onClick={handleAddFilter}
-              className="border border-[var(--line-dark)] bg-transparent px-3 py-2 text-[10px] text-[var(--purple)] transition hover:border-[var(--purple)] hover:bg-[var(--purple-pale)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
+              className="border border-[var(--line-dark)] bg-transparent px-3 py-2 text-[15px] font-serif text-[var(--purple)] transition hover:border-[var(--purple)] hover:bg-[var(--purple-pale)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
             >
               ＋ 添加筛选
             </button>
-            <label className="flex cursor-pointer items-center gap-2 text-[10px] text-[var(--ink)]">
+            <label className="flex cursor-pointer items-center gap-2 text-[15px] text-[var(--ink)]">
               <input
                 type="checkbox"
                 checked={config.excludeUnknownYear}
                 onChange={(event) => update({ excludeUnknownYear: event.target.checked })}
-                className="size-3.5 accent-[var(--purple)]"
+                className="size-4 accent-[var(--purple)]"
               />
               排除无年份书信（{unknownYearCount} 封）
             </label>
           </div>
         </section>
 
-        <section
-          aria-label="已选条件摘要"
-          className="border-y border-[var(--line)] py-4"
-        >
-          <div className="flex flex-wrap items-center gap-2">
-            <h2 className="mr-1 text-[11px] font-medium text-[var(--muted)]">已选条件：</h2>
-            {config.selectedDimensions.length ? (
-              config.selectedDimensions.map((key) => {
-                const item = getDimensionItem(key);
-                return (
-                  <button
-                    key={key}
-                    type="button"
-                    onClick={() => {
-                      if (!item) return;
-                      if (item.parentKey) {
-                        const parent = getDimensionItem(item.parentKey);
-                        if (parent) handleToggleSubtype(parent, item);
-                        return;
-                      }
-                      handleToggleItem(item);
-                    }}
-                    className="inline-flex min-h-7 items-center gap-1.5 border border-[#c9c2d4] bg-[var(--purple-pale)] px-2.5 py-1 text-[10px] text-[var(--purple-deep)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
-                    aria-label={`取消${getDimensionKeyLabel(key)}`}
-                  >
-                    {getDimensionKeyLabel(key)}
-                    <span aria-hidden="true">×</span>
-                  </button>
-                );
-              })
-            ) : (
-              <span className="text-[10px] text-[#9b959a]">尚未选择</span>
-            )}
-          </div>
-        </section>
+        {/* 已选条件摘要 */}
+        <div className="flex flex-wrap items-center gap-2 pt-2">
+          <h2 className="mr-1 text-[15px] font-medium text-[var(--muted)]">已选条件：</h2>
+          {config.selectedDimensions.length ? (
+            config.selectedDimensions.map((key) => {
+              const item = getDimensionItem(key);
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => {
+                    if (!item) return;
+                    if (item.parentKey) {
+                      const parent = getDimensionItem(item.parentKey);
+                      if (parent) handleToggleSubtype(parent, item);
+                      return;
+                    }
+                    handleToggleItem(item);
+                  }}
+                  className="inline-flex min-h-7 items-center gap-1.5 border border-[#c9c2d4] bg-[var(--purple-pale)] px-2.5 py-1 text-[15px] font-serif text-[var(--purple-deep)] transition hover:border-[var(--purple)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
+                  aria-label={`取消${getDimensionKeyLabel(key)}`}
+                >
+                  {getDimensionKeyLabel(key)}
+                  <span aria-hidden="true">×</span>
+                </button>
+              );
+            })
+          ) : (
+            <span className="text-[15px] text-[#9b959a]">尚未选择</span>
+          )}
+        </div>
 
-        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center">
-          <p className="text-[10px] text-[var(--muted)]" aria-live="polite">
+        {/* 开始分析 */}
+        <div className="flex flex-col items-start justify-between gap-3 sm:flex-row sm:items-center pt-2">
+          <p className="text-[15px] leading-6 text-[var(--muted)]" aria-live="polite">
             {selectableAxisKeys.length
               ? `已选择 ${selectableAxisKeys.length} 个分析维度`
               : "请至少勾选一个维度"}
@@ -615,7 +575,7 @@ export function DimensionPanel({
             type="button"
             onClick={onAnalyze}
             disabled={!selectableAxisKeys.length || !config.rowKey || Boolean(chartReason)}
-            className="h-11 w-full bg-[var(--purple)] px-7 text-[12px] font-medium text-white transition hover:bg-[var(--purple-deep)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] disabled:cursor-not-allowed disabled:bg-[#b7b1bd] disabled:text-white sm:w-auto"
+            className="h-[52px] w-full bg-[var(--purple)] px-7 text-[16px] font-serif font-medium text-white transition hover:bg-[var(--purple-deep)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)] disabled:cursor-not-allowed disabled:bg-[#b7b1bd] disabled:text-white sm:w-auto"
           >
             <span className="text-white">开始分析</span>
           </button>

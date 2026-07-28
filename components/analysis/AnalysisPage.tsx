@@ -157,7 +157,7 @@ export function AnalysisPage() {
     : [];
 
   return (
-    <main className="min-h-[calc(100vh-64px)] bg-[var(--paper)] pb-20 font-[var(--font-serif)]">
+    <main className="min-h-[calc(100vh-64px)] bg-[var(--paper)] pb-20 font-serif">
       <div className="site-container">
         <header className="flex flex-col gap-5 border-b border-[var(--line)] py-9 sm:flex-row sm:items-end sm:justify-between">
           <div>
