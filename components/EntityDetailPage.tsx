@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { entityTypeMeta, eventTypeMeta } from "@/lib/config";
-import { formatLetterDate, getEntity, getEntityOccurrences, getRelatedEntities, getRelatedEvents } from "@/lib/data-adapter";
+import { formatLetterDate, getEntity, getEntityAnnotation, getEntityOccurrences, getRelatedEntities, getRelatedEvents } from "@/lib/data-adapter";
 import type { EntityType } from "@/lib/types";
 import { TopicHero } from "@/components/TopicHero";
 
@@ -14,25 +14,23 @@ export function EntityDetailPage({ type, name }: { type: EntityType; name: strin
   const occurrences = getEntityOccurrences(entry);
   const related = getRelatedEntities(entry);
   const relatedEvents = getRelatedEvents(entry);
+  const annotation = getEntityAnnotation(type, name);
+  const subtypeLabel = entry.subtypes.length ? entry.subtypes.join("、") : `${entityTypeMeta[type].label} · ${type}`;
+  const hasAliases = entry.aliases.length > 0;
 
   return (
     <main className="entity-detail-page site-container">
       <Link className="back-link" href={`/category/entity/${type}`}>← 返回{entityTypeMeta[type].label}索引</Link>
       <TopicHero
-        eyebrow={`${entityTypeMeta[type].label} · ${type}`}
+        eyebrow={subtypeLabel}
         title={entry.canonical}
-        description={`${entityTypeMeta[type].prompt}。当前页面仅呈现语料中可验证的规范名、异名与共现记录。`}
+        subtitle={hasAliases ? `别名：${entry.aliases.join("、")}` : undefined}
+        description={annotation ?? `${entityTypeMeta[type].prompt}。当前页面仅呈现语料中可验证的规范名、异名与共现记录。`}
         metrics={[
-          { value: entry.count.toLocaleString("zh-CN"), label: "次出现" },
-          { value: entry.letterIds.length.toLocaleString("zh-CN"), label: "封书信" },
+          { value: (entry.count ?? 0).toLocaleString("zh-CN"), label: "次出现" },
+          { value: (entry.letterIds?.length ?? 0).toLocaleString("zh-CN"), label: "封书信" },
         ]}
       />
-      <section className="entity-facts">
-        <div><span>标准名称</span><p>{entry.canonical}</p></div>
-        <div><span>异名或简称</span><p>{entry.aliases.length ? entry.aliases.join("、") : "暂无数据"}</p></div>
-        <div><span>子类别</span><p>{entry.subtypes.length ? entry.subtypes.join("、") : "暂无数据"}</p></div>
-        <div><span>简短介绍</span><p>暂无独立释义字段</p></div>
-      </section>
 
       <section className="occurrence-section">
         <div className="section-heading"><div><span>CORRESPONDENCE</span><h2>相关书信</h2></div><div className="view-toggle"><button type="button" className={!tableView ? "selected" : ""} onClick={() => setTableView(false)}>原文片段</button><button type="button" className={tableView ? "selected" : ""} onClick={() => setTableView(true)}>表格模式</button></div></div>

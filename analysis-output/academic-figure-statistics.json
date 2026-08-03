@@ -1,0 +1,1843 @@
+{
+  "generatedAt": "2026-08-01T09:21:12.906Z",
+  "materialPassport": {
+    "analysisId": "request-path-academic-figure-statistics-v1",
+    "originSkill": "academic-research-suite / experiment-agent",
+    "originMode": "validate",
+    "status": "VERIFIED",
+    "dataUnit": "含至少一个请求行动的整封书信",
+    "sampleSize": 178,
+    "clusteringInput": "analysis-output/preliminary-request-path-clusters.json",
+    "clusteringInputSha256": "19142e67c3e3960193d931493005ed26304833f111a7861bfcfaaa2584f9fc93",
+    "controlInput": "analysis-output/recipient-effects-controlled-by-domain.json",
+    "controlInputSha256": "67cad7ca9248186d90e95ca77d62f21d1e0f665b9ad6490fa615d0a427406f91",
+    "featureIntervals": "固定当前聚类归属，在各类型内对整封书信重采样20,000次；百分位95%区间",
+    "featureStandardization": "以178封书信的总体均值与样本标准差转换为z分数",
+    "personIntervals": "各人物×路径类型的边际比例采用Wilson 95%区间",
+    "adjustedEffectIntervals": "Mantel–Haenszel共同优势比；Robins–Breslow–Greenland对数OR标准误与正态近似95%区间；不作零格连续性修正",
+    "adjustedEffectReference": "Robins, Breslow & Greenland (1986), Biometrics 42(2):311–323；公式按statsmodels StratifiedTable.logodds_pooled_se复核",
+    "adjustedEffectPValues": "沿用事务签名内100,000次置换检验及Benjamini–Hochberg FDR；时期敏感性模型在事务签名×时期内置换",
+    "randomSeed": 20260801
+  },
+  "featureStatistics": {
+    "corpus": {
+      "complexity": {
+        "mean": 2.0266170045261465,
+        "sd": 0.441310195320419,
+        "q025": 1.2208771694601164,
+        "q25": 1.791759469228055,
+        "median": 1.9459101490553132,
+        "q75": 2.3978952727983707,
+        "q975": 2.772588722239781
+      },
+      "requestShare": {
+        "mean": 0.15792330191121573,
+        "sd": 0.09784993084016795,
+        "q025": 0.04431818181818182,
+        "q25": 0.09090909090909091,
+        "median": 0.13333333333333333,
+        "q75": 0.2,
+        "q975": 0.41210526315789453
+      },
+      "serialRequest": {
+        "mean": 0.11857945425361156,
+        "sd": 0.30087767415065686,
+        "q025": 0,
+        "q25": 0,
+        "median": 0,
+        "q75": 0,
+        "q975": 1
+      },
+      "firstRequestPosition": {
+        "mean": 0.5825017204803717,
+        "sd": 0.29144154659368093,
+        "q025": 0.0665158371040724,
+        "q25": 0.3333333333333333,
+        "median": 0.6076923076923078,
+        "q75": 0.8181818181818182,
+        "q975": 1
+      },
+      "lastRequestPosition": {
+        "mean": 0.7545339924774412,
+        "sd": 0.2502501236106537,
+        "q025": 0.2,
+        "q25": 0.637987012987013,
+        "median": 0.8333333333333334,
+        "q75": 0.9626068376068376,
+        "q975": 1
+      },
+      "postRequestContinuation": {
+        "mean": 0.2454660075225588,
+        "sd": 0.2502501236106537,
+        "q025": 0,
+        "q25": 0.03739316239316239,
+        "median": 0.16666666666666666,
+        "q75": 0.362012987012987,
+        "q975": 0.8
+      },
+      "persuasionShare": {
+        "mean": 0.20136596228013579,
+        "sd": 0.1795889896412865,
+        "q025": 0,
+        "q25": 0.08333333333333333,
+        "median": 0.16666666666666666,
+        "q75": 0.2935049019607843,
+        "q975": 0.7015151515151508
+      },
+      "informationShare": {
+        "mean": 0.5850612557362399,
+        "sd": 0.1837227805470443,
+        "q025": 0.110625,
+        "q25": 0.4821428571428571,
+        "median": 0.6043478260869566,
+        "q75": 0.7202380952380952,
+        "q975": 0.8666666666666667
+      },
+      "displayShare": {
+        "mean": 0.05337350501614522,
+        "sd": 0.07612514277273204,
+        "q025": 0,
+        "q25": 0,
+        "median": 0,
+        "q75": 0.09090909090909091,
+        "q975": 0.22874999999999945
+      }
+    },
+    "types": [
+      {
+        "code": "A",
+        "name": "先叙后请型",
+        "letterCount": 65,
+        "corpusShare": 0.3651685393258427,
+        "assignmentStability": {
+          "featureWeightPerturbation": 0.9064615384615384,
+          "eightyPercentSubsampling": 0.802307391474384
+        },
+        "features": {
+          "complexity": {
+            "label": "路径复杂度（log(去重行动数+1)）",
+            "mean": 1.823668442958167,
+            "sd": 0.3386754035189374,
+            "median": 1.9459101490553132,
+            "q25": 1.6094379124341003,
+            "q75": 2.0794415416798357,
+            "meanCi95": {
+              "lower": 1.7401937598202852,
+              "upper": 1.904313088909154
+            },
+            "standardizedMean": -0.45987734641078465,
+            "standardizedMeanCi95": {
+              "lower": -0.6490292944578357,
+              "upper": -0.2771382055386057
+            }
+          },
+          "requestShare": {
+            "label": "请求行动占比",
+            "mean": 0.15363732421424725,
+            "sd": 0.08659366830153684,
+            "median": 0.13333333333333333,
+            "q25": 0.09090909090909091,
+            "q75": 0.2,
+            "meanCi95": {
+              "lower": 0.13370660055756212,
+              "upper": 0.17514430868277017
+            },
+            "standardizedMean": -0.04380154038094691,
+            "standardizedMeanCi95": {
+              "lower": -0.24748818058144728,
+              "upper": 0.17599406176059473
+            }
+          },
+          "serialRequest": {
+            "label": "连续请求程度",
+            "mean": 0,
+            "sd": 0,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "meanCi95": {
+              "lower": 0,
+              "upper": 0
+            },
+            "standardizedMean": -0.39411184159259327,
+            "standardizedMeanCi95": {
+              "lower": -0.39411184159259327,
+              "upper": -0.39411184159259327
+            }
+          },
+          "firstRequestPosition": {
+            "label": "首次请求位置",
+            "mean": 0.7250332462382951,
+            "sd": 0.23457601753873702,
+            "median": 0.75,
+            "q25": 0.625,
+            "q75": 0.9,
+            "meanCi95": {
+              "lower": 0.6670506408366313,
+              "upper": 0.780335652367267
+            },
+            "standardizedMean": 0.4890569907544327,
+            "standardizedMeanCi95": {
+              "lower": 0.29010592808215907,
+              "upper": 0.6788117006622579
+            }
+          },
+          "lastRequestPosition": {
+            "label": "末次请求位置",
+            "mean": 0.844404940670718,
+            "sd": 0.12442247670640073,
+            "median": 0.8571428571428571,
+            "q25": 0.75,
+            "q75": 0.9411764705882353,
+            "meanCi95": {
+              "lower": 0.8145557529680234,
+              "upper": 0.8747546225803244
+            },
+            "standardizedMean": 0.359124490715939,
+            "standardizedMeanCi95": {
+              "lower": 0.2398470762954177,
+              "upper": 0.48040188099937126
+            }
+          },
+          "postRequestContinuation": {
+            "label": "请求后续写比例",
+            "mean": 0.15559505932928178,
+            "sd": 0.12442247670640068,
+            "median": 0.14285714285714285,
+            "q25": 0.058823529411764705,
+            "q75": 0.25,
+            "meanCi95": {
+              "lower": 0.1252453774196748,
+              "upper": 0.18544424703197626
+            },
+            "standardizedMean": -0.3591244907159399,
+            "standardizedMeanCi95": {
+              "lower": -0.48040188099937436,
+              "upper": -0.23984707629541915
+            }
+          },
+          "persuasionShare": {
+            "label": "说服行动占比",
+            "mean": 0.12953873050026896,
+            "sd": 0.13194101268235106,
+            "median": 0.1111111111111111,
+            "q25": 0,
+            "q75": 0.2,
+            "meanCi95": {
+              "lower": 0.09976173559346635,
+              "upper": 0.1631769347105885
+            },
+            "standardizedMean": -0.39995342656214905,
+            "standardizedMeanCi95": {
+              "lower": -0.5657597767525454,
+              "upper": -0.21264682008527677
+            }
+          },
+          "informationShare": {
+            "label": "告知行动占比",
+            "mean": 0.6794977671900747,
+            "sd": 0.1449985784108435,
+            "median": 0.7142857142857143,
+            "q25": 0.6190476190476191,
+            "q75": 0.75,
+            "meanCi95": {
+              "lower": 0.642420178112486,
+              "upper": 0.7126380222341756
+            },
+            "standardizedMean": 0.5140163412106278,
+            "standardizedMeanCi95": {
+              "lower": 0.3122036483742345,
+              "upper": 0.6943981912208662
+            }
+          },
+          "displayShare": {
+            "label": "展示行动占比",
+            "mean": 0.03561677638600716,
+            "sd": 0.0736707503151492,
+            "median": 0,
+            "q25": 0,
+            "q75": 0.05,
+            "meanCi95": {
+              "lower": 0.019314158064158066,
+              "upper": 0.054743177762408515
+            },
+            "standardizedMean": -0.23325708147635166,
+            "standardizedMeanCi95": {
+              "lower": -0.44741258553261043,
+              "upper": 0.017992383283304818
+            }
+          }
+        }
+      },
+      {
+        "code": "B",
+        "name": "论议收束型",
+        "letterCount": 52,
+        "corpusShare": 0.29213483146067415,
+        "assignmentStability": {
+          "featureWeightPerturbation": 0.9203846153846154,
+          "eightyPercentSubsampling": 0.8539674952198852
+        },
+        "features": {
+          "complexity": {
+            "label": "路径复杂度（log(去重行动数+1)）",
+            "mean": 2.370339578980667,
+            "sd": 0.4105194387915895,
+            "median": 2.4849066497880004,
+            "q25": 2.1677788184221236,
+            "q75": 2.639057329615259,
+            "meanCi95": {
+              "lower": 2.255782860671886,
+              "upper": 2.4745151902427986
+            },
+            "standardizedMean": 0.778868419763011,
+            "standardizedMeanCi95": {
+              "lower": 0.5192852070398031,
+              "upper": 1.014928253337655
+            }
+          },
+          "requestShare": {
+            "label": "请求行动占比",
+            "mean": 0.14430896255386869,
+            "sd": 0.07425687318974629,
+            "median": 0.14285714285714285,
+            "q25": 0.09090909090909091,
+            "q75": 0.16666666666666666,
+            "meanCi95": {
+              "lower": 0.12553872220453238,
+              "upper": 0.16490524432713824
+            },
+            "standardizedMean": -0.13913488993247486,
+            "standardizedMeanCi95": {
+              "lower": -0.3309617025645285,
+              "upper": 0.07135357537786202
+            }
+          },
+          "serialRequest": {
+            "label": "连续请求程度",
+            "mean": 0.046932234432234425,
+            "sd": 0.13771506359000238,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "meanCi95": {
+              "lower": 0.014423076923076924,
+              "upper": 0.0879120879120879
+            },
+            "standardizedMean": -0.23812740517763248,
+            "standardizedMeanCi95": {
+              "lower": -0.3461751611333614,
+              "upper": -0.10192636069822765
+            }
+          },
+          "firstRequestPosition": {
+            "label": "首次请求位置",
+            "mean": 0.6264782564419124,
+            "sd": 0.3123315180793058,
+            "median": 0.6666666666666666,
+            "q25": 0.45,
+            "q75": 0.8867647058823529,
+            "meanCi95": {
+              "lower": 0.5414743521141274,
+              "upper": 0.7079698094312994
+            },
+            "standardizedMean": 0.1508931601397634,
+            "standardizedMeanCi95": {
+              "lower": -0.1407739179460348,
+              "upper": 0.4305085888315419
+            }
+          },
+          "lastRequestPosition": {
+            "label": "末次请求位置",
+            "mean": 0.9171544352306525,
+            "sd": 0.10819658344792939,
+            "median": 0.9473684210526315,
+            "q25": 0.8642857142857143,
+            "q75": 1,
+            "meanCi95": {
+              "lower": 0.8869206106279987,
+              "upper": 0.9445827947741616
+            },
+            "standardizedMean": 0.6498316180903105,
+            "standardizedMeanCi95": {
+              "lower": 0.5290171938397453,
+              "upper": 0.7594353982913661
+            }
+          },
+          "postRequestContinuation": {
+            "label": "请求后续写比例",
+            "mean": 0.0828455647693471,
+            "sd": 0.10819658344792939,
+            "median": 0.05263157894736842,
+            "q25": 0,
+            "q75": 0.13571428571428573,
+            "meanCi95": {
+              "lower": 0.05541720522583834,
+              "upper": 0.11307938937200111
+            },
+            "standardizedMean": -0.6498316180903121,
+            "standardizedMeanCi95": {
+              "lower": -0.7594353982913663,
+              "upper": -0.5290171938397464
+            }
+          },
+          "persuasionShare": {
+            "label": "说服行动占比",
+            "mean": 0.30685963308018316,
+            "sd": 0.16288908232230348,
+            "median": 0.3003220611916264,
+            "q25": 0.20789473684210524,
+            "q75": 0.375,
+            "meanCi95": {
+              "lower": 0.2647977602845205,
+              "upper": 0.3519292614362299
+            },
+            "standardizedMean": 0.5874172520863438,
+            "standardizedMeanCi95": {
+              "lower": 0.3532053837547851,
+              "upper": 0.8383771157509783
+            }
+          },
+          "informationShare": {
+            "label": "告知行动占比",
+            "mean": 0.4731073796311533,
+            "sd": 0.1379746836010664,
+            "median": 0.5,
+            "q25": 0.4125,
+            "q75": 0.5666118421052632,
+            "meanCi95": {
+              "lower": 0.4352104207173971,
+              "upper": 0.5087522096241697
+            },
+            "standardizedMean": -0.6093630619552896,
+            "standardizedMeanCi95": {
+              "lower": -0.8156355710089628,
+              "upper": -0.4153488526836792
+            }
+          },
+          "displayShare": {
+            "label": "展示行动占比",
+            "mean": 0.07304281171704317,
+            "sd": 0.07324525176833693,
+            "median": 0.0625,
+            "q25": 0,
+            "q75": 0.10277777777777779,
+            "meanCi95": {
+              "lower": 0.05429812994277813,
+              "upper": 0.09339588717714946
+            },
+            "standardizedMean": 0.2583812126253704,
+            "standardizedMeanCi95": {
+              "lower": 0.012146117471245098,
+              "upper": 0.5257445924336608
+            }
+          }
+        }
+      },
+      {
+        "code": "C",
+        "name": "先请后叙型",
+        "letterCount": 42,
+        "corpusShare": 0.23595505617977527,
+        "assignmentStability": {
+          "featureWeightPerturbation": 0.9480952380952381,
+          "eightyPercentSubsampling": 0.830755502676978
+        },
+        "features": {
+          "complexity": {
+            "label": "路径复杂度（log(去重行动数+1)）",
+            "mean": 1.9800956276668493,
+            "sd": 0.3938987900917835,
+            "median": 1.791759469228055,
+            "q25": 1.791759469228055,
+            "q75": 2.1972245773362196,
+            "meanCi95": {
+              "lower": 1.8638760359472553,
+              "upper": 2.099554246239326
+            },
+            "standardizedMean": -0.10541650148263557,
+            "standardizedMeanCi95": {
+              "lower": -0.36876775180942967,
+              "upper": 0.16527431835156833
+            }
+          },
+          "requestShare": {
+            "label": "请求行动占比",
+            "mean": 0.12042052916794115,
+            "sd": 0.06430971060294809,
+            "median": 0.10555555555555556,
+            "q25": 0.07142857142857142,
+            "q75": 0.15384615384615385,
+            "meanCi95": {
+              "lower": 0.10210741544754227,
+              "upper": 0.14032604529078394
+            },
+            "standardizedMean": -0.3832682600924178,
+            "standardizedMeanCi95": {
+              "lower": -0.5704233614109078,
+              "upper": -0.1798392341142874
+            }
+          },
+          "serialRequest": {
+            "label": "连续请求程度",
+            "mean": 0.047619047619047616,
+            "sd": 0.21554026870452117,
+            "median": 0,
+            "q25": 0,
+            "q75": 0,
+            "meanCi95": {
+              "lower": 0,
+              "upper": 0.11904761904761904
+            },
+            "standardizedMean": -0.2358447061081452,
+            "standardizedMeanCi95": {
+              "lower": -0.39411184159259327,
+              "upper": 0.0015559971185268346
+            }
+          },
+          "firstRequestPosition": {
+            "label": "首次请求位置",
+            "mean": 0.3188733300133123,
+            "sd": 0.15977258230220792,
+            "median": 0.31666666666666665,
+            "q25": 0.2,
+            "q75": 0.44047619047619047,
+            "meanCi95": {
+              "lower": 0.27080560748918237,
+              "upper": 0.3671498523549607
+            },
+            "standardizedMean": -0.9045669484955151,
+            "standardizedMeanCi95": {
+              "lower": -1.0694978689011239,
+              "upper": -0.7389195900255365
+            }
+          },
+          "lastRequestPosition": {
+            "label": "末次请求位置",
+            "mean": 0.37438377182959226,
+            "sd": 0.1658153877407921,
+            "median": 0.375,
+            "q25": 0.25,
+            "q75": 0.5,
+            "meanCi95": {
+              "lower": 0.3248528114625805,
+              "upper": 0.4237698031099733
+            },
+            "standardizedMean": -1.5190810504425467,
+            "standardizedMeanCi95": {
+              "lower": -1.7170068682298476,
+              "upper": -1.3217343695784955
+            }
+          },
+          "postRequestContinuation": {
+            "label": "请求后续写比例",
+            "mean": 0.6256162281704079,
+            "sd": 0.16581538774079219,
+            "median": 0.625,
+            "q25": 0.5,
+            "q75": 0.75,
+            "meanCi95": {
+              "lower": 0.5762301968900264,
+              "upper": 0.6751471885374198
+            },
+            "standardizedMean": 1.5190810504425472,
+            "standardizedMeanCi95": {
+              "lower": 1.3217343695784944,
+              "upper": 1.717006868229849
+            }
+          },
+          "persuasionShare": {
+            "label": "说服行动占比",
+            "mean": 0.22238434874304439,
+            "sd": 0.22145808750172508,
+            "median": 0.15192307692307694,
+            "q25": 0.06923076923076923,
+            "q75": 0.3155594405594406,
+            "meanCi95": {
+              "lower": 0.15827539523968095,
+              "upper": 0.2915033271952914
+            },
+            "standardizedMean": 0.11703605273848365,
+            "standardizedMeanCi95": {
+              "lower": -0.23993991572938028,
+              "upper": 0.5019091932929585
+            }
+          },
+          "informationShare": {
+            "label": "告知行动占比",
+            "mean": 0.6044791781334227,
+            "sd": 0.22232300526645538,
+            "median": 0.6666666666666666,
+            "q25": 0.5346153846153846,
+            "q75": 0.7777777777777778,
+            "meanCi95": {
+              "lower": 0.5344377793148499,
+              "upper": 0.6680133251338609
+            },
+            "standardizedMean": 0.10569142454389636,
+            "standardizedMeanCi95": {
+              "lower": -0.2755427294898101,
+              "upper": 0.4515067165357874
+            }
+          },
+          "displayShare": {
+            "label": "展示行动占比",
+            "mean": 0.05168074726822139,
+            "sd": 0.08073879705497353,
+            "median": 0,
+            "q25": 0,
+            "q75": 0.09772727272727275,
+            "meanCi95": {
+              "lower": 0.029947064894981557,
+              "upper": 0.077922644700595
+            },
+            "standardizedMean": -0.022236513276270325,
+            "standardizedMeanCi95": {
+              "lower": -0.30773591047444304,
+              "upper": 0.3224839887360219
+            }
+          }
+        }
+      },
+      {
+        "code": "D",
+        "name": "连环请托型",
+        "letterCount": 19,
+        "corpusShare": 0.10674157303370786,
+        "assignmentStability": {
+          "featureWeightPerturbation": 0.9163157894736842,
+          "eightyPercentSubsampling": 0.8538961038961039
+        },
+        "features": {
+          "complexity": {
+            "label": "路径复杂度（log(去重行动数+1)）",
+            "mean": 1.8830370286510911,
+            "sd": 0.39938183168850705,
+            "median": 1.9459101490553132,
+            "q25": 1.6094379124341003,
+            "q75": 2.1383330595080277,
+            "meanCi95": {
+              "lower": 1.709556144951939,
+              "upper": 2.0625346079461107
+            },
+            "standardizedMean": -0.3253493288792189,
+            "standardizedMeanCi95": {
+              "lower": -0.7184535116937449,
+              "upper": 0.08138856478012196
+            }
+          },
+          "requestShare": {
+            "label": "请求行动占比",
+            "mean": 0.2927470204429277,
+            "sd": 0.13919328176045337,
+            "median": 0.2857142857142857,
+            "q25": 0.16776315789473684,
+            "q75": 0.4,
+            "meanCi95": {
+              "lower": 0.23063246349766373,
+              "upper": 0.3521957066579492
+            },
+            "standardizedMean": 1.377862175006935,
+            "standardizedMeanCi95": {
+              "lower": 0.7430680937855142,
+              "upper": 1.9854117737095378
+            }
+          },
+          "serialRequest": {
+            "label": "连续请求程度",
+            "mean": 0.8771929824561404,
+            "sd": 0.21403029426134618,
+            "median": 1,
+            "q25": 0.8333333333333333,
+            "q75": 1,
+            "meanCi95": {
+              "lower": 0.7807017543859649,
+              "upper": 0.9649122807017545
+            },
+            "standardizedMean": 2.5213353910156604,
+            "standardizedMeanCi95": {
+              "lower": 2.200636195428752,
+              "upper": 2.812880114276486
+            }
+          },
+          "firstRequestPosition": {
+            "label": "首次请求位置",
+            "mean": 0.5572945286567578,
+            "sd": 0.2515017140472545,
+            "median": 0.6666666666666666,
+            "q25": 0.4642857142857143,
+            "q75": 0.7361111111111112,
+            "meanCi95": {
+              "lower": 0.4444935869084476,
+              "upper": 0.6628796674172062
+            },
+            "standardizedMean": -0.0864914152365417,
+            "standardizedMeanCi95": {
+              "lower": -0.4735362380036054,
+              "upper": 0.27579440157478624
+            }
+          },
+          "lastRequestPosition": {
+            "label": "末次请求位置",
+            "mean": 0.8423463404500557,
+            "sd": 0.11862463799950763,
+            "median": 0.8333333333333334,
+            "q25": 0.75,
+            "q75": 0.9772727272727273,
+            "meanCi95": {
+              "lower": 0.7911688604867784,
+              "upper": 0.8949157611609238
+            },
+            "standardizedMean": 0.35089832007130384,
+            "standardizedMeanCi95": {
+              "lower": 0.14639300664775978,
+              "upper": 0.5609658315369805
+            }
+          },
+          "postRequestContinuation": {
+            "label": "请求后续写比例",
+            "mean": 0.15765365954994437,
+            "sd": 0.11862463799950763,
+            "median": 0.16666666666666666,
+            "q25": 0.022727272727272728,
+            "q75": 0.25,
+            "meanCi95": {
+              "lower": 0.1050842388390763,
+              "upper": 0.20883113951322152
+            },
+            "standardizedMean": -0.3508983200713035,
+            "standardizedMeanCi95": {
+              "lower": -0.5609658315369804,
+              "upper": -0.14639300664776034
+            }
+          },
+          "persuasionShare": {
+            "label": "说服行动占比",
+            "mean": 0.11190948610364697,
+            "sd": 0.0900260995881304,
+            "median": 0.125,
+            "q25": 0,
+            "q75": 0.16228070175438597,
+            "meanCi95": {
+              "lower": 0.0723987794563809,
+              "upper": 0.15194296339516172
+            },
+            "standardizedMean": -0.4981178208929757,
+            "standardizedMeanCi95": {
+              "lower": -0.7181241070588775,
+              "upper": -0.2752006065833559
+            }
+          },
+          "informationShare": {
+            "label": "告知行动占比",
+            "mean": 0.5254652332248488,
+            "sd": 0.13264892881009138,
+            "median": 0.5625,
+            "q25": 0.42857142857142855,
+            "q75": 0.6157894736842104,
+            "meanCi95": {
+              "lower": 0.46711346580966484,
+              "upper": 0.5816144244039901
+            },
+            "standardizedMean": -0.3243801467294407,
+            "standardizedMeanCi95": {
+              "lower": -0.6419878339277213,
+              "upper": -0.018761044885052598
+            }
+          },
+          "displayShare": {
+            "label": "展示行动占比",
+            "mean": 0.06403030701220229,
+            "sd": 0.0724958478212897,
+            "median": 0.043478260869565216,
+            "q25": 0,
+            "q75": 0.13392857142857142,
+            "meanCi95": {
+              "lower": 0.03319279656942869,
+              "upper": 0.09624053540180369
+            },
+            "standardizedMean": 0.13999056826563125,
+            "standardizedMeanCi95": {
+              "lower": -0.2650991211532446,
+              "upper": 0.5631126435274603
+            }
+          }
+        }
+      }
+    ]
+  },
+  "personProportions": {
+    "corpusBaseline": [
+      {
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 65,
+        "total": 178,
+        "proportion": 0.3651685393258427,
+        "proportionCi95": {
+          "lower": 0.2979783742017564,
+          "upper": 0.43805541967948
+        }
+      },
+      {
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 52,
+        "total": 178,
+        "proportion": 0.29213483146067415,
+        "proportionCi95": {
+          "lower": 0.23028534238848913,
+          "upper": 0.36276675651175033
+        }
+      },
+      {
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 42,
+        "total": 178,
+        "proportion": 0.23595505617977527,
+        "proportionCi95": {
+          "lower": 0.17956864343429105,
+          "upper": 0.3034975362497969
+        }
+      },
+      {
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 19,
+        "total": 178,
+        "proportion": 0.10674157303370786,
+        "proportionCi95": {
+          "lower": 0.06940641985636498,
+          "upper": 0.16069214563057463
+        }
+      }
+    ],
+    "rows": [
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 18,
+        "total": 53,
+        "proportion": 0.33962264150943394,
+        "proportionCi95": {
+          "lower": 0.22687039101324172,
+          "upper": 0.4740521336245169
+        }
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 15,
+        "total": 53,
+        "proportion": 0.2830188679245283,
+        "proportionCi95": {
+          "lower": 0.1796629044633857,
+          "upper": 0.4157028641641701
+        }
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 17,
+        "total": 53,
+        "proportion": 0.32075471698113206,
+        "proportionCi95": {
+          "lower": 0.2109221407913507,
+          "upper": 0.4548147985096737
+        }
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 3,
+        "total": 53,
+        "proportion": 0.05660377358490566,
+        "proportionCi95": {
+          "lower": 0.019436661484935766,
+          "upper": 0.15370208310180888
+        }
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 16,
+        "total": 35,
+        "proportion": 0.45714285714285713,
+        "proportionCi95": {
+          "lower": 0.3046601928840721,
+          "upper": 0.6181027493151624
+        }
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 11,
+        "total": 35,
+        "proportion": 0.3142857142857143,
+        "proportionCi95": {
+          "lower": 0.18550844674265818,
+          "upper": 0.4797976361206918
+        }
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 3,
+        "total": 35,
+        "proportion": 0.08571428571428572,
+        "proportionCi95": {
+          "lower": 0.02958236826696982,
+          "upper": 0.22379273965896496
+        }
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 5,
+        "total": 35,
+        "proportion": 0.14285714285714285,
+        "proportionCi95": {
+          "lower": 0.06260231079433716,
+          "upper": 0.29375554086595146
+        }
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 4,
+        "total": 14,
+        "proportion": 0.2857142857142857,
+        "proportionCi95": {
+          "lower": 0.11721378644576919,
+          "upper": 0.5464908432989318
+        }
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 3,
+        "total": 14,
+        "proportion": 0.21428571428571427,
+        "proportionCi95": {
+          "lower": 0.07571386712693182,
+          "upper": 0.47589230586600295
+        }
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 6,
+        "total": 14,
+        "proportion": 0.42857142857142855,
+        "proportionCi95": {
+          "lower": 0.21380798904474121,
+          "upper": 0.6740935542034926
+        }
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 1,
+        "total": 14,
+        "proportion": 0.07142857142857142,
+        "proportionCi95": {
+          "lower": 0.012722215247890939,
+          "upper": 0.31468704424151117
+        }
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 3,
+        "total": 11,
+        "proportion": 0.2727272727272727,
+        "proportionCi95": {
+          "lower": 0.09746059290024889,
+          "upper": 0.5656453011761291
+        }
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 6,
+        "total": 11,
+        "proportion": 0.5454545454545454,
+        "proportionCi95": {
+          "lower": 0.280091537409322,
+          "upper": 0.7872872837754024
+        }
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 2,
+        "total": 11,
+        "proportion": 0.18181818181818182,
+        "proportionCi95": {
+          "lower": 0.05136768974608513,
+          "upper": 0.4769805619608442
+        }
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 0,
+        "total": 11,
+        "proportion": 0,
+        "proportionCi95": {
+          "lower": 0,
+          "upper": 0.2588329669680317
+        }
+      },
+      {
+        "person": "易培基",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "count": 2,
+        "total": 8,
+        "proportion": 0.25,
+        "proportionCi95": {
+          "lower": 0.071479212752109,
+          "upper": 0.5907245696898311
+        }
+      },
+      {
+        "person": "易培基",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "count": 1,
+        "total": 8,
+        "proportion": 0.125,
+        "proportionCi95": {
+          "lower": 0.02241749145005667,
+          "upper": 0.4708881822128535
+        }
+      },
+      {
+        "person": "易培基",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "count": 1,
+        "total": 8,
+        "proportion": 0.125,
+        "proportionCi95": {
+          "lower": 0.02241749145005667,
+          "upper": 0.4708881822128535
+        }
+      },
+      {
+        "person": "易培基",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "count": 4,
+        "total": 8,
+        "proportion": 0.5,
+        "proportionCi95": {
+          "lower": 0.21521606221387757,
+          "upper": 0.7847839377861224
+        }
+      }
+    ]
+  },
+  "controlledEffects": [
+    {
+      "person": "松崎鹤雄",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "totalLetters": 53,
+      "observed": 18,
+      "domainAdjusted": {
+        "expected": 16.66036238394729,
+        "expectedShare": 0.3143464600744772,
+        "deltaPercentagePoints": 2.5276181434956744,
+        "oddsRatio": 1.2129201163619683,
+        "logOddsRatioSe": 0.37979085156600156,
+        "oddsRatioCi95": {
+          "lower": 0.5761739777489897,
+          "upper": 2.55335239960533
+        },
+        "informativeStrataCount": 13,
+        "personMatchedLetters": 50,
+        "personMatchedShare": 0.9433962264150944,
+        "permutationP": 0.7047129528704713,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 18.91587301587301,
+        "expectedShare": 0.3569032644504342,
+        "deltaPercentagePoints": -1.7280622941000245,
+        "oddsRatio": 0.7508635578583764,
+        "logOddsRatioSe": 0.5652027998227482,
+        "oddsRatioCi95": {
+          "lower": 0.24800448310298154,
+          "upper": 2.2733302054286995
+        },
+        "informativeStrataCount": 11,
+        "personMatchedLetters": 37,
+        "personMatchedShare": 0.6981132075471698,
+        "permutationP": 0.7920620793792063,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "松崎鹤雄",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "totalLetters": 53,
+      "observed": 15,
+      "domainAdjusted": {
+        "expected": 17.672626534890686,
+        "expectedShare": 0.33344578367718275,
+        "deltaPercentagePoints": -5.0426915752654455,
+        "oddsRatio": 0.6365244379736318,
+        "logOddsRatioSe": 0.4247294914449123,
+        "oddsRatioCi95": {
+          "lower": 0.27687559925771826,
+          "upper": 1.4633407971806074
+        },
+        "informativeStrataCount": 14,
+        "personMatchedLetters": 50,
+        "personMatchedShare": 0.9433962264150944,
+        "permutationP": 0.33325666743332566,
+        "fdrQ": 0.6967930320696794
+      },
+      "domainEraAdjusted": {
+        "expected": 16.517460317460316,
+        "expectedShare": 0.3116501946690626,
+        "deltaPercentagePoints": -2.863132674453428,
+        "oddsRatio": 0.4668153931957613,
+        "logOddsRatioSe": 0.749352939904759,
+        "oddsRatioCi95": {
+          "lower": 0.10747186602757708,
+          "upper": 2.0276619303194776
+        },
+        "informativeStrataCount": 8,
+        "personMatchedLetters": 37,
+        "personMatchedShare": 0.6981132075471698,
+        "permutationP": 0.35904640953590466,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "松崎鹤雄",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "totalLetters": 53,
+      "observed": 17,
+      "domainAdjusted": {
+        "expected": 12.97906558849955,
+        "expectedShare": 0.24488802997168962,
+        "deltaPercentagePoints": 7.5866687009442435,
+        "oddsRatio": 2.0426101947628363,
+        "logOddsRatioSe": 0.4230459596057024,
+        "oddsRatioCi95": {
+          "lower": 0.8914317977485107,
+          "upper": 4.680398902402786
+        },
+        "informativeStrataCount": 12,
+        "personMatchedLetters": 50,
+        "personMatchedShare": 0.9433962264150944,
+        "permutationP": 0.08650913490865092,
+        "fdrQ": 0.42075579244207556
+      },
+      "domainEraAdjusted": {
+        "expected": 14.317460317460318,
+        "expectedShare": 0.27014076070679843,
+        "deltaPercentagePoints": 5.061395627433363,
+        "oddsRatio": 2.109652002626395,
+        "logOddsRatioSe": 0.5414195896080544,
+        "oddsRatioCi95": {
+          "lower": 0.7300517259125279,
+          "upper": 6.096323608607998
+        },
+        "informativeStrataCount": 12,
+        "personMatchedLetters": 37,
+        "personMatchedShare": 0.6981132075471698,
+        "permutationP": 0.1825481745182548,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "松崎鹤雄",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "totalLetters": 53,
+      "observed": 3,
+      "domainAdjusted": {
+        "expected": 5.6879454926624735,
+        "expectedShare": 0.10731972627665044,
+        "deltaPercentagePoints": -5.071595269174479,
+        "oddsRatio": 0.2938164848672994,
+        "logOddsRatioSe": 0.7982927001451265,
+        "oddsRatioCi95": {
+          "lower": 0.06145655054394644,
+          "upper": 1.4047017936362096
+        },
+        "informativeStrataCount": 7,
+        "personMatchedLetters": 50,
+        "personMatchedShare": 0.9433962264150944,
+        "permutationP": 0.13511864881351188,
+        "fdrQ": 0.4503954960450396
+      },
+      "domainEraAdjusted": {
+        "expected": 3.249206349206349,
+        "expectedShare": 0.0613057801737047,
+        "deltaPercentagePoints": -0.4702006588799039,
+        "oddsRatio": 0.8219954648526077,
+        "logOddsRatioSe": 0.8910836396019464,
+        "oddsRatioCi95": {
+          "lower": 0.14334338378583963,
+          "upper": 4.713691880245695
+        },
+        "informativeStrataCount": 7,
+        "personMatchedLetters": 37,
+        "personMatchedShare": 0.6981132075471698,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "缪荃孙",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "totalLetters": 35,
+      "observed": 16,
+      "domainAdjusted": {
+        "expected": 15.199311171009285,
+        "expectedShare": 0.43426603345740816,
+        "deltaPercentagePoints": 2.2876823685448966,
+        "oddsRatio": 1.1576281779161361,
+        "logOddsRatioSe": 0.4272689748435681,
+        "oddsRatioCi95": {
+          "lower": 0.501045399270306,
+          "upper": 2.6746139177349666
+        },
+        "informativeStrataCount": 8,
+        "personMatchedLetters": 35,
+        "personMatchedShare": 1,
+        "permutationP": 0.8303216967830321,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 14.645279866332498,
+        "expectedShare": 0.41843656760949993,
+        "deltaPercentagePoints": 3.8706289533357197,
+        "oddsRatio": 1.5890729439116538,
+        "logOddsRatioSe": 0.5860191941179198,
+        "oddsRatioCi95": {
+          "lower": 0.5038756726085023,
+          "upper": 5.011460084984149
+        },
+        "informativeStrataCount": 7,
+        "personMatchedLetters": 29,
+        "personMatchedShare": 0.8285714285714286,
+        "permutationP": 0.5646443535564645,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "缪荃孙",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "totalLetters": 35,
+      "observed": 11,
+      "domainAdjusted": {
+        "expected": 10.439832285115305,
+        "expectedShare": 0.2982809224318658,
+        "deltaPercentagePoints": 1.6004791853848455,
+        "oddsRatio": 1.1302951564252426,
+        "logOddsRatioSe": 0.4664982805783131,
+        "oddsRatioCi95": {
+          "lower": 0.4530100221512391,
+          "upper": 2.8201741201474855
+        },
+        "informativeStrataCount": 9,
+        "personMatchedLetters": 35,
+        "personMatchedShare": 1,
+        "permutationP": 0.8179718202817972,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 11.232080200501253,
+        "expectedShare": 0.32091657715717864,
+        "deltaPercentagePoints": -0.663086287146436,
+        "oddsRatio": 0.8770905229625697,
+        "logOddsRatioSe": 0.7511619875927081,
+        "oddsRatioCi95": {
+          "lower": 0.2012121378502988,
+          "upper": 3.8232672923693194
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 29,
+        "personMatchedShare": 0.8285714285714286,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "缪荃孙",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "totalLetters": 35,
+      "observed": 3,
+      "domainAdjusted": {
+        "expected": 6.307502246181492,
+        "expectedShare": 0.18021434989089977,
+        "deltaPercentagePoints": -9.450006417661406,
+        "oddsRatio": 0.3087179005680485,
+        "logOddsRatioSe": 0.680165922182832,
+        "oddsRatioCi95": {
+          "lower": 0.08139608742131275,
+          "upper": 1.1709007785328556
+        },
+        "informativeStrataCount": 7,
+        "personMatchedLetters": 35,
+        "personMatchedShare": 1,
+        "permutationP": 0.10518894811051889,
+        "fdrQ": 0.42075579244207556
+      },
+      "domainEraAdjusted": {
+        "expected": 4.647786131996658,
+        "expectedShare": 0.1327938894856188,
+        "deltaPercentagePoints": -4.707960377133308,
+        "oddsRatio": 0.4394361393736145,
+        "logOddsRatioSe": 0.7185830443847965,
+        "oddsRatioCi95": {
+          "lower": 0.10745751033834307,
+          "upper": 1.7970276807975065
+        },
+        "informativeStrataCount": 6,
+        "personMatchedLetters": 29,
+        "personMatchedShare": 0.8285714285714286,
+        "permutationP": 0.25485745142548577,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "缪荃孙",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "totalLetters": 35,
+      "observed": 5,
+      "domainAdjusted": {
+        "expected": 3.05335429769392,
+        "expectedShare": 0.08723869421982629,
+        "deltaPercentagePoints": 5.561844863731656,
+        "oddsRatio": 2.6664572864321605,
+        "logOddsRatioSe": 0.6931602249639944,
+        "oddsRatioCi95": {
+          "lower": 0.68535498813304,
+          "upper": 10.374177737781316
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 35,
+        "personMatchedShare": 1,
+        "permutationP": 0.27008729912700874,
+        "fdrQ": 0.6752182478175218
+      },
+      "domainEraAdjusted": {
+        "expected": 4.474853801169591,
+        "expectedShare": 0.12785296574770258,
+        "deltaPercentagePoints": 1.5004177109440269,
+        "oddsRatio": 1.674174174174174,
+        "logOddsRatioSe": 1.0206676259711482,
+        "oddsRatioCi95": {
+          "lower": 0.22646796617873677,
+          "upper": 12.376404543058687
+        },
+        "informativeStrataCount": 4,
+        "personMatchedLetters": 29,
+        "personMatchedShare": 0.8285714285714286,
+        "permutationP": 0.6831531684683153,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "孙毓修",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "totalLetters": 14,
+      "observed": 4,
+      "domainAdjusted": {
+        "expected": 4.80188679245283,
+        "expectedShare": 0.34299191374663074,
+        "deltaPercentagePoints": -5.727762803234504,
+        "oddsRatio": 0.67843631778058,
+        "logOddsRatioSe": 0.7072612906250147,
+        "oddsRatioCi95": {
+          "lower": 0.16962395546428816,
+          "upper": 2.713507275690058
+        },
+        "informativeStrataCount": 4,
+        "personMatchedLetters": 14,
+        "personMatchedShare": 1,
+        "permutationP": 0.7446425535744643,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 4.559649122807018,
+        "expectedShare": 0.32568922305764414,
+        "deltaPercentagePoints": -3.997493734335844,
+        "oddsRatio": 0.7127851140456183,
+        "logOddsRatioSe": 0.793434755327578,
+        "oddsRatioCi95": {
+          "lower": 0.15051706216644203,
+          "upper": 3.3754486799855856
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 10,
+        "personMatchedShare": 0.7142857142857143,
+        "permutationP": 0.7272827271727282,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "孙毓修",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "totalLetters": 14,
+      "observed": 3,
+      "domainAdjusted": {
+        "expected": 4.183647798742138,
+        "expectedShare": 0.2988319856244384,
+        "deltaPercentagePoints": -8.454627133872414,
+        "oddsRatio": 0.5976483164083378,
+        "logOddsRatioSe": 0.694316045022117,
+        "oddsRatioCi95": {
+          "lower": 0.15326493713994832,
+          "upper": 2.330497221158754
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 14,
+        "personMatchedShare": 1,
+        "permutationP": 0.5157648423515765,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 3.82719298245614,
+        "expectedShare": 0.2733709273182957,
+        "deltaPercentagePoints": -5.908521303258143,
+        "oddsRatio": 0.6304376224689745,
+        "logOddsRatioSe": 0.786469681130039,
+        "oddsRatioCi95": {
+          "lower": 0.13495777707730686,
+          "upper": 2.9450069824183904
+        },
+        "informativeStrataCount": 6,
+        "personMatchedLetters": 10,
+        "personMatchedShare": 0.7142857142857143,
+        "permutationP": 0.7147428525714743,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "孙毓修",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "totalLetters": 14,
+      "observed": 6,
+      "domainAdjusted": {
+        "expected": 3.0707547169811322,
+        "expectedShare": 0.21933962264150944,
+        "deltaPercentagePoints": 20.923180592991912,
+        "oddsRatio": 4.399635036496351,
+        "logOddsRatioSe": 0.7084708965332944,
+        "oddsRatioCi95": {
+          "lower": 1.0974004436683282,
+          "upper": 17.6387649249179
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 14,
+        "personMatchedShare": 1,
+        "permutationP": 0.06327936720632793,
+        "fdrQ": 0.42075579244207556
+      },
+      "domainEraAdjusted": {
+        "expected": 4.421929824561404,
+        "expectedShare": 0.31585213032581455,
+        "deltaPercentagePoints": 11.2719298245614,
+        "oddsRatio": 2.8687673130193905,
+        "logOddsRatioSe": 0.8206740349404329,
+        "oddsRatioCi95": {
+          "lower": 0.5742966974568107,
+          "upper": 14.330268540099702
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 10,
+        "personMatchedShare": 0.7142857142857143,
+        "permutationP": 0.1965580344196558,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "孙毓修",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "totalLetters": 14,
+      "observed": 1,
+      "domainAdjusted": {
+        "expected": 1.9437106918238993,
+        "expectedShare": 0.13883647798742138,
+        "deltaPercentagePoints": -6.740790655884996,
+        "oddsRatio": 0.346329775648007,
+        "logOddsRatioSe": 1.2305228657396385,
+        "oddsRatioCi95": {
+          "lower": 0.031050376407924657,
+          "upper": 3.8628940250072703
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 14,
+        "personMatchedShare": 1,
+        "permutationP": 0.6597334026659734,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 1.1912280701754385,
+        "expectedShare": 0.08508771929824561,
+        "deltaPercentagePoints": -1.365914786967419,
+        "oddsRatio": 0.7770961145194274,
+        "logOddsRatioSe": 1.2007687959810798,
+        "oddsRatioCi95": {
+          "lower": 0.07385475900064885,
+          "upper": 8.176566809944982
+        },
+        "informativeStrataCount": 5,
+        "personMatchedLetters": 10,
+        "personMatchedShare": 0.7142857142857143,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "夏敬观",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "totalLetters": 11,
+      "observed": 3,
+      "domainAdjusted": {
+        "expected": 3.9968553459119494,
+        "expectedShare": 0.3633504859919954,
+        "deltaPercentagePoints": -9.062321326472267,
+        "oddsRatio": 0.5850785340314136,
+        "logOddsRatioSe": 0.7582430826351219,
+        "oddsRatioCi95": {
+          "lower": 0.13237210724287043,
+          "upper": 2.586019805186605
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 0.7269627303726963,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 3.5,
+        "expectedShare": 0.3181818181818182,
+        "deltaPercentagePoints": -4.545454545454547,
+        "oddsRatio": 0.6896551724137931,
+        "logOddsRatioSe": 0.8718394593078378,
+        "oddsRatioCi95": {
+          "lower": 0.12488805574390269,
+          "upper": 3.808404686933561
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "夏敬观",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "totalLetters": 11,
+      "observed": 6,
+      "domainAdjusted": {
+        "expected": 3.138364779874214,
+        "expectedShare": 0.28530588907947396,
+        "deltaPercentagePoints": 26.014865637507146,
+        "oddsRatio": 3.8706624605678233,
+        "logOddsRatioSe": 0.6608952008632312,
+        "oddsRatioCi95": {
+          "lower": 1.0598155458007112,
+          "upper": 14.13644850088488
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 0.06417935820641793,
+        "fdrQ": 0.42075579244207556
+      },
+      "domainEraAdjusted": {
+        "expected": 3.8333333333333335,
+        "expectedShare": 0.3484848484848485,
+        "deltaPercentagePoints": 19.696969696969692,
+        "oddsRatio": 4.250000000000001,
+        "logOddsRatioSe": 0.8229164385411332,
+        "oddsRatioCi95": {
+          "lower": 0.8470736798720178,
+          "upper": 21.323410736512344
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 0.10905890941090589,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "夏敬观",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "totalLetters": 11,
+      "observed": 2,
+      "domainAdjusted": {
+        "expected": 2.7154088050314464,
+        "expectedShare": 0.2468553459119497,
+        "deltaPercentagePoints": -6.5037164093767865,
+        "oddsRatio": 0.6728971962616822,
+        "logOddsRatioSe": 0.772377725819893,
+        "oddsRatioCi95": {
+          "lower": 0.1480810913836971,
+          "upper": 3.0577208238126383
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 0.7114528854711453,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 2.166666666666667,
+        "expectedShare": 0.196969696969697,
+        "deltaPercentagePoints": -1.5151515151515165,
+        "oddsRatio": 0.8571428571428572,
+        "logOddsRatioSe": 0.9674404597100021,
+        "oddsRatioCi95": {
+          "lower": 0.12869639983958212,
+          "upper": 5.708736829210482
+        },
+        "informativeStrataCount": 2,
+        "personMatchedLetters": 11,
+        "personMatchedShare": 1,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "夏敬观",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "totalLetters": 11,
+      "observed": 0,
+      "domainAdjusted": {
+        "expected": 1.14937106918239,
+        "expectedShare": 0.1044882790165809,
+        "deltaPercentagePoints": -10.44882790165809,
+        "oddsRatio": 0,
+        "logOddsRatioSe": null,
+        "oddsRatioCi95": {
+          "lower": null,
+          "upper": null
+        },
+        "informativeStrataCount": 0,
+        "permutationP": 0.3483965160348397,
+        "fdrQ": 0.6967930320696794
+      },
+      "domainEraAdjusted": {
+        "expected": 1.5,
+        "expectedShare": 0.13636363636363635,
+        "deltaPercentagePoints": -13.636363636363635,
+        "oddsRatio": 0,
+        "logOddsRatioSe": null,
+        "oddsRatioCi95": {
+          "lower": null,
+          "upper": null
+        },
+        "informativeStrataCount": 0,
+        "permutationP": 0.2206577934220658,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "易培基",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "totalLetters": 8,
+      "observed": 2,
+      "domainAdjusted": {
+        "expected": 2.0757575757575757,
+        "expectedShare": 0.25946969696969696,
+        "deltaPercentagePoints": -0.9469696969696961,
+        "oddsRatio": 0.9391727493917276,
+        "logOddsRatioSe": 0.9147307007276025,
+        "oddsRatioCi95": {
+          "lower": 0.15635986929041099,
+          "upper": 5.641124268029237
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 1,
+        "fdrQ": 1
+      },
+      "domainEraAdjusted": {
+        "expected": 1.5666666666666667,
+        "expectedShare": 0.19583333333333333,
+        "deltaPercentagePoints": 5.416666666666667,
+        "oddsRatio": 3.6000000000000005,
+        "logOddsRatioSe": 1.8439088914585775,
+        "oddsRatioCi95": {
+          "lower": 0.09699836342096292,
+          "upper": 133.6105016922289
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "易培基",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "totalLetters": 8,
+      "observed": 1,
+      "domainAdjusted": {
+        "expected": 2.5515151515151517,
+        "expectedShare": 0.31893939393939397,
+        "deltaPercentagePoints": -19.393939393939398,
+        "oddsRatio": 0.20865533230293665,
+        "logOddsRatioSe": 1.205136128667574,
+        "oddsRatioCi95": {
+          "lower": 0.019661459603617912,
+          "upper": 2.2143344683544073
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 0.23228767712322876,
+        "fdrQ": 0.6636790774949394
+      },
+      "domainEraAdjusted": {
+        "expected": 1.9,
+        "expectedShare": 0.2375,
+        "deltaPercentagePoints": -11.249999999999998,
+        "oddsRatio": 0.18181818181818182,
+        "logOddsRatioSe": 1.503439582594657,
+        "oddsRatioCi95": {
+          "lower": 0.009547885839539923,
+          "upper": 3.462321585661352
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 0.5394846051539485,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "易培基",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "totalLetters": 8,
+      "observed": 1,
+      "domainAdjusted": {
+        "expected": 1.9621212121212122,
+        "expectedShare": 0.24526515151515152,
+        "deltaPercentagePoints": -12.026515151515152,
+        "oddsRatio": 0.3566362715298886,
+        "logOddsRatioSe": 1.1805386999200935,
+        "oddsRatioCi95": {
+          "lower": 0.035265427071874245,
+          "upper": 3.6066323516093086
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 0.6508634913650864,
+        "fdrQ": 0.8740228387189812
+      },
+      "domainEraAdjusted": {
+        "expected": 1.3666666666666667,
+        "expectedShare": 0.17083333333333334,
+        "deltaPercentagePoints": -4.583333333333334,
+        "oddsRatio": 0.35294117647058826,
+        "logOddsRatioSe": 1.784852321211808,
+        "oddsRatioCi95": {
+          "lower": 0.010676607538416465,
+          "upper": 11.667327247932032
+        },
+        "informativeStrataCount": 2,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 1,
+        "fdrQ": 1
+      }
+    },
+    {
+      "person": "易培基",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "totalLetters": 8,
+      "observed": 4,
+      "domainAdjusted": {
+        "expected": 1.4106060606060604,
+        "expectedShare": 0.17632575757575755,
+        "deltaPercentagePoints": 32.36742424242425,
+        "oddsRatio": 6.773648648648648,
+        "logOddsRatioSe": 0.8295983079431677,
+        "oddsRatioCi95": {
+          "lower": 1.3325002707037568,
+          "upper": 34.43325080234843
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 0.023659763402365978,
+        "fdrQ": 0.42075579244207556
+      },
+      "domainEraAdjusted": {
+        "expected": 3.1666666666666665,
+        "expectedShare": 0.3958333333333333,
+        "deltaPercentagePoints": 10.416666666666668,
+        "oddsRatio": 3.0833333333333335,
+        "logOddsRatioSe": 1.1946282250371931,
+        "oddsRatioCi95": {
+          "lower": 0.29658630218539894,
+          "upper": 32.05456345890702
+        },
+        "informativeStrataCount": 3,
+        "personMatchedLetters": 8,
+        "personMatchedShare": 1,
+        "permutationP": 0.5257647423525764,
+        "fdrQ": 1
+      }
+    }
+  ],
+  "validation": {
+    "overallConfidence": "CAUTION",
+    "fallacyScanCoverage": "11/11",
+    "multipleComparisonFinding": "20项人物×类型比较均未通过Benjamini–Hochberg FDR校正",
+    "reproducibility": "使用固定随机种子完整重跑；三份CSV及Markdown报告的SHA-256均完全一致"
+  }
+}

@@ -282,11 +282,11 @@ export function PivotTable({
                           : undefined,
                       }}
                     >
-                      {value > 0 ? value.toLocaleString("zh-CN") : "—"}
+                      {value > 0 ? (value ?? 0).toLocaleString("zh-CN") : "—"}
                     </td>
                   ))}
                   <td className="h-12 w-[92px] border-b border-l border-[var(--line-dark)] bg-[#f5f2ea] px-2 py-2.5 align-middle text-center font-medium tabular-nums">
-                    {row.total > 0 ? row.total.toLocaleString("zh-CN") : "—"}
+                    {row.total > 0 ? (row.total ?? 0).toLocaleString("zh-CN") : "—"}
                   </td>
                 </tr>
               );
@@ -303,11 +303,11 @@ export function PivotTable({
                   key={columnIndex}
                   className="sticky bottom-0 z-20 h-[52px] w-20 border-r border-t border-[var(--line-dark)] bg-[#e9e5da] px-2 py-2.5 align-middle text-center font-medium tabular-nums"
                 >
-                  {value > 0 ? value.toLocaleString("zh-CN") : "—"}
+                  {value > 0 ? (value ?? 0).toLocaleString("zh-CN") : "—"}
                 </td>
               ))}
               <td className="sticky bottom-0 z-20 h-[52px] w-[92px] border-l border-t border-[var(--line-dark)] bg-[#ddd7c9] px-2 py-2.5 align-middle text-center font-medium tabular-nums text-[var(--purple-deep)]">
-                {result.grandTotal.toLocaleString("zh-CN")}
+                {(result.grandTotal ?? 0).toLocaleString("zh-CN")}
               </td>
             </tr>
           </tbody>
@@ -315,7 +315,7 @@ export function PivotTable({
       </div>
 
       <footer className="flex h-9 shrink-0 items-center justify-between border-t border-[var(--line)] px-4 text-[12px] text-[var(--muted)]">
-        <span>{rows.length.toLocaleString("zh-CN")} 行 × {columnLabels.length.toLocaleString("zh-CN")} 列</span>
+        <span>{(rows.length ?? 0).toLocaleString("zh-CN")} 行 × {(columnLabels.length ?? 0).toLocaleString("zh-CN")} 列</span>
         <span>指标：{metricLabel}</span>
       </footer>
     </section>

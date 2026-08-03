@@ -153,7 +153,7 @@ export function ChartPanel({
     content = (
       <ChartState
         symbol="多"
-        title={`当前包含 ${largestAxis.toLocaleString("zh-CN")} 个维度值`}
+        title={`当前包含 ${(largestAxis ?? 0).toLocaleString("zh-CN")} 个维度值`}
         description="为保持图表清晰和页面流畅，建议切换热力图或通过筛选缩小范围。"
       />
     );
@@ -223,7 +223,7 @@ export function ChartPanel({
       </header>
       <div className="relative min-h-0 flex-1">{content}</div>
       <footer className="flex h-9 shrink-0 items-center justify-between border-t border-[var(--line)] px-4 text-[12px] text-[var(--muted)]">
-        <span>{footerValueCount.toLocaleString("zh-CN")} 个{footerDimensionLabel}</span>
+        <span>{(footerValueCount ?? 0).toLocaleString("zh-CN")} 个{footerDimensionLabel}</span>
         <span>指标：{metricLabel}</span>
       </footer>
     </section>

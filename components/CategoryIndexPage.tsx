@@ -202,8 +202,8 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
         title={`${meta.label}专题`}
         description={"prompt" in meta ? meta.prompt : meta.definition}
         metrics={[
-          { value: totalValue.toLocaleString("zh-CN"), label: totalUnit },
-          { value: letterCount.toLocaleString("zh-CN"), label: "封书信" },
+          { value: (totalValue ?? 0).toLocaleString("zh-CN"), label: totalUnit },
+          { value: (letterCount ?? 0).toLocaleString("zh-CN"), label: "封书信" },
         ]}
       />
 

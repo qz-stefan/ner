@@ -1,4 +1,5 @@
 import rawDataset from "@/data/generated.json";
+import rawEntityAnnotations from "@/data/entity-annotations.json";
 import { actTypeMeta, entityTypeMeta, eventTypeMeta, featuredLetterIds, topicDefinitions } from "./config";
 import type {
   ActType,
@@ -8,6 +9,7 @@ import type {
   EventMention,
   EventType,
   Letter,
+  SearchMatchField,
   SearchResult,
   SearchScope,
   TopicSummary,
@@ -78,29 +80,86 @@ export function formatLetterDate(letter: Letter) {
 }
 
 export const searchScopeLabels: Record<SearchScope, string> = {
+  all: "全部",
   fulltext: "全文",
   recipient: "收信人",
   source: "来源",
 };
 
-export function searchLetters(rawQuery: string, scope: SearchScope = "fulltext", limit = 30): SearchResult[] {
+/** Expand query to include entity aliases if query matches a known entity. */
+function expandEntityTerms(query: string): string[] {
+  const lowerQuery = query.toLocaleLowerCase("zh-CN");
+  for (const entry of dataset.entityCatalog) {
+    const allNames = [entry.canonical, ...entry.aliases].map((n) => n.toLocaleLowerCase("zh-CN"));
+    if (allNames.includes(lowerQuery)) {
+      return [...new Set([entry.canonical, ...entry.aliases])];
+    }
+  }
+  return [query];
+}
+
+/** Check if any of the terms appear in the given field, returning the best match. */
+function findBestMatch(field: string, terms: string[], queryLen: number): { idx: number; matchedTerm: string } | null {
+  const lowerField = field.toLocaleLowerCase("zh-CN");
+  let best: { idx: number; matchedTerm: string } | null = null;
+  for (const term of terms) {
+    const idx = lowerField.indexOf(term);
+    if (idx >= 0 && (!best || idx < best.idx)) {
+      best = { idx, matchedTerm: term };
+    }
+  }
+  return best;
+}
+
+export function searchLetters(rawQuery: string, scope: SearchScope = "all", limit = 30): SearchResult[] {
   const query = rawQuery.trim().toLocaleLowerCase("zh-CN");
   if (!query) return [];
+  const expandedTerms = scope !== "source" ? expandEntityTerms(rawQuery.trim()) : [rawQuery.trim()];
   const results: SearchResult[] = [];
   for (const letter of dataset.letters) {
-    const field = scope === "recipient" ? letter.recipient : scope === "source" ? letter.source ?? "" : letter.text;
-    const rawIndex = field.toLocaleLowerCase("zh-CN").indexOf(query);
-    if (rawIndex < 0) continue;
-    const start = scope === "fulltext" ? Math.max(0, rawIndex - 34) : 0;
-    const end = scope === "fulltext" ? Math.min(field.length, rawIndex + Math.max(query.length, 1) + 56) : field.length;
-    results.push({
-      letter: normalizeLetter(letter),
-      snippet: `${start > 0 ? "……" : ""}${field.slice(start, end)}${end < field.length ? "……" : ""}`,
-      matchStart: scope === "fulltext" ? rawIndex : rawIndex,
-      snippetMatchStart: rawIndex - start + (start > 0 ? 2 : 0),
-      matchLength: rawQuery.trim().length,
-      matchField: scope,
-    });
+    if (scope === "all") {
+      // Search all fields: text, recipient, source
+      const fields = [
+        { label: letter.text, matchField: "fulltext" as SearchMatchField },
+        { label: letter.recipient, matchField: "recipient" as SearchMatchField },
+        { label: letter.source ?? "", matchField: "source" as SearchMatchField },
+      ];
+      let bestMatch: { rawIndex: number; matchField: SearchMatchField; field: string; matchLen: number } | null = null;
+      for (const { label, matchField } of fields) {
+        const searchTerms = matchField === "source" ? [rawQuery.trim()] : expandedTerms;
+        const m = findBestMatch(label, searchTerms, rawQuery.trim().length);
+        if (m && (!bestMatch || m.idx < bestMatch.rawIndex)) {
+          bestMatch = { rawIndex: m.idx, matchField, field: label, matchLen: m.matchedTerm.length };
+        }
+      }
+      if (!bestMatch) continue;
+      const { rawIndex, matchField, field, matchLen } = bestMatch;
+      const start = Math.max(0, rawIndex - 34);
+      const end = Math.min(field.length, rawIndex + Math.max(matchLen, 1) + 56);
+      results.push({
+        letter: normalizeLetter(letter),
+        snippet: `${start > 0 ? "……" : ""}${field.slice(start, end)}${end < field.length ? "……" : ""}`,
+        matchStart: rawIndex,
+        snippetMatchStart: rawIndex - start + (start > 0 ? 2 : 0),
+        matchLength: matchLen,
+        matchField,
+      });
+    } else {
+      const field = scope === "recipient" ? letter.recipient : scope === "source" ? letter.source ?? "" : letter.text;
+      const searchTerms = scope === "source" ? [rawQuery.trim()] : expandedTerms;
+      const m = findBestMatch(field, searchTerms, rawQuery.trim().length);
+      if (!m) continue;
+      const start = scope === "fulltext" ? Math.max(0, m.idx - 34) : 0;
+      const end = scope === "fulltext" ? Math.min(field.length, m.idx + Math.max(m.matchedTerm.length, 1) + 56) : field.length;
+      results.push({
+        letter: normalizeLetter(letter),
+        snippet: `${start > 0 ? "……" : ""}${field.slice(start, end)}${end < field.length ? "……" : ""}`,
+        matchStart: m.idx,
+        snippetMatchStart: m.idx - start + (start > 0 ? 2 : 0),
+        matchLength: m.matchedTerm.length,
+        matchField: scope,
+      });
+    }
     if (results.length >= limit) break;
   }
   return results;
@@ -108,7 +167,7 @@ export function searchLetters(rawQuery: string, scope: SearchScope = "fulltext",
 
 export function getSearchResultHref(result: SearchResult, query: string) {
   const params = new URLSearchParams({ q: query, scope: result.matchField });
-  if (result.matchField === "fulltext") params.set("at", String(result.matchStart));
+  if (result.matchField === "fulltext" || (result.matchField === "all" && result.matchStart >= 0)) params.set("at", String(result.matchStart));
   return `/letter/${encodeURIComponent(result.letter.id)}?${params.toString()}`;
 }
 
@@ -116,8 +175,15 @@ export function getEntityCategory(type: EntityType): EntityCatalogEntry[] {
   return dataset.entityCatalog.filter((entry) => entry.type === type);
 }
 
+const entityAnnotations = rawEntityAnnotations as Record<string, string>;
+
 export function getEntity(type: EntityType, canonical: string) {
   return dataset.entityCatalog.find((entry) => entry.type === type && entry.canonical === canonical) ?? null;
+}
+
+/** Get the annotation/description for an entity, if available. */
+export function getEntityAnnotation(type: EntityType, canonical: string): string | null {
+  return entityAnnotations[`${type}:${canonical}`] ?? null;
 }
 
 /** The catalog's stable composite key. Surface text is intentionally excluded. */

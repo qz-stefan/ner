@@ -28,19 +28,22 @@ export function LettersPage() {
             {letters.map((letter) => {
               const entities = getLetterEntitySummary(letter.id);
               const result = resultMap.get(letter.id);
+              const href = result ? getSearchResultHref(result, search.query) : `/letter/${encodeURIComponent(letter.id)}`;
               return (
-                <article className="letter-list-item" key={letter.id}>
-                  <span className="letter-list-number">{letter.number}</span>
-                  <div className="letter-list-body">
-                    <header><div><h2>致{search.query && search.scope === "recipient" ? <HighlightedText text={letter.recipient} query={search.query} /> : letter.recipient}</h2><p>收信人：{search.query && search.scope === "recipient" ? <HighlightedText text={letter.recipient} query={search.query} /> : letter.recipient}</p></div><time>{formatLetterDate(letter)}</time></header>
-                    <p className="letter-excerpt">{result && search.scope === "fulltext" ? <HighlightedText text={result.snippet} query={search.query} matchStart={result.snippetMatchStart} /> : getLetterExcerpt(letter)}</p>
-                    <footer>
-                      <span>来源：{search.query && search.scope === "source" ? <HighlightedText text={letter.source ?? "暂无来源字段"} query={search.query} /> : letter.source ?? "暂无来源字段"}</span>
-                      {entities.count ? <span>实体 {entities.count} 处 · {entities.types.slice(0, 4).map((type) => entityTypeMeta[type].label).join("、")}</span> : <span>实体数据整理中</span>}
-                      <Link href={result ? getSearchResultHref(result, search.query) : `/letter/${encodeURIComponent(letter.id)}`}>{result ? "定位命中" : "阅读原信"} <i aria-hidden="true">→</i></Link>
-                    </footer>
-                  </div>
-                </article>
+                <Link href={href} key={letter.id} className="letter-list-link">
+                  <article className="letter-list-item">
+                    <span className="letter-list-number">{letter.number}</span>
+                    <div className="letter-list-body">
+                      <header><div><h2>致{search.query && search.scope === "recipient" ? <HighlightedText text={letter.recipient} query={search.query} /> : letter.recipient}</h2><p>收信人：{search.query && search.scope === "recipient" ? <HighlightedText text={letter.recipient} query={search.query} /> : letter.recipient}</p></div><time>{formatLetterDate(letter)}</time></header>
+                      <p className="letter-excerpt">{result && search.scope === "fulltext" ? <HighlightedText text={result.snippet} query={search.query} matchStart={result.snippetMatchStart} /> : getLetterExcerpt(letter)}</p>
+                      <footer>
+                        <span>来源：{search.query && search.scope === "source" ? <HighlightedText text={letter.source ?? "暂无来源字段"} query={search.query} /> : letter.source ?? "暂无来源字段"}</span>
+                        {entities.count ? <span>实体 {entities.count} 处 · {entities.types.slice(0, 4).map((type) => entityTypeMeta[type].label).join("、")}</span> : <span>实体数据整理中</span>}
+                        <span className="read-link">{result ? "定位命中" : "阅读原信"} <i aria-hidden="true">→</i></span>
+                      </footer>
+                    </div>
+                  </article>
+                </Link>
               );
             })}
           </section>

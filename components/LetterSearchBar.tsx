@@ -10,7 +10,7 @@ interface Props {
   onSearch: (query: string, scope: SearchScope) => void;
 }
 
-export function LetterSearchBar({ initialValue = "", initialScope = "fulltext", onSearch }: Props) {
+export function LetterSearchBar({ initialValue = "", initialScope = "all", onSearch }: Props) {
   const [value, setValue] = useState(initialValue);
   const [scope, setScope] = useState<SearchScope>(initialScope);
 
@@ -35,7 +35,7 @@ export function LetterSearchBar({ initialValue = "", initialScope = "fulltext", 
         id="letter-search-input"
         value={value}
         onChange={(event) => setValue(event.target.value)}
-        placeholder={scope === "fulltext" ? "输入原文关键词" : scope === "recipient" ? "输入收信人姓名" : "输入来源或出版信息"}
+        placeholder={scope === "all" ? "输入任意关键词" : scope === "fulltext" ? "输入原文关键词" : scope === "recipient" ? "输入收信人姓名" : "输入来源或出版信息"}
         autoComplete="off"
       />
       {value ? <button className="search-clear" type="button" onClick={clear}>清除</button> : null}

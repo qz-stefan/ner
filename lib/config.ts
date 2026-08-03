@@ -2,10 +2,10 @@ import type { CSSProperties } from "react";
 import type { ActType, EntityType, EventType, TopicDefinition } from "./types";
 
 export const featuredLetterIds = [
-  "171_1913_缪荃孙",
-  "063_1914_松崎鹤雄",
-  "064_1914_松崎鹤雄",
-  "172_1914_缪荃孙",
+  "018_0_张鞠生",
+  "075_1916_松崎鹤雄",
+  "176_1916_缪荃孙",
+  "277_1924_各省机关_法团_报馆",
 ] as const;
 
 export const entityTypeMeta: Record<EntityType, { label: string; prompt: string }> = {

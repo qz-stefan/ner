@@ -14,8 +14,8 @@ export interface Letter {
   summary: string | null;
 }
 
-export type SearchScope = "fulltext" | "recipient" | "source";
-export type SearchMatchField = "fulltext" | "recipient" | "source";
+export type SearchScope = "all" | "fulltext" | "recipient" | "source";
+export type SearchMatchField = "all" | "fulltext" | "recipient" | "source";
 
 export interface EntityMention {
   type: EntityType;

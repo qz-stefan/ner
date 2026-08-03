@@ -104,51 +104,113 @@ export const AnnotatedLetterText = forwardRef<HTMLDivElement, Props>(function An
     return frags;
   }
 
-  function renderFragments(): ReactNode[] {
-    const frags = computeFragments();
-    const nodes: ReactNode[] = [];
-    for (const frag of frags) {
-      let content: ReactNode = renderTextSlice(frag.start, frag.end);
-
-      // Layer 1: entity
-      if (frag.entityMention) {
-        const m = frag.entityMention;
-        const aid = `entity-${letter.id}-${m.start}`.replace(/[^\w-]/g, "-");
-        content = (
-          <Link className={`entity-annotation entity-${m.type.toLowerCase()}`} style={entityStyleVariables(m.type)}
-            key={`${m.type}-${m.start}`} id={aid} href={getEntityHref(m)} data-entity-id={getEntityKey(m)}
-            aria-label={`查看${entityTypeMeta[m.type].label}实体：${m.canonical}`}
-            aria-describedby={preview?.anchor.id === aid ? preview.id : undefined}
-            onMouseEnter={(ev) => finePointer && openPreview(m, ev.currentTarget, 125)}
-            onMouseLeave={finePointer ? scheduleClose : undefined}
-            onFocus={(ev) => finePointer && openPreview(m, ev.currentTarget)} onBlur={finePointer ? scheduleClose : undefined}
-            onClick={(ev) => handleEntityClick(ev, m)}>
-            {content}<span className="sr-only">，规范实体{m.canonical}</span>
-          </Link>
-        );
-      }
-
-      // Layer 2: event highlighter
-      if (frag.eventId) {
-        const ev = events.find((e) => e.id === frag.eventId)!;
-        content = (
-          <span className={`event-range event-${ev.type.toLowerCase()}`} style={eventStyleVariables(ev.type)}
-            key={ev.id} tabIndex={0}
-            data-event={`${eventTypeMeta[ev.type].label} · ${ev.type}`}
-            aria-label={`${eventTypeMeta[ev.type].label}事件范围`}>
-            {content}
-          </span>
-        );
-      }
-
-      nodes.push(content);
+  /** Split full text into paragraphs by \n\n, tracking each paragraph's offset. */
+  function getParagraphs(): { offset: number; text: string }[] {
+    const paragraphs: { offset: number; text: string }[] = [];
+    const parts = letter.text.split("\n\n");
+    let cursor = 0;
+    for (const part of parts) {
+      paragraphs.push({ offset: cursor, text: part });
+      cursor += part.length + 2; // +2 for the \n\n separator
     }
+    return paragraphs;
+  }
+
+  function wrapFragment(content: ReactNode, frag: TextFragment, key: string): ReactNode {
+    // Layer 1: entity
+    if (frag.entityMention) {
+      const m = frag.entityMention;
+      const aid = `entity-${letter.id}-${m.start}`.replace(/[^\w-]/g, "-");
+      content = (
+        <Link className={`entity-annotation entity-${m.type.toLowerCase()}`} style={entityStyleVariables(m.type)}
+          key={key} id={aid} href={getEntityHref(m)} data-entity-id={getEntityKey(m)}
+          aria-label={`查看${entityTypeMeta[m.type].label}实体：${m.canonical}`}
+          aria-describedby={preview?.anchor.id === aid ? preview.id : undefined}
+          onMouseEnter={(ev) => finePointer && openPreview(m, ev.currentTarget, 125)}
+          onMouseLeave={finePointer ? scheduleClose : undefined}
+          onFocus={(ev) => finePointer && openPreview(m, ev.currentTarget)} onBlur={finePointer ? scheduleClose : undefined}
+          onClick={(ev) => handleEntityClick(ev, m)}>
+          {content}<span className="sr-only">，规范实体{m.canonical}</span>
+        </Link>
+      );
+    }
+
+    // Layer 2: event highlighter
+    if (frag.eventId) {
+      const ev = events.find((e) => e.id === frag.eventId)!;
+      content = (
+        <span className={`event-range event-${ev.type.toLowerCase()}`} style={eventStyleVariables(ev.type)}
+          key={key} tabIndex={0}
+          data-event={`${eventTypeMeta[ev.type].label} · ${ev.type}`}
+          aria-label={`${eventTypeMeta[ev.type].label}事件范围`}>
+          {content}
+        </span>
+      );
+    }
+    return content;
+  }
+
+  function renderParagraphs(): ReactNode[] {
+    const allFrags = computeFragments();
+    const paragraphs = getParagraphs();
+    const nodes: ReactNode[] = [];
+
+    for (let pi = 0; pi < paragraphs.length; pi++) {
+      const para = paragraphs[pi];
+      const paraStart = para.offset;
+      const paraEnd = para.offset + para.text.length;
+
+      // Fragments that overlap this paragraph
+      const paraFrags = allFrags.filter(
+        (f) => f.start < paraEnd && f.end > paraStart,
+      );
+
+      // Build seamless segments covering the entire paragraph
+      const paraNodes: ReactNode[] = [];
+      let cursor = paraStart;
+
+      for (const frag of paraFrags) {
+        // Plain text before this fragment
+        if (frag.start > cursor) {
+          const plainText = letter.text.slice(cursor, frag.start);
+          if (plainText) {
+            paraNodes.push(<Fragment key={`p${pi}-t${cursor}`}>{renderTextSlice(cursor, frag.start)}</Fragment>);
+          }
+        }
+        // Annotated fragment
+        const fragKey = `p${pi}-${frag.entityMention?.type ?? "ev"}-${frag.start}`;
+        let content: ReactNode = renderTextSlice(
+          Math.max(frag.start, paraStart),
+          Math.min(frag.end, paraEnd),
+        );
+        content = wrapFragment(content, frag, fragKey);
+        paraNodes.push(<Fragment key={fragKey}>{content}</Fragment>);
+        cursor = Math.min(frag.end, paraEnd);
+      }
+
+      // Remaining text after last fragment
+      if (cursor < paraEnd) {
+        paraNodes.push(
+          <Fragment key={`p${pi}-tail`}>{renderTextSlice(cursor, paraEnd)}</Fragment>,
+        );
+      }
+
+      // First paragraph: if short (< 80 chars), treat as title; otherwise normal body
+      const isTitle = pi === 0 && para.text.length < 80;
+      const indent = isTitle ? 0 : "2em";
+      nodes.push(
+        <p key={pi} className={isTitle ? "letter-title" : undefined} style={{ textIndent: indent, margin: 0 }}>
+          {paraNodes}
+        </p>,
+      );
+    }
+
     return nodes;
   }
 
   return (
     <div className="annotated-text" ref={innerRef}>
-      <p>{renderFragments().map((n, i) => <Fragment key={i}>{n}</Fragment>)}</p>
+      {renderParagraphs()}
       {preview ? <EntityPreviewCard anchor={preview.anchor} entity={preview.entity} isFinePointer={finePointer} previewId={preview.id} onClose={closePreview} onNavigate={rememberReturnPosition} /> : null}
     </div>
   );

@@ -1,0 +1,2459 @@
+{
+  "generatedAt": "2026-07-31T11:02:07.472Z",
+  "materialPassport": {
+    "dataSource": "data/generated.json",
+    "clusteringSource": "analysis-output/preliminary-request-path-clusters.json",
+    "unit": "含请求的整封书信",
+    "sampleSize": 178,
+    "focalRecipientThreshold": "含请求书信至少8封",
+    "focalRecipients": [
+      "松崎鹤雄",
+      "缪荃孙",
+      "孙毓修",
+      "夏敬观",
+      "易培基"
+    ],
+    "control": "请求行动 contentDomains 的完整多标签组合（精确事务签名）",
+    "primaryTest": "在同一事务签名内置换收信人标签，100,000次",
+    "sensitivityTest": "在同一事务签名与时期内置换，100,000次",
+    "multipleComparisons": "Benjamini–Hochberg FDR，20项人物×类型检验"
+  },
+  "domainCounts": [
+    {
+      "signature": "DOM-BIB+DOM-SOC",
+      "label": "书籍＋社交",
+      "count": 53
+    },
+    {
+      "signature": "DOM-SOC",
+      "label": "社交",
+      "count": 22
+    },
+    {
+      "signature": "DOM-POL+DOM-SOC",
+      "label": "政治＋社交",
+      "count": 18
+    },
+    {
+      "signature": "DOM-BIB",
+      "label": "书籍",
+      "count": 15
+    },
+    {
+      "signature": "DOM-ACA+DOM-BIB",
+      "label": "学术＋书籍",
+      "count": 12
+    },
+    {
+      "signature": "DOM-ACA",
+      "label": "学术",
+      "count": 7
+    },
+    {
+      "signature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "label": "书籍＋政治＋社交",
+      "count": 7
+    },
+    {
+      "signature": "DOM-BIB+DOM-KIN",
+      "label": "书籍＋家族",
+      "count": 7
+    },
+    {
+      "signature": "DOM-ACA+DOM-SOC",
+      "label": "学术＋社交",
+      "count": 6
+    },
+    {
+      "signature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "label": "学术＋书籍＋社交",
+      "count": 6
+    },
+    {
+      "signature": "DOM-ACA+DOM-POL",
+      "label": "学术＋政治",
+      "count": 5
+    },
+    {
+      "signature": "DOM-POL",
+      "label": "政治",
+      "count": 4
+    },
+    {
+      "signature": "DOM-BIB+DOM-KIN+DOM-SOC",
+      "label": "书籍＋家族＋社交",
+      "count": 4
+    },
+    {
+      "signature": "DOM-ACA+DOM-POL+DOM-SOC",
+      "label": "学术＋政治＋社交",
+      "count": 2
+    },
+    {
+      "signature": "DOM-KIN+DOM-SOC",
+      "label": "家族＋社交",
+      "count": 2
+    },
+    {
+      "signature": "DOM-ACA+DOM-BIB+DOM-KIN+DOM-SOC",
+      "label": "学术＋书籍＋家族＋社交",
+      "count": 2
+    },
+    {
+      "signature": "DOM-ACA+DOM-BIB+DOM-POL+DOM-SOC",
+      "label": "学术＋书籍＋政治＋社交",
+      "count": 1
+    },
+    {
+      "signature": "DOM-ACA+DOM-KIN+DOM-SOC",
+      "label": "学术＋家族＋社交",
+      "count": 1
+    },
+    {
+      "signature": "DOM-BIB+DOM-KIN+DOM-POL+DOM-SOC",
+      "label": "书籍＋家族＋政治＋社交",
+      "count": 1
+    },
+    {
+      "signature": "UNSPECIFIED",
+      "label": "未标注",
+      "count": 1
+    },
+    {
+      "signature": "DOM-BIB+DOM-POL",
+      "label": "书籍＋政治",
+      "count": 1
+    },
+    {
+      "signature": "DOM-AFF+DOM-BIB+DOM-SOC",
+      "label": "情感＋书籍＋社交",
+      "count": 1
+    }
+  ],
+  "domainOnly": {
+    "iterations": 100000,
+    "strataCount": 22,
+    "exchangeableStrataCount": 16,
+    "globalStatistic": 16.903719655750407,
+    "globalP": 0.03022969770302297,
+    "supportByPerson": [
+      {
+        "person": "松崎鹤雄",
+        "matchedLetters": 50,
+        "totalLetters": 53,
+        "matchedShare": 0.9433962264150944
+      },
+      {
+        "person": "缪荃孙",
+        "matchedLetters": 35,
+        "totalLetters": 35,
+        "matchedShare": 1
+      },
+      {
+        "person": "孙毓修",
+        "matchedLetters": 14,
+        "totalLetters": 14,
+        "matchedShare": 1
+      },
+      {
+        "person": "夏敬观",
+        "matchedLetters": 11,
+        "totalLetters": 11,
+        "matchedShare": 1
+      },
+      {
+        "person": "易培基",
+        "matchedLetters": 8,
+        "totalLetters": 8,
+        "matchedShare": 1
+      }
+    ],
+    "pairs": [
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 18,
+        "expected": 16.66036238394729,
+        "totalLetters": 53,
+        "matchedOddsRatio": 1.2129201163619683,
+        "observedShare": 0.33962264150943394,
+        "expectedShare": 0.3143464600744772,
+        "deltaPercentagePoints": 2.5276181434956744,
+        "observedExpectedRatio": 1.0804086721032842,
+        "pTwoSided": 0.7047129528704713,
+        "pEnrichment": 0.37378626213737864,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 15,
+        "expected": 17.672626534890686,
+        "totalLetters": 53,
+        "matchedOddsRatio": 0.6365244379736318,
+        "observedShare": 0.2830188679245283,
+        "expectedShare": 0.33344578367718275,
+        "deltaPercentagePoints": -5.0426915752654455,
+        "observedExpectedRatio": 0.8487702702473695,
+        "pTwoSided": 0.33325666743332566,
+        "pEnrichment": 0.8956210437895621,
+        "qTwoSided": 0.6967930320696794
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 17,
+        "expected": 12.97906558849955,
+        "totalLetters": 53,
+        "matchedOddsRatio": 2.0426101947628363,
+        "observedShare": 0.32075471698113206,
+        "expectedShare": 0.24488802997168962,
+        "deltaPercentagePoints": 7.5866687009442435,
+        "observedExpectedRatio": 1.3098015326360095,
+        "pTwoSided": 0.08650913490865092,
+        "pEnrichment": 0.06432935670643293,
+        "qTwoSided": 0.42075579244207556
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 3,
+        "expected": 5.6879454926624735,
+        "totalLetters": 53,
+        "matchedOddsRatio": 0.2938164848672994,
+        "observedShare": 0.05660377358490566,
+        "expectedShare": 0.10731972627665044,
+        "deltaPercentagePoints": -5.071595269174479,
+        "observedExpectedRatio": 0.5274312146398098,
+        "pTwoSided": 0.13511864881351188,
+        "pEnrichment": 0.9814801851981481,
+        "qTwoSided": 0.4503954960450396
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 16,
+        "expected": 15.199311171009285,
+        "totalLetters": 35,
+        "matchedOddsRatio": 1.1576281779161361,
+        "observedShare": 0.45714285714285713,
+        "expectedShare": 0.43426603345740816,
+        "deltaPercentagePoints": 2.2876823685448966,
+        "observedExpectedRatio": 1.0526792839479413,
+        "pTwoSided": 0.8303216967830321,
+        "pEnrichment": 0.44674553254467453,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 11,
+        "expected": 10.439832285115305,
+        "totalLetters": 35,
+        "matchedOddsRatio": 1.1302951564252426,
+        "observedShare": 0.3142857142857143,
+        "expectedShare": 0.2982809224318658,
+        "deltaPercentagePoints": 1.6004791853848455,
+        "observedExpectedRatio": 1.053656773364392,
+        "pTwoSided": 0.8179718202817972,
+        "pEnrichment": 0.4856151438485615,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 3,
+        "expected": 6.307502246181492,
+        "totalLetters": 35,
+        "matchedOddsRatio": 0.3087179005680485,
+        "observedShare": 0.08571428571428572,
+        "expectedShare": 0.18021434989089977,
+        "deltaPercentagePoints": -9.450006417661406,
+        "observedExpectedRatio": 0.4756240874612727,
+        "pTwoSided": 0.10518894811051889,
+        "pEnrichment": 0.984460155398446,
+        "qTwoSided": 0.42075579244207556
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 5,
+        "expected": 3.05335429769392,
+        "totalLetters": 35,
+        "matchedOddsRatio": 2.6664572864321605,
+        "observedShare": 0.14285714285714285,
+        "expectedShare": 0.08723869421982629,
+        "deltaPercentagePoints": 5.561844863731656,
+        "observedExpectedRatio": 1.637543341686979,
+        "pTwoSided": 0.27008729912700874,
+        "pEnrichment": 0.14543854561454386,
+        "qTwoSided": 0.6752182478175218
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 4,
+        "expected": 4.80188679245283,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.67843631778058,
+        "observedShare": 0.2857142857142857,
+        "expectedShare": 0.34299191374663074,
+        "deltaPercentagePoints": -5.727762803234504,
+        "observedExpectedRatio": 0.8330058939096268,
+        "pTwoSided": 0.7446425535744643,
+        "pEnrichment": 0.8029819701802982,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 3,
+        "expected": 4.183647798742138,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.5976483164083378,
+        "observedShare": 0.21428571428571427,
+        "expectedShare": 0.2988319856244384,
+        "deltaPercentagePoints": -8.454627133872414,
+        "observedExpectedRatio": 0.7170775706554421,
+        "pTwoSided": 0.5157648423515765,
+        "pEnrichment": 0.8761412385876142,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 6,
+        "expected": 3.0707547169811322,
+        "totalLetters": 14,
+        "matchedOddsRatio": 4.399635036496351,
+        "observedShare": 0.42857142857142855,
+        "expectedShare": 0.21933962264150944,
+        "deltaPercentagePoints": 20.923180592991912,
+        "observedExpectedRatio": 1.9539170506912442,
+        "pTwoSided": 0.06327936720632793,
+        "pEnrichment": 0.04315956840431596,
+        "qTwoSided": 0.42075579244207556
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 1,
+        "expected": 1.9437106918238993,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.346329775648007,
+        "observedShare": 0.07142857142857142,
+        "expectedShare": 0.13883647798742138,
+        "deltaPercentagePoints": -6.740790655884996,
+        "observedExpectedRatio": 0.5144798576282155,
+        "pTwoSided": 0.6597334026659734,
+        "pEnrichment": 0.9109108908910911,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 3,
+        "expected": 3.9968553459119494,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0.5850785340314136,
+        "observedShare": 0.2727272727272727,
+        "expectedShare": 0.3633504859919954,
+        "deltaPercentagePoints": -9.062321326472267,
+        "observedExpectedRatio": 0.7505900865460268,
+        "pTwoSided": 0.7269627303726963,
+        "pEnrichment": 0.8539314606853932,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 6,
+        "expected": 3.138364779874214,
+        "totalLetters": 11,
+        "matchedOddsRatio": 3.8706624605678233,
+        "observedShare": 0.5454545454545454,
+        "expectedShare": 0.28530588907947396,
+        "deltaPercentagePoints": 26.014865637507146,
+        "observedExpectedRatio": 1.911823647294589,
+        "pTwoSided": 0.06417935820641793,
+        "pEnrichment": 0.04667953320466795,
+        "qTwoSided": 0.42075579244207556
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 2,
+        "expected": 2.7154088050314464,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0.6728971962616822,
+        "observedShare": 0.18181818181818182,
+        "expectedShare": 0.2468553459119497,
+        "deltaPercentagePoints": -6.5037164093767865,
+        "observedExpectedRatio": 0.7365373480023162,
+        "pTwoSided": 0.7114528854711453,
+        "pEnrichment": 0.8279317206827932,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 0,
+        "expected": 1.14937106918239,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0,
+        "observedShare": 0,
+        "expectedShare": 0.1044882790165809,
+        "deltaPercentagePoints": -10.44882790165809,
+        "observedExpectedRatio": 0,
+        "pTwoSided": 0.3483965160348397,
+        "pEnrichment": 1,
+        "qTwoSided": 0.6967930320696794
+      },
+      {
+        "person": "易培基",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 2,
+        "expected": 2.0757575757575757,
+        "totalLetters": 8,
+        "matchedOddsRatio": 0.9391727493917276,
+        "observedShare": 0.25,
+        "expectedShare": 0.25946969696969696,
+        "deltaPercentagePoints": -0.9469696969696961,
+        "observedExpectedRatio": 0.9635036496350365,
+        "pTwoSided": 1,
+        "pEnrichment": 0.6775232247677523,
+        "qTwoSided": 1
+      },
+      {
+        "person": "易培基",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 1,
+        "expected": 2.5515151515151517,
+        "totalLetters": 8,
+        "matchedOddsRatio": 0.20865533230293665,
+        "observedShare": 0.125,
+        "expectedShare": 0.31893939393939397,
+        "deltaPercentagePoints": -19.393939393939398,
+        "observedExpectedRatio": 0.3919239904988123,
+        "pTwoSided": 0.23228767712322876,
+        "pEnrichment": 0.971340286597134,
+        "qTwoSided": 0.6636790774949394
+      },
+      {
+        "person": "易培基",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 1,
+        "expected": 1.9621212121212122,
+        "totalLetters": 8,
+        "matchedOddsRatio": 0.3566362715298886,
+        "observedShare": 0.125,
+        "expectedShare": 0.24526515151515152,
+        "deltaPercentagePoints": -12.026515151515152,
+        "observedExpectedRatio": 0.5096525096525096,
+        "pTwoSided": 0.6508634913650864,
+        "pEnrichment": 0.9192508074919251,
+        "qTwoSided": 0.8740228387189812
+      },
+      {
+        "person": "易培基",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 4,
+        "expected": 1.4106060606060604,
+        "totalLetters": 8,
+        "matchedOddsRatio": 6.773648648648648,
+        "observedShare": 0.5,
+        "expectedShare": 0.17632575757575755,
+        "deltaPercentagePoints": 32.36742424242425,
+        "observedExpectedRatio": 2.8356605800214827,
+        "pTwoSided": 0.023659763402365978,
+        "pEnrichment": 0.023659763402365978,
+        "qTwoSided": 0.42075579244207556
+      }
+    ]
+  },
+  "domainAndEra": {
+    "iterations": 100000,
+    "strataCount": 54,
+    "exchangeableStrataCount": 27,
+    "globalStatistic": 5.108019821809887,
+    "globalP": 0.5973540264597355,
+    "supportByPerson": [
+      {
+        "person": "松崎鹤雄",
+        "matchedLetters": 37,
+        "totalLetters": 53,
+        "matchedShare": 0.6981132075471698
+      },
+      {
+        "person": "缪荃孙",
+        "matchedLetters": 29,
+        "totalLetters": 35,
+        "matchedShare": 0.8285714285714286
+      },
+      {
+        "person": "孙毓修",
+        "matchedLetters": 10,
+        "totalLetters": 14,
+        "matchedShare": 0.7142857142857143
+      },
+      {
+        "person": "夏敬观",
+        "matchedLetters": 11,
+        "totalLetters": 11,
+        "matchedShare": 1
+      },
+      {
+        "person": "易培基",
+        "matchedLetters": 8,
+        "totalLetters": 8,
+        "matchedShare": 1
+      }
+    ],
+    "pairs": [
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 18,
+        "expected": 18.91587301587301,
+        "totalLetters": 53,
+        "matchedOddsRatio": 0.7508635578583764,
+        "observedShare": 0.33962264150943394,
+        "expectedShare": 0.3569032644504342,
+        "deltaPercentagePoints": -1.7280622941000245,
+        "observedExpectedRatio": 0.9515817739363936,
+        "pTwoSided": 0.7920620793792063,
+        "pEnrichment": 0.7712722872771273,
+        "qTwoSided": 1
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 15,
+        "expected": 16.517460317460316,
+        "totalLetters": 53,
+        "matchedOddsRatio": 0.4668153931957613,
+        "observedShare": 0.2830188679245283,
+        "expectedShare": 0.3116501946690626,
+        "deltaPercentagePoints": -2.863132674453428,
+        "observedExpectedRatio": 0.9081299250432444,
+        "pTwoSided": 0.35904640953590466,
+        "pEnrichment": 0.9075509244907551,
+        "qTwoSided": 1
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 17,
+        "expected": 14.317460317460318,
+        "totalLetters": 53,
+        "matchedOddsRatio": 2.109652002626395,
+        "observedShare": 0.32075471698113206,
+        "expectedShare": 0.27014076070679843,
+        "deltaPercentagePoints": 5.061395627433363,
+        "observedExpectedRatio": 1.187361419068736,
+        "pTwoSided": 0.1825481745182548,
+        "pEnrichment": 0.11821881781182188,
+        "qTwoSided": 1
+      },
+      {
+        "person": "松崎鹤雄",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 3,
+        "expected": 3.249206349206349,
+        "totalLetters": 53,
+        "matchedOddsRatio": 0.8219954648526077,
+        "observedShare": 0.05660377358490566,
+        "expectedShare": 0.0613057801737047,
+        "deltaPercentagePoints": -0.4702006588799039,
+        "observedExpectedRatio": 0.9233023937469468,
+        "pTwoSided": 1,
+        "pEnrichment": 0.7320526794732053,
+        "qTwoSided": 1
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 16,
+        "expected": 14.645279866332498,
+        "totalLetters": 35,
+        "matchedOddsRatio": 1.5890729439116538,
+        "observedShare": 0.45714285714285713,
+        "expectedShare": 0.41843656760949993,
+        "deltaPercentagePoints": 3.8706289533357197,
+        "observedExpectedRatio": 1.092502167663031,
+        "pTwoSided": 0.5646443535564645,
+        "pEnrichment": 0.3108368916310837,
+        "qTwoSided": 1
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 11,
+        "expected": 11.232080200501253,
+        "totalLetters": 35,
+        "matchedOddsRatio": 0.8770905229625697,
+        "observedShare": 0.3142857142857143,
+        "expectedShare": 0.32091657715717864,
+        "deltaPercentagePoints": -0.663086287146436,
+        "observedExpectedRatio": 0.9793377365226705,
+        "pTwoSided": 1,
+        "pEnrichment": 0.6984730152698473,
+        "qTwoSided": 1
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 3,
+        "expected": 4.647786131996658,
+        "totalLetters": 35,
+        "matchedOddsRatio": 0.4394361393736145,
+        "observedShare": 0.08571428571428572,
+        "expectedShare": 0.1327938894856188,
+        "deltaPercentagePoints": -4.707960377133308,
+        "observedExpectedRatio": 0.6454685983391452,
+        "pTwoSided": 0.25485745142548577,
+        "pEnrichment": 0.9514104858951411,
+        "qTwoSided": 1
+      },
+      {
+        "person": "缪荃孙",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 5,
+        "expected": 4.474853801169591,
+        "totalLetters": 35,
+        "matchedOddsRatio": 1.674174174174174,
+        "observedShare": 0.14285714285714285,
+        "expectedShare": 0.12785296574770258,
+        "deltaPercentagePoints": 1.5004177109440269,
+        "observedExpectedRatio": 1.1173549398849973,
+        "pTwoSided": 0.6831531684683153,
+        "pEnrichment": 0.4995750042499575,
+        "qTwoSided": 1
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 4,
+        "expected": 4.559649122807018,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.7127851140456183,
+        "observedShare": 0.2857142857142857,
+        "expectedShare": 0.32568922305764414,
+        "deltaPercentagePoints": -3.997493734335844,
+        "observedExpectedRatio": 0.8772604848018467,
+        "pTwoSided": 0.7272827271727282,
+        "pEnrichment": 0.7806921930780693,
+        "qTwoSided": 1
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 3,
+        "expected": 3.82719298245614,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.6304376224689745,
+        "observedShare": 0.21428571428571427,
+        "expectedShare": 0.2733709273182957,
+        "deltaPercentagePoints": -5.908521303258143,
+        "observedExpectedRatio": 0.7838643135457255,
+        "pTwoSided": 0.7147428525714743,
+        "pEnrichment": 0.8412615873841262,
+        "qTwoSided": 1
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 6,
+        "expected": 4.421929824561404,
+        "totalLetters": 14,
+        "matchedOddsRatio": 2.8687673130193905,
+        "observedShare": 0.42857142857142855,
+        "expectedShare": 0.31585213032581455,
+        "deltaPercentagePoints": 11.2719298245614,
+        "observedExpectedRatio": 1.356873636183297,
+        "pTwoSided": 0.1965580344196558,
+        "pEnrichment": 0.16486835131648683,
+        "qTwoSided": 1
+      },
+      {
+        "person": "孙毓修",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 1,
+        "expected": 1.1912280701754385,
+        "totalLetters": 14,
+        "matchedOddsRatio": 0.7770961145194274,
+        "observedShare": 0.07142857142857142,
+        "expectedShare": 0.08508771929824561,
+        "deltaPercentagePoints": -1.365914786967419,
+        "observedExpectedRatio": 0.8394698085419735,
+        "pTwoSided": 1,
+        "pEnrichment": 0.7513924860751392,
+        "qTwoSided": 1
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 3,
+        "expected": 3.5,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0.6896551724137931,
+        "observedShare": 0.2727272727272727,
+        "expectedShare": 0.3181818181818182,
+        "deltaPercentagePoints": -4.545454545454547,
+        "observedExpectedRatio": 0.8571428571428571,
+        "pTwoSided": 1,
+        "pEnrichment": 0.7965920340796592,
+        "qTwoSided": 1
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 6,
+        "expected": 3.8333333333333335,
+        "totalLetters": 11,
+        "matchedOddsRatio": 4.250000000000001,
+        "observedShare": 0.5454545454545454,
+        "expectedShare": 0.3484848484848485,
+        "deltaPercentagePoints": 19.696969696969692,
+        "observedExpectedRatio": 1.5652173913043477,
+        "pTwoSided": 0.10905890941090589,
+        "pEnrichment": 0.08496915030849692,
+        "qTwoSided": 1
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 2,
+        "expected": 2.166666666666667,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0.8571428571428572,
+        "observedShare": 0.18181818181818182,
+        "expectedShare": 0.196969696969697,
+        "deltaPercentagePoints": -1.5151515151515165,
+        "observedExpectedRatio": 0.9230769230769229,
+        "pTwoSided": 1,
+        "pEnrichment": 0.7361526384736152,
+        "qTwoSided": 1
+      },
+      {
+        "person": "夏敬观",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 0,
+        "expected": 1.5,
+        "totalLetters": 11,
+        "matchedOddsRatio": 0,
+        "observedShare": 0,
+        "expectedShare": 0.13636363636363635,
+        "deltaPercentagePoints": -13.636363636363635,
+        "observedExpectedRatio": 0,
+        "pTwoSided": 0.2206577934220658,
+        "pEnrichment": 1,
+        "qTwoSided": 1
+      },
+      {
+        "person": "易培基",
+        "typeCode": "A",
+        "typeName": "先叙后请型",
+        "observed": 2,
+        "expected": 1.5666666666666667,
+        "totalLetters": 8,
+        "matchedOddsRatio": 3.6000000000000005,
+        "observedShare": 0.25,
+        "expectedShare": 0.19583333333333333,
+        "deltaPercentagePoints": 5.416666666666667,
+        "observedExpectedRatio": 1.2765957446808511,
+        "pTwoSided": 1,
+        "pEnrichment": 0.5530044699553004,
+        "qTwoSided": 1
+      },
+      {
+        "person": "易培基",
+        "typeCode": "B",
+        "typeName": "论议收束型",
+        "observed": 1,
+        "expected": 1.9,
+        "totalLetters": 8,
+        "matchedOddsRatio": 0.18181818181818182,
+        "observedShare": 0.125,
+        "expectedShare": 0.2375,
+        "deltaPercentagePoints": -11.249999999999998,
+        "observedExpectedRatio": 0.5263157894736842,
+        "pTwoSided": 0.5394846051539485,
+        "pEnrichment": 0.95940040599594,
+        "qTwoSided": 1
+      },
+      {
+        "person": "易培基",
+        "typeCode": "C",
+        "typeName": "先请后叙型",
+        "observed": 1,
+        "expected": 1.3666666666666667,
+        "totalLetters": 8,
+        "matchedOddsRatio": 0.35294117647058826,
+        "observedShare": 0.125,
+        "expectedShare": 0.17083333333333334,
+        "deltaPercentagePoints": -4.583333333333334,
+        "observedExpectedRatio": 0.7317073170731707,
+        "pTwoSided": 1,
+        "pEnrichment": 0.9175808241917581,
+        "qTwoSided": 1
+      },
+      {
+        "person": "易培基",
+        "typeCode": "D",
+        "typeName": "连环请托型",
+        "observed": 4,
+        "expected": 3.1666666666666665,
+        "totalLetters": 8,
+        "matchedOddsRatio": 3.0833333333333335,
+        "observedShare": 0.5,
+        "expectedShare": 0.3958333333333333,
+        "deltaPercentagePoints": 10.416666666666668,
+        "observedExpectedRatio": 1.2631578947368423,
+        "pTwoSided": 0.5257647423525764,
+        "pEnrichment": 0.3252967470325297,
+        "qTwoSided": 1
+      }
+    ]
+  },
+  "rows": [
+    {
+      "letterId": "001_1923_易培基",
+      "recipient": "易培基",
+      "year": "1923",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "002_1923_易培基",
+      "recipient": "易培基",
+      "year": "1923",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "005_1925_易培基",
+      "recipient": "易培基",
+      "year": "1925",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "006_1925_易培基",
+      "recipient": "易培基",
+      "year": "1925",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "009_1925_易培基",
+      "recipient": "易培基",
+      "year": "1925",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "010_1925_易培基",
+      "recipient": "易培基",
+      "year": "1925",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "013_1925_易培基",
+      "recipient": "易培基",
+      "year": "1925",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "016_1926_易培基",
+      "recipient": "易培基",
+      "year": "1926",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "017_0_瞿良士",
+      "recipient": "瞿良士",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "019_0_白岩龙平",
+      "recipient": "白岩龙平",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "022_0_后藤朝太郎",
+      "recipient": "后藤朝太郎",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "025_0_舒贻上",
+      "recipient": "舒贻上",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "026_0_舒贻上",
+      "recipient": "舒贻上",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "029_0_皮锡瑞",
+      "recipient": "皮锡瑞",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "031_0_段伯猷",
+      "recipient": "段伯猷",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "032_0_罗大令",
+      "recipient": "罗敬则",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "034_1911_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1911",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "035_1911_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1911",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "037_1911_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1911",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "039_1912_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1912",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "040_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "042_1912_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1912",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "044_1912_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1912",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "045_1912_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1912",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "046_1913_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1913",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "047_1913_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1913",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "049_1913_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1913",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "050_1913_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1913",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "052_1913_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1913",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "054_1914_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1914",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "055_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "056_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "060_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "065_1914_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1914",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "067_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "068_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "070_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "073_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "075_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "076_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "077_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "078_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "079_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "081_1916_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1916",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "088_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "091_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "092_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "094_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "095_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "096_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "097_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "098_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-KIN+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "099_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "100_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-POL",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "101_1917_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1917",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-KIN+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "103_1918_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1918",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "105_1918_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1918",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "106_0_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-KIN+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "107_1918_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1918",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "108_1918_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1918",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "109_1918_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1918",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "113_1919_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1919",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "120_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "121_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "122_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-POL",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "124_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "126_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "127_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "128_1920_松崎鹤雄",
+      "recipient": "松崎鹤雄",
+      "year": "1920",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "130_0_石醉六",
+      "recipient": "石醉六",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "131_0_刘先端、黄郁文",
+      "recipient": "刘先端、黄郁文",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "132_0_皮锡瑞",
+      "recipient": "皮鹿门",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-POL",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "135_0_俞恪士",
+      "recipient": "俞恪士",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-POL",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "136_1906_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1906",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "137_1907_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1907",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "138_1907_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1907",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "139_1907_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1907",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "140_1907_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1907",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "141_1908_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1908",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "143_1908_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1908",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "144_1908_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1908",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "145_1909_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1909",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "146_1909_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1909",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "147_1909_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1909",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "148_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "149_1910_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1910",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "150_1910_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1910",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "151_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "152_1911_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1911",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "153_1911_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1911",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "154_1911_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1911",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "156_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "157_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "158_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "159_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "160_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "161_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "162_1913_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1913",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "167_1913_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1913",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "168_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "172_1914_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1914",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "173_1914_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1914",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "175_0_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": null,
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "176_1916_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1916",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "178_1916_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1916",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "179_1917_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "180_1917_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1917",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "182_1917_缪荃孙",
+      "recipient": "缪荃孙",
+      "year": "1917",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "187_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "188_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "189_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "190_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "191_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "194_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "195_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "196_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "197_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "198_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "199_1919_夏敬观",
+      "recipient": "夏敬观",
+      "year": "1919",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "200_1903_吴庆坻",
+      "recipient": "吴庆坻",
+      "year": "1903",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "201_1904_吴庆坻",
+      "recipient": "吴庆坻",
+      "year": "1904",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "203_1906_吴庆坻",
+      "recipient": "吴庆坻",
+      "year": "1906",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "207_1908_吴庆坻",
+      "recipient": "吴庆坻",
+      "year": "1908",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "209_1908_吴庆坻",
+      "recipient": "吴庆坻",
+      "year": "1908",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "211_1917_刘承干",
+      "recipient": "刘承干",
+      "year": "1917",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "212_1917_刘承干",
+      "recipient": "刘承干",
+      "year": "1917",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "UNSPECIFIED",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "218_1919_刘承干",
+      "recipient": "刘承干",
+      "year": "1919",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "219_1896_叶昌炽",
+      "recipient": "叶昌炽",
+      "year": "1896",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "220_1896_叶昌炽",
+      "recipient": "叶昌炽",
+      "year": "1896",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "221_1897_叶昌炽",
+      "recipient": "叶昌炽",
+      "year": "1897",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "223_0_叶昌炽",
+      "recipient": "叶昌炽",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "224_1919_瞿启甲",
+      "recipient": "瞿启甲",
+      "year": "1919",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "225_1919_瞿启甲",
+      "recipient": "瞿启甲",
+      "year": "1919",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "226_1921_瞿启甲",
+      "recipient": "瞿启甲",
+      "year": "1921",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "227_0_钱康荣",
+      "recipient": "钱康荣",
+      "year": null,
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "228_1894_钱康荣",
+      "recipient": "钱康荣",
+      "year": "1894",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "229_1897_熊希龄",
+      "recipient": "熊希龄",
+      "year": "1897",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-ACA+DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "230_1912_俞廉三",
+      "recipient": "俞廉三",
+      "year": "1912",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-BIB+DOM-POL",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "233_1920_严家炽",
+      "recipient": "严家炽",
+      "year": "1920",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "235_1922_劭章",
+      "recipient": "劭章",
+      "year": "1922",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-KIN",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "236_1924_曹献廷",
+      "recipient": "曹献廷",
+      "year": "1924",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "238_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "239_1919_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1919",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "240_1919_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1919",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "244_1920_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1920",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "245_1920_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1920",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "246_1920_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1920",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-KIN+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "247_1920_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1920",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "248_1920_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1920",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "251_1922_杨树达",
+      "recipient": "杨树达",
+      "year": "1922",
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-ACA+DOM-POL",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "252_1922_赵恒惕",
+      "recipient": "赵恒惕",
+      "year": "1922",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "253_1922_赵恒惕",
+      "recipient": "赵恒惕",
+      "year": "1922",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "254_0_杨树达",
+      "recipient": "杨树达",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "257_0_杨树达",
+      "recipient": "杨树达",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "258_0_杨树达",
+      "recipient": "杨树达",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "265_1916_水野梅晓",
+      "recipient": "水野梅晓",
+      "year": "1916",
+      "typeCode": "B",
+      "typeName": "论议收束型",
+      "domainSignature": "DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "266_1916_水野梅晓",
+      "recipient": "水野梅晓",
+      "year": "1916",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-AFF+DOM-BIB+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "269_0_陈夔",
+      "recipient": "陈夔",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "270_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "272_1915_北京政事堂_财政部_参政院_肃政厅",
+      "recipient": "北京政事堂、财政部、参政院、肃政厅",
+      "year": "1915",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "273_1915_北京筹安会杨皙子_孙少侯",
+      "recipient": "北京筹安会杨皙子、孙少侯",
+      "year": "1915",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1912—1918"
+    },
+    {
+      "letterId": "274_1923_大总统_国务院_内务部_参众两院_江苏同乡会",
+      "recipient": "大总统、国务院、内务部、参众两院、江苏同乡会",
+      "year": "1923",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "278_1924_章太炎",
+      "recipient": "章太炎",
+      "year": "1924",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "280_1924_省议会",
+      "recipient": "省议会",
+      "year": "1924",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "282_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "283_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "285_1920_商衍鎏",
+      "recipient": "商衍鎏",
+      "year": "1920",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "286_0_刘仲鲁",
+      "recipient": "刘仲鲁",
+      "year": null,
+      "typeCode": "D",
+      "typeName": "连环请托型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "288_1905_冯锡仁",
+      "recipient": "冯锡仁",
+      "year": "1905",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "289_1905_冯锡仁",
+      "recipient": "冯锡仁",
+      "year": "1905",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "290_1906_冯锡仁",
+      "recipient": "冯锡仁",
+      "year": "1906",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-POL+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "293_1908_陶翁",
+      "recipient": "陶翁",
+      "year": "1908",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "294_1898_石醉六",
+      "recipient": "石醉六",
+      "year": "1898",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "295_1898_石醉六",
+      "recipient": "石醉六",
+      "year": "1898",
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-ACA+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "297_1925_叶恭绰",
+      "recipient": "叶恭绰",
+      "year": "1925",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-KIN+DOM-SOC",
+      "era": "1919以后"
+    },
+    {
+      "letterId": "300_1908_孙毓修",
+      "recipient": "孙毓修",
+      "year": "1908",
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "1911以前"
+    },
+    {
+      "letterId": "301_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "A",
+      "typeName": "先叙后请型",
+      "domainSignature": "DOM-BIB+DOM-SOC",
+      "era": "年代不详"
+    },
+    {
+      "letterId": "304_0_孙毓修",
+      "recipient": "孙毓修",
+      "year": null,
+      "typeCode": "C",
+      "typeName": "先请后叙型",
+      "domainSignature": "DOM-ACA+DOM-BIB",
+      "era": "年代不详"
+    }
+  ]
+}

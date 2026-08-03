@@ -33,7 +33,7 @@ export function TopicsPage() {
                 <Link href={`/category/entity/${code}`} className="classification-card entity-classification-card" key={code}>
                   <span className="entity-legend" style={entityStyleVariables(code)}><strong>{entityTypeMeta[code].label}</strong><small>{code}</small></span>
                   <p>{entityTypeMeta[code].prompt}</p>
-                  <dl><div><dt>{stats.canonicalCount.toLocaleString("zh-CN")}</dt><dd>规范实体</dd></div><div><dt>{stats.mentionCount.toLocaleString("zh-CN")}</dt><dd>出现次数</dd></div><div><dt>{stats.letterCount}</dt><dd>相关书信</dd></div></dl>
+                  <dl><div><dt>{(stats.canonicalCount ?? 0).toLocaleString("zh-CN")}</dt><dd>规范实体</dd></div><div><dt>{(stats.mentionCount ?? 0).toLocaleString("zh-CN")}</dt><dd>出现次数</dd></div><div><dt>{stats.letterCount ?? 0}</dt><dd>相关书信</dd></div></dl>
                   <b>查看专题 <i aria-hidden="true">→</i></b>
                 </Link>
               );
@@ -50,7 +50,7 @@ export function TopicsPage() {
                 <Link href={`/category/event/${code}`} className="classification-card event-classification-card" key={code}>
                   <span className="event-legend" style={eventStyleVariables(code)}><strong>{eventTypeMeta[code].label}</strong><small>{code}</small></span>
                   <p>{eventTypeMeta[code].definition}</p>
-                  <dl><div><dt>{stats.eventCount.toLocaleString("zh-CN")}</dt><dd>标注事件</dd></div><div><dt>{stats.letterCount}</dt><dd>相关书信</dd></div></dl>
+                  <dl><div><dt>{(stats.eventCount ?? 0).toLocaleString("zh-CN")}</dt><dd>标注事件</dd></div><div><dt>{stats.letterCount ?? 0}</dt><dd>相关书信</dd></div></dl>
                   <b>查看专题 <i aria-hidden="true">→</i></b>
                 </Link>
               );

@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { actTypeMeta } from "@/lib/config";
 import { formatLetterDate, getFeaturedLetters, normalizeActAnnotation } from "@/lib/data-adapter";
-import type { ActMention } from "@/lib/types";
+import type { ActMention, ActType } from "@/lib/types";
 import { AnnotatedLetterText } from "./AnnotatedLetterText";
 
 // ── Behavior block types ──
@@ -16,9 +16,52 @@ interface BehaviorBlock {
   act: ActMention | null;
 }
 
-function getDescription(act: ActMention): string {
-  const text = (act.originalText ?? "").replace(/\s+/g, " ").trim();
-  return text || act.type;
+/** Generate a functional annotation describing the rhetorical purpose of the text. */
+function getActDescription(act: ActMention): string {
+  const text = (act.originalText ?? "").trim();
+  const t = act.type;
+
+  if (t === "MNT") {
+    if (/此颂|即颂|此请|顺颂|敬请|并颂|肃颂|此致|祗颂|手颂/.test(text)) return "书信结尾问候语";
+    if (/此叩|叩颂|敬请钧安|虔请/.test(text)) return "书信结尾敬语";
+    if (/甚念|驰念|悬悬|甚慰|为慰|至以为慰/.test(text)) return "表达挂念与慰问";
+    if (/旬日未晤|久未通问|久疏|久未晤|久不/.test(text)) return "表达久未联系的歉意";
+    if (/别后|别经|经年|岁更/.test(text)) return "叙别后之情";
+    return "维系关系，表达问候";
+  }
+  if (t === "INF") {
+    if (/近状|近况|起居|万安|安好|康健/.test(text)) return "转达近况问候";
+    if (/闻|听闻|得悉|获悉|顷闻|近闻/.test(text)) return "转述听闻之事";
+    if (/书|函|信|札|寄|惠书/.test(text) && /收到|收悉|接|奉|得/.test(text)) return "告知来信收悉";
+    if (/已|业已|已经|均已|均已办/.test(text)) return "告知事项进展";
+    if (/到|抵|行踪|在|寓|住/.test(text)) return "告知行踪住处";
+    return "告知近况与信息";
+  }
+  if (t === "REQ") {
+    if (/可否|能否|能.*否|乞|恳|请|托|烦|求|望/.test(text)) return "提出请求或委托";
+    if (/何不|不如|宜|应|当/.test(text)) return "提出建议";
+    return "向对方提出请求";
+  }
+  if (t === "DSP") {
+    if (/碑|帖|书|画|拓|刻|版本|金石/.test(text)) return "展示金石碑帖之见解";
+    if (/诗|词|文|赋|联|楹/.test(text)) return "展示诗文创作与品评";
+    if (/考|证|辨|校|勘|版本/.test(text)) return "展示版本考证之学";
+    return "展示学识与见解";
+  }
+  if (t === "PRS") {
+    if (/佳|妙|好|精|善|美/.test(text)) return "表达赞许与欣赏";
+    if (/钦佩|佩服|敬仰|仰慕|推崇/.test(text)) return "表达钦佩仰慕之情";
+    return "表达赞扬与肯定";
+  }
+  if (t === "INS") {
+    if (/宜|应|当|须|不可|毋|勿|戒/.test(text)) return "提出规劝与教诲";
+    return "进行学术指导与训诫";
+  }
+  if (t === "NEG") {
+    if (/可否|能否|商量|商议|酌|裁|定夺/.test(text)) return "商议事务安排";
+    return "协商讨论具体事项";
+  }
+  const fallback: Record<string, string> = { MNT: "维系关系", INF: "传递信息", REQ: "提出请求", DSP: "展示", PRS: "表达赞扬", INS: "提出训导", NEG: "协商讨论" }; return fallback[t] ?? t;
 }
 
 /**
@@ -71,7 +114,7 @@ export function FeaturedLetterViewer() {
   const [index, setIndex] = useState(0);
   // Three independent layer states — Layer 3 defaults OFF
   const [showLayer1, setShowLayer1] = useState(true);
-  const [showLayer2, setShowLayer2] = useState(true);
+  const [showLayer2, setShowLayer2] = useState(false);
   const [showLayer3, setShowLayer3] = useState(false);
   const letter = letters[index];
 
@@ -139,7 +182,7 @@ export function FeaturedLetterViewer() {
                   {block.act ? (
                     <div className="behavior-annotation">
                       <span className="behavior-type">{actTypeMeta[block.act.type]?.label ?? block.act.type}：</span>
-                      <span className="behavior-description">{getDescription(block.act)}</span>
+                      <span className="behavior-description">{getActDescription(block.act)}</span>
                     </div>
                   ) : null}
                 </div>

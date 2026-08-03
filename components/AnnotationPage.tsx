@@ -8,7 +8,7 @@ import { LetterSearchResults } from "./LetterSearchResults";
 import type { SearchScope } from "@/lib/types";
 
 export function AnnotationPage() {
-  const [search, setSearch] = useState<{ query: string; scope: SearchScope }>({ query: "", scope: "fulltext" });
+  const [search, setSearch] = useState<{ query: string; scope: SearchScope }>({ query: "", scope: "all" });
   return (
     <main>
       <div className="search-band"><div className="site-container"><LetterSearchBar initialValue={search.query} initialScope={search.scope} onSearch={(query, scope) => setSearch({ query, scope })} /></div></div>

@@ -6,16 +6,17 @@ type TopicMetric = {
 type TopicHeroProps = {
   eyebrow: string;
   title: string;
+  subtitle?: string;
   description: string;
   metrics: TopicMetric[];
 };
 
-export function TopicHero({ eyebrow, title, description, metrics }: TopicHeroProps) {
+export function TopicHero({ eyebrow, title, subtitle, description, metrics }: TopicHeroProps) {
   return (
     <header className="topic-hero">
       <div className="topic-hero-copy">
         <span>{eyebrow}</span>
-        <h1>{title}</h1>
+        <h1>{title}{subtitle ? <small>（{subtitle}）</small> : null}</h1>
         <p>{description}</p>
       </div>
       <dl>
