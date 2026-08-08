@@ -1,7 +1,7 @@
 /**
  * 基于规则自动推断所有实体类型的二级分类（subtype），直接写入 generated.json。
  * 不改动任何组件或 lib 代码。
- * 用法：npx tsx scripts/classify-entities.ts
+ * 用法：node --experimental-strip-types scripts/classify-entities.ts
  */
 import { readFileSync, writeFileSync } from "node:fs";
 
@@ -36,6 +36,18 @@ const dataset: Dataset = JSON.parse(raw);
 
 // ─── Recipients ───
 const recipients = new Set(dataset.letters.map((l) => l.recipient));
+
+// LOC 的二级分类已经存在于逐条实体标注中，但部分重建脚本没有把它
+// 汇总回 entityCatalog。这里按规范名重新聚合，避免分类页全部显示为 0。
+const locSubtypesByCanonical = new Map<string, Set<string>>();
+for (const mentions of Object.values(dataset.entitiesByLetter)) {
+  for (const mention of mentions) {
+    if (mention.type !== "LOC" || !mention.subtype) continue;
+    const subtypes = locSubtypesByCanonical.get(mention.canonical) ?? new Set<string>();
+    subtypes.add(mention.subtype);
+    locSubtypesByCanonical.set(mention.canonical, subtypes);
+  }
+}
 
 // ─── Alias → canonical lookup for PER ───
 const perAliasToCanonical = new Map<string, string>();
@@ -623,7 +635,7 @@ function classifyAST(entry: EntityCatalogEntry): string[] {
 // ═══════════════════════════════════════════
 const classifiers: Record<string, (e: EntityCatalogEntry) => string[]> = {
   PER: classifyPER,
-  LOC: undefined!, // LOC already has subtypes
+  LOC: (entry) => [...(locSubtypesByCanonical.get(entry.canonical) ?? [])],
   BOK: classifyBOK,
   VER: classifyVER,
   TIM: classifyTIM,

@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1500" height="260" viewBox="0 0 1500 260">
+  <defs>
+    <clipPath id="titleCrop">
+      <rect x="0" y="0" width="445" height="232" />
+    </clipPath>
+  </defs>
+  <g clip-path="url(#titleCrop)">
+    <image href="brand-lockup-zhi-shang-v2.png" x="-132" y="-10" width="700" height="350" preserveAspectRatio="none" />
+  </g>
+  <line x1="485" y1="78" x2="485" y2="181" stroke="#39332e" stroke-width="2" />
+  <text x="535" y="158" fill="#24201d" font-family="STSong, Songti SC, serif" font-size="50" font-weight="600" letter-spacing="4">叶德辉数字人文平台</text>
+</svg>

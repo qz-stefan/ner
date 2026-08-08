@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCallback, useMemo, useState } from "react";
-import { entityTypeMeta, eventTypeMeta, actTypeMeta } from "@/lib/config";
+import { actTypeMeta, eventTypeMeta } from "@/lib/config";
 import { formatLetterDate, getCategoryMeta, getEntityCategory, getEventsByType, getActsByType } from "@/lib/data-adapter";
 import { getTextInitial, ALPHABET } from "@/lib/pinyin";
 import { getSearchPlaceholder, getSecondaryCategories } from "@/lib/topic-config";
@@ -15,6 +15,8 @@ import { SecondaryCategoryFilter } from "@/components/SecondaryCategoryFilter";
 import type { FilterMode } from "@/components/SecondaryCategoryFilter";
 import { ActiveFilterSummary } from "@/components/ActiveFilterSummary";
 import { AlphabetGroupedEntityList } from "@/components/AlphabetGroupedEntityList";
+import { AnnotationLayerSidebar } from "@/components/AnnotationLayerSidebar";
+import { EntityTopRanking, RANKABLE_ENTITY_TYPES } from "@/components/EntityTopRanking";
 
 export function CategoryIndexPage({ layer, code }: { layer: string; code: string }) {
   const meta = getCategoryMeta(layer, code);
@@ -23,6 +25,7 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [filterMode, setFilterMode] = useState<FilterMode>("single");
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Entity data (only for entity layer)
   const allEntries: EntityCatalogEntry[] = useMemo(
@@ -193,24 +196,39 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
   const letterCount = "letterCount" in meta.stats ? meta.stats.letterCount : 0;
   const placeholder = getSearchPlaceholder(meta.label);
 
-  return (
-    <main className="index-page site-container">
-      <Link className="back-link" href="/topics">← 返回实体分类检索</Link>
+  const backHref = "/topics";
+  const backLabel = "← 返回专项知识索引";
 
-      <TopicHeader
-        eyebrow={`${layerLabel} · ${code}`}
-        title={`${meta.label}专题`}
-        description={"prompt" in meta ? meta.prompt : meta.definition}
-        metrics={[
-          { value: (totalValue ?? 0).toLocaleString("zh-CN"), label: totalUnit },
-          { value: (letterCount ?? 0).toLocaleString("zh-CN"), label: "封书信" },
-        ]}
+  return (
+    <main className={`category-index-layout site-container${sidebarCollapsed ? " is-sidebar-collapsed" : ""}`}>
+      <AnnotationLayerSidebar
+        activeLayer={layer === "entity" || layer === "event" || layer === "act" ? layer : undefined}
+        activeCode={code}
+        collapsed={sidebarCollapsed}
+        onToggleCollapse={() => setSidebarCollapsed((current) => !current)}
       />
 
-      <TopicSearch value={query} onChange={setQuery} placeholder={placeholder} />
+      <section className="index-page category-index-main">
+        <Link className="back-link" href={backHref}>{backLabel}</Link>
+
+        <TopicHeader
+          eyebrow={`${layerLabel} · ${code}`}
+          title={`${meta.label}专题`}
+          description={"prompt" in meta ? meta.prompt : meta.definition}
+          metrics={[
+            { value: (totalValue ?? 0).toLocaleString("zh-CN"), label: totalUnit },
+            { value: (letterCount ?? 0).toLocaleString("zh-CN"), label: "封书信" },
+          ]}
+        />
+
+        {layer === "entity" && RANKABLE_ENTITY_TYPES.includes(code as EntityType) && (
+          <EntityTopRanking entries={allEntries} type={code as EntityType} />
+        )}
+
+        <TopicSearch value={query} onChange={setQuery} placeholder={placeholder} />
 
       {/* Entity layer: full filtering + grouped list */}
-      {layer === "entity" && (
+        {layer === "entity" && (
         <>
           <AlphabetIndex
             counts={letterCounts}
@@ -248,7 +266,7 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
       )}
 
       {/* Event layer */}
-      {layer === "event" && (
+        {layer === "event" && (
         filteredEvents.length ? (
           <section className="event-index-list" style={{ marginTop: 24 }}>
             {filteredEvents.slice(0, 120).map(({ letter, event }) => (
@@ -265,7 +283,7 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
         ) : <EmptyIndex />
       )}
 
-      {layer === "act" && (
+        {layer === "act" && (
         filteredActs.length ? (
           <section className="event-index-list" style={{ marginTop: 24 }}>
             {filteredActs.slice(0, 200).map(({ letter, act }) => (
@@ -273,14 +291,15 @@ export function CategoryIndexPage({ layer, code }: { layer: string; code: string
                 <span>{actTypeMeta[act.type].label}<b>{act.type}</b></span>
                 <div>
                   <p>{act.originalText}</p>
-                  <small>{act.subtype ? `${act.subtype} · ` : ""}{act.mode} · 致{letter.recipient} · {formatLetterDate(letter)}</small>
+                  <small>{act.subtype ? `${act.subtype} · ` : ""}{act.mode ?? "表达方式未标注"} · 致{letter.recipient} · {formatLetterDate(letter)}</small>
                 </div>
                 <Link href={`/letter/${encodeURIComponent(letter.id)}`}>查看原信 →</Link>
               </article>
             ))}
           </section>
         ) : <EmptyIndex />
-      )}
+        )}
+      </section>
     </main>
   );
 }

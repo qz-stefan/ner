@@ -2,18 +2,17 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { entityTypeMeta, eventTypeMeta } from "@/lib/config";
-import { formatLetterDate, getEntity, getEntityAnnotation, getEntityOccurrences, getRelatedEntities, getRelatedEvents } from "@/lib/data-adapter";
+import { entityTypeMeta } from "@/lib/config";
+import { formatLetterDate, getEntity, getEntityAnnotation, getEntityOccurrences } from "@/lib/data-adapter";
 import type { EntityType } from "@/lib/types";
 import { TopicHero } from "@/components/TopicHero";
+import { EntityNetworkOverlay } from "@/components/EntityNetworkOverlay";
 
 export function EntityDetailPage({ type, name }: { type: EntityType; name: string }) {
   const entry = getEntity(type, name);
   const [tableView, setTableView] = useState(false);
   if (!entry) return <main className="site-container page-state">未找到“{name}”的实体数据。</main>;
   const occurrences = getEntityOccurrences(entry);
-  const related = getRelatedEntities(entry);
-  const relatedEvents = getRelatedEvents(entry);
   const annotation = getEntityAnnotation(type, name);
   const subtypeLabel = entry.subtypes.length ? entry.subtypes.join("、") : `${entityTypeMeta[type].label} · ${type}`;
   const hasAliases = entry.aliases.length > 0;
@@ -31,6 +30,7 @@ export function EntityDetailPage({ type, name }: { type: EntityType; name: strin
           { value: (entry.letterIds?.length ?? 0).toLocaleString("zh-CN"), label: "封书信" },
         ]}
       />
+      <EntityNetworkOverlay center={entry} />
 
       <section className="occurrence-section">
         <div className="section-heading"><div><span>CORRESPONDENCE</span><h2>相关书信</h2></div><div className="view-toggle"><button type="button" className={!tableView ? "selected" : ""} onClick={() => setTableView(false)}>原文片段</button><button type="button" className={tableView ? "selected" : ""} onClick={() => setTableView(true)}>表格模式</button></div></div>
@@ -53,10 +53,6 @@ export function EntityDetailPage({ type, name }: { type: EntityType; name: strin
         )}
       </section>
 
-      <section className="relation-section">
-        <div><h2>相关实体</h2>{related.length ? related.map(({ entry: item, sharedLetters }) => <Link key={`${item.type}-${item.canonical}`} href={`/entity/${item.type}/${encodeURIComponent(item.canonical)}`}><b>{item.canonical}</b><small>{item.type} · 共现 {sharedLetters} 封</small></Link>) : <p>暂无数据</p>}</div>
-        <div><h2>相关事件</h2>{relatedEvents.length ? relatedEvents.map(({ letter, event }) => <Link key={`${letter.id}-${event.id}`} href={`/letter/${encodeURIComponent(letter.id)}`}><b>{eventTypeMeta[event.type].label}</b><small>{event.originalText.slice(0, 36)}{event.originalText.length > 36 ? "……" : ""}</small></Link>) : <p>暂无数据</p>}</div>
-      </section>
     </main>
   );
 }

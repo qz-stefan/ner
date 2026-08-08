@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { RequestTypeDetailPage } from "@/components/analysis/RequestTypeDetailPage";
+import { Suspense } from "react";
+import { RequestTypeRoute as RequestTypeRouteClient } from "@/components/analysis/RequestTypeRoute";
 import { TYPE_SLUG_MAP } from "@/lib/request-types";
 import type { PathCode } from "@/lib/request-types";
 
@@ -20,15 +21,12 @@ export async function generateMetadata({ params }: { params: Promise<{ type: str
   };
 }
 
-export default async function RequestTypeRoute({
+export default async function Page({
   params,
-  searchParams,
 }: {
   params: Promise<{ type: string }>;
-  searchParams: Promise<{ [key: string]: string | string[] | undefined }>;
 }) {
   const { type: slug } = await params;
-  const sp = await searchParams;
   const typeCode = TYPE_SLUG_MAP[slug];
 
   if (!typeCode) {
@@ -43,10 +41,7 @@ export default async function RequestTypeRoute({
     );
   }
 
-  const from = typeof sp.from === "string" ? sp.from : undefined;
-  const question = typeof sp.question === "string" ? sp.question : undefined;
-
-  return <RequestTypeDetailPage typeCode={typeCode} from={from} question={question} />;
+  return <Suspense fallback={null}><RequestTypeRouteClient typeCode={typeCode} /></Suspense>;
 }
 
 export function generateStaticParams() {

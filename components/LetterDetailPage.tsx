@@ -1,12 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { actTypeMeta } from "@/lib/config";
-import { formatLetterDate, getLetter, normalizeActAnnotation, normalizeEventAnnotation, searchScopeLabels } from "@/lib/data-adapter";
-import type { ActMention, ActType, EventMention, Letter, SearchScope } from "@/lib/types";
+import { formatLetterDate, getLetter, normalizeActAnnotation, searchScopeLabels } from "@/lib/data-adapter";
+import type { ActMention, Letter, SearchScope } from "@/lib/types";
 import { AnnotatedLetterText } from "./AnnotatedLetterText";
 import { HighlightedText } from "./HighlightedText";
+import { LetterAnnotationIndex } from "./LetterAnnotationIndex";
 
 interface BehaviorBlock {
   start: number;
@@ -15,66 +16,126 @@ interface BehaviorBlock {
   act: ActMention | null;
 }
 
-/** Generate a functional annotation describing the rhetorical purpose of the text. */
-function getActAnnotation(act: ActMention, _eventMap: Map<string, EventMention>): string {
-  const text = (act.originalText ?? "").trim();
-  const t = act.type;
+/** Map contentDomainEvidence to domain tags. */
+const DOMAIN_PATTERNS: [RegExp, string][] = [
+  [/人际|通信|会晤|邀约|赠答|往还/g, "人际"],
+  [/书籍|著述|校勘|刊刻|文献流通|文献/g, "文献"],
+  [/经学|学派|学术判断|学术/g, "学术"],
+  [/政治|制度|时局|公共事务|时政/g, "时政"],
+  [/亲属|先祖|祭祖|家族|邦族/g, "家族"],
+  [/遗憾|哀悼|欣慰|感谢|歉意|惋惜/g, "情感"],
+];
 
-  // ── MNT 维系 ──
-  if (t === "MNT") {
-    if (/此颂|即颂|此请|顺颂|敬请|并颂|肃颂|此致|祗颂|手颂/.test(text)) return "书信结尾问候语";
-    if (/此叩|叩颂|敬请钧安|虔请/.test(text)) return "书信结尾敬语";
-    if (/甚念|驰念|悬悬|甚慰|为慰|至以为慰/.test(text)) return "表达挂念与慰问";
-    if (/旬日未晤|久未通问|久疏|久未晤|久不/.test(text)) return "表达久未联系的歉意";
-    if (/别后|别经|经年|岁更/.test(text)) return "叙别后之情";
-    return "维系关系，表达问候";
+function extractDomains(evidence: string | null | undefined): string[] {
+  if (!evidence) return [];
+  const tags = new Set<string>();
+  for (const [re, tag] of DOMAIN_PATTERNS) {
+    if (re.test(evidence)) tags.add(tag);
+    re.lastIndex = 0;
   }
+  return [...tags].slice(0, 2);
+}
 
-  // ── INF 告知 ──
-  if (t === "INF") {
-    if (/近状|近况|起居|万安|安好|康健/.test(text)) return "转达近况问候";
-    if (/闻|听闻|得悉|获悉|顷闻|近闻/.test(text)) return "转述听闻之事";
-    if (/书|函|信|札|寄|惠书/.test(text) && /收到|收悉|接|奉|得/.test(text)) return "告知来信收悉";
-    if (/已|业已|已经|均已|均已办/.test(text)) return "告知事项进展";
-    if (/到|抵|行踪|在|寓|住/.test(text)) return "告知行踪住处";
-    return "告知近况与信息";
+/**
+ * Generate a natural, human-readable description of what the act IS DOING.
+ * Combines the rhetorical subtype with the content domain to produce
+ * descriptions like "告知近况", "请求书籍帮助", "论证学术观点", etc.
+ */
+function describeAction(subtype: string | null | undefined, domains: string[]): string {
+  const templates: Record<string, Record<string, string>> = {
+    告知: {
+      人际: "告知个人近况与日常往来",
+      文献: "告知书籍文献相关信息",
+      学术: "告知学术研究与学问进展",
+      时政: "告知时局政事近闻",
+      家族: "告知家族事务近况",
+      _: "告知事项近况",
+    },
+    论证: {
+      人际: "议论人事往来与交游",
+      文献: "论证文献真伪与版本源流",
+      学术: "论证学术观点与学问见解",
+      时政: "议论时局政事与形势",
+      家族: "议论家族事务与家世",
+      _: "论证观点见解",
+    },
+    评价: {
+      人际: "评价人物品性与人事",
+      文献: "评价文献价值与版本优劣",
+      学术: "评价学术贡献与学问造诣",
+      时政: "评价时局政事与形势",
+      家族: "评价家族事务与家世",
+      _: "发表评价看法",
+    },
+    请求: {
+      人际: "请求对方帮忙办事或引介",
+      文献: "请求寄送、代寻或提供书籍文献",
+      学术: "请求学术方面的帮助与指教",
+      时政: "请求政事方面的帮助",
+      家族: "请求家族事务方面的帮助",
+      _: "请求对方帮助",
+    },
+    询问: {
+      人际: "打听近况与人事消息",
+      文献: "询问书籍文献的相关信息",
+      学术: "询问学术问题与学问意见",
+      时政: "询问时局政事近闻",
+      家族: "询问家族事务近况",
+      _: "询问打听信息",
+    },
+    建议: {
+      人际: "就人事往来提出建议",
+      文献: "就文献事务提出建议",
+      学术: "就学术方向与学问提出建议",
+      时政: "就时局政事提出建议",
+      家族: "就家族事务提出建议",
+      _: "提出建议",
+    },
+    承诺: {
+      人际: "承诺后续人事往来与交往",
+      文献: "承诺处理书籍文献事务",
+      学术: "承诺学术方面的事务",
+      时政: "承诺政事方面的事务",
+      家族: "承诺家族方面的事务",
+      _: "承诺后续行动",
+    },
+    提供: {
+      人际: "提供人际方面的帮助",
+      文献: "提供或寄送书籍文献",
+      学术: "提供学术资源与帮助",
+      时政: "提供政事方面的协助",
+      家族: "提供家族事务协助",
+      _: "提供帮助",
+    },
+    祝颂: { _: "表达祝颂与敬意" },
+    问候: { _: "问候对方近况起居" },
+    感谢: { _: "表达感谢之情" },
+    致歉: { _: "表达歉意与不安" },
+    庆贺: { _: "表达庆贺之意" },
+  };
+
+  const t = subtype ?? "";
+  const map = templates[t];
+  if (!map) {
+    const d = domains[0];
+    return d ? `${t}${d}` : t;
   }
-
-  // ── REQ 请求 ──
-  if (t === "REQ") {
-    if (/可否|能否|能.*否|乞|恳|请|托|烦|求|望/.test(text)) return "提出请求或委托";
-    if (/何不|不如|宜|应|当/.test(text)) return "提出建议";
-    return "向对方提出请求";
+  for (const d of domains) {
+    if (map[d]) return map[d];
   }
+  return map._ ?? t;
+}
 
-  // ── DSP 展示 ──
-  if (t === "DSP") {
-    if (/碑|帖|书|画|拓|刻|版本|金石/.test(text)) return "展示金石碑帖之见解";
-    if (/诗|词|文|赋|联|楹/.test(text)) return "展示诗文创作与品评";
-    if (/考|证|辨|校|勘|版本/.test(text)) return "展示版本考证之学";
-    return "展示学识与见解";
-  }
+function getActTypeLabel(act: ActMention): string {
+  const label = actTypeMeta[act.type]?.label ?? act.type;
+  return act.subtype ? `${label} · ${act.subtype}` : label;
+}
 
-  // ── PRS 赞扬 ──
-  if (t === "PRS") {
-    if (/佳|妙|好|精|善|美/.test(text)) return "表达赞许与欣赏";
-    if (/钦佩|佩服|敬仰|仰慕|推崇/.test(text)) return "表达钦佩仰慕之情";
-    return "表达赞扬与肯定";
-  }
-
-  // ── INS 训导 ──
-  if (t === "INS") {
-    if (/宜|应|当|须|不可|毋|勿|戒/.test(text)) return "提出规劝与教诲";
-    return "进行学术指导与训诫";
-  }
-
-  // ── NEG 协商 ──
-  if (t === "NEG") {
-    if (/可否|能否|商量|商议|酌|裁|定夺/.test(text)) return "商议事务安排";
-    return "协商讨论具体事项";
-  }
-
-  const fallback: Record<string, string> = { MNT: "维系关系", INF: "传递信息", REQ: "提出请求", DSP: "展示", PRS: "表达赞扬", INS: "提出训导", NEG: "协商讨论" }; return fallback[t] ?? t;
+function getActExplanation(act: ActMention): string {
+  const domains = extractDomains(act.contentDomainEvidence);
+  // For merged acts, use the first subtype for the description
+  const primarySubtype = act.subtype?.split("·")[0] ?? null;
+  return describeAction(primarySubtype, domains);
 }
 
 /**
@@ -86,17 +147,16 @@ function splitIntoBehaviorBlocks(text: string, acts: ActMention[]): BehaviorBloc
   const sorted = [...acts].sort((a, b) => a.start - b.start);
   if (!sorted.length) return [];
 
-  // Phase 1: merge adjacent same-type acts
+  // Phase 1: merge adjacent acts of the same type AND subtype
   const merged: ActMention[] = [];
   for (const act of sorted) {
     if (act.start >= act.end) continue;
     const prev = merged[merged.length - 1];
-    if (prev && prev.type === act.type && act.start <= prev.end) {
-      // Merge into previous: extend end, join text
+    if (prev && prev.type === act.type && (prev.subtype ?? null) === (act.subtype ?? null) && act.start <= prev.end) {
       const extended: ActMention = {
         ...prev,
         end: Math.max(prev.end, act.end),
-        originalText: (prev.originalText + act.originalText).replace(/\s+/g, " ").trim(),
+        originalText: text.slice(prev.start, Math.max(prev.end, act.end)).replace(/\s+/g, " ").trim(),
       };
       merged[merged.length - 1] = extended;
     } else {
@@ -145,13 +205,6 @@ export function LetterDetailPage({ id, query = "", scope = "fulltext", matchStar
   const textMatchStart = scope === "fulltext" ? (typeof matchStart === "number" && matchStart >= 0 ? matchStart : fallbackMatch) : -1;
   const searchMatch = textMatchStart >= 0 ? { start: textMatchStart, length: query.length } : null;
 
-  // Build event map for act → paraphrase lookup
-  const eventMap = useMemo(() => {
-    if (!letter) return new Map<string, EventMention>();
-    const events = normalizeEventAnnotation(letter.id);
-    return new Map(events.map((ev) => [ev.id, ev]));
-  }, [letter]);
-
   useEffect(() => {
     if (!query) return;
     const frame = requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -170,39 +223,39 @@ export function LetterDetailPage({ id, query = "", scope = "fulltext", matchStar
       <Link className="back-link" href="/letters">← 返回书信检索</Link>
       <header className="letter-detail-heading"><span>LETTER {letter.number}</span><h1>致{scope === "recipient" && query ? <HighlightedText text={letter.recipient} query={query} markId="search-match" /> : letter.recipient}</h1><time>{formatLetterDate(letter)}</time></header>
       {query ? <p className="detail-match-note">由&ldquo;{searchScopeLabels[scope]}&rdquo;检索进入，已定位并标出&ldquo;{query}&rdquo;。</p> : null}
-      <div className="detail-controls">
-        {(["entity", "event"] as const).map((layer) => <button type="button" key={layer} className={layers[layer] ? "selected" : ""} aria-pressed={layers[layer]} onClick={() => setLayers((c) => ({ ...c, [layer]: !c[layer] }))}>{layer === "entity" ? "第一层标注" : "第二层标注"} {layers[layer] ? "✓" : ""}</button>)}
-        <button type="button" className={layers.act ? "selected" : ""} aria-pressed={layers.act} onClick={() => setLayers((c) => ({ ...c, act: !c.act }))}>第三层标注 {layers.act ? "✓" : ""}</button>
-      </div>
-
-      {/* ── Behavior block mode (act layer ON) ── */}
-      {layers.act ? (
-        <article className="behavior-block-view">
-          {behaviorBlocks.map((block, i) => (
-            <div key={i} className={`behavior-block${block.act ? " has-act" : ""}`}>
-              <div className="behavior-text">
-                <AnnotatedLetterText
-                  letter={letter as Letter}
-                  showEntity={layers.entity}
-                  showEvent={layers.event}
-                  rangeStart={block.start}
-                  rangeEnd={block.end}
-                  searchMatch={searchMatch}
-                />
-              </div>
-              {block.act ? (
-                <div className="behavior-annotation">
-                  <span className="behavior-type">{actTypeMeta[block.act.type]?.label ?? block.act.type}：</span>
-                  <span className="behavior-description">{getActAnnotation(block.act, eventMap)}</span>
+      <LetterAnnotationIndex letterId={letter.id} layers={layers} onLayersChange={setLayers}>
+        {/* ── Behavior block mode (act layer ON) ── */}
+        {layers.act ? (
+          <article className="behavior-block-view">
+            {behaviorBlocks.map((block, i) => (
+              <div key={i} className={`behavior-block${block.act ? " has-act" : ""}`}>
+                <div className="behavior-text">
+                  <AnnotatedLetterText
+                    letter={letter as Letter}
+                    showEntity={layers.entity}
+                    showEvent={layers.event}
+                    rangeStart={block.start}
+                    rangeEnd={block.end}
+                    searchMatch={searchMatch}
+                  />
                 </div>
-              ) : null}
-            </div>
-          ))}
-        </article>
-      ) : (
-        /* ── Continuous text (act OFF) ── */
-        <article className="detail-original-only"><AnnotatedLetterText letter={letter as Letter} showEntity={layers.entity} showEvent={layers.event} searchMatch={searchMatch} /></article>
-      )}
+                {block.act ? (() => {
+                  const expl = getActExplanation(block.act);
+                  return (
+                    <div className="behavior-annotation">
+                      <span className="behavior-type">{getActTypeLabel(block.act)}{expl ? "：" : ""}</span>
+                      {expl ? <span className="behavior-description">{expl}</span> : null}
+                    </div>
+                  );
+                })() : null}
+              </div>
+            ))}
+          </article>
+        ) : (
+          /* ── Continuous text (act OFF) ── */
+          <article className="detail-original-only"><AnnotatedLetterText letter={letter as Letter} showEntity={layers.entity} showEvent={layers.event} searchMatch={searchMatch} /></article>
+        )}
+      </LetterAnnotationIndex>
 
       <footer className="letter-record"><div><span>收信人</span><p>{scope === "recipient" && query ? <HighlightedText text={letter.recipient} query={query} /> : letter.recipient}</p></div><div><span>时间</span><p>{formatLetterDate(letter)}</p></div><div><span>来源</span><p>{scope === "source" && query ? <HighlightedText text={letter.source ?? "暂无来源字段"} query={query} markId="search-match" /> : letter.source ?? "暂无来源字段"}</p></div></footer>
     </main>

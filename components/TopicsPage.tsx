@@ -14,12 +14,12 @@ const entityCodes = Object.keys(dataset.entityStats) as EntityType[];
 const eventCodes = Object.keys(dataset.eventStats) as EventType[];
 const actCodes = Object.keys(dataset.actStats) as ActType[];
 
-export function TopicsPage() {
-  return (
-    <main className="topics-page site-container">
+export function TopicsPage({ embedded = false }: { embedded?: boolean }) {
+  const content = (
+    <>
       <header className="topics-heading">
         <span>ANNOTATION CLASSIFICATION</span>
-        <h1>实体分类检索</h1>
+        {embedded ? <h2>专项知识索引</h2> : <h1>专项知识索引</h1>}
         <p>依照项目真实标注数据，将第一层实体、第二层事件与第三层行动分开呈现，可进入各层专题查看条目、出现次数与相关书信。</p>
       </header>
 
@@ -75,6 +75,16 @@ export function TopicsPage() {
           </div>
         </section>
       </div>
+    </>
+  );
+
+  if (embedded) {
+    return <div className="topics-page embedded-topics-page">{content}</div>;
+  }
+
+  return (
+    <main className="topics-page site-container">
+      {content}
     </main>
   );
 }

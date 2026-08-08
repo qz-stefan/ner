@@ -1,5 +1,5 @@
 import { annotationStyles } from "@/lib/config";
-import { BarChart, HeatmapChart, LineChart, PieChart, RadarChart, SankeyChart, ScatterChart } from "echarts/charts";
+import { BarChart, GraphChart, HeatmapChart, LineChart, PieChart, RadarChart, SankeyChart, ScatterChart } from "echarts/charts";
 import {
   DataZoomComponent,
   GridComponent,
@@ -16,6 +16,7 @@ import type { AnalysisConfig, PivotResult } from "./types";
 
 echarts.use([
   BarChart,
+  GraphChart,
   HeatmapChart,
   LineChart,
   PieChart,

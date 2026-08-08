@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import "./free-analysis.css";
 import { AnalysisPage } from "@/components/analysis/AnalysisPage";
 
 export const metadata: Metadata = {

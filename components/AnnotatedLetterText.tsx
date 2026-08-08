@@ -35,8 +35,8 @@ export const AnnotatedLetterText = forwardRef<HTMLDivElement, Props>(function An
 
   useImperativeHandle(ref, () => innerRef.current!);
 
-  const entities = showEntity ? normalizeEntityAnnotation(letter.id).filter((i) => i.start >= rangeStart && i.end <= rangeEnd) : [];
-  const events = showEvent ? normalizeEventAnnotation(letter.id).filter((i) => i.start >= rangeStart && i.end <= rangeEnd) : [];
+  const entities = showEntity ? normalizeEntityAnnotation(letter.id).filter((i) => i.start < rangeEnd && i.end > rangeStart) : [];
+  const events = showEvent ? normalizeEventAnnotation(letter.id).filter((i) => i.start < rangeEnd && i.end > rangeStart) : [];
 
   const clearTimers = useCallback(() => { if (openTimer.current) clearTimeout(openTimer.current); if (closeTimer.current) clearTimeout(closeTimer.current); openTimer.current = null; closeTimer.current = null; }, []);
   const closePreview = useCallback(() => { clearTimers(); setPreview(null); }, [clearTimers]);
@@ -157,10 +157,15 @@ export const AnnotatedLetterText = forwardRef<HTMLDivElement, Props>(function An
 
     for (let pi = 0; pi < paragraphs.length; pi++) {
       const para = paragraphs[pi];
-      const paraStart = para.offset;
-      const paraEnd = para.offset + para.text.length;
+      const fullStart = para.offset;
+      const fullEnd = para.offset + para.text.length;
 
-      // Fragments that overlap this paragraph
+      // Clamp to requested display range — skip paragraphs fully outside
+      const paraStart = Math.max(fullStart, rangeStart);
+      const paraEnd = Math.min(fullEnd, rangeEnd);
+      if (paraStart >= paraEnd) continue;
+
+      // Fragments that overlap this paragraph's clamped range
       const paraFrags = allFrags.filter(
         (f) => f.start < paraEnd && f.end > paraStart,
       );

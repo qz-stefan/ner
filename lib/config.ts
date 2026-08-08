@@ -46,13 +46,10 @@ export const eventTypeMeta: Record<EventType, { label: string; definition: strin
 };
 
 export const actTypeMeta: Record<ActType, { label: string; definition: string }> = {
-  REQ: { label: "请求", definition: "提出请求、委托或期望对方采取行动。" },
-  DSP: { label: "展示", definition: "展示学识、成果、收藏或个人立场。" },
-  INF: { label: "告知", definition: "向收信人传递事实、进展或近况。" },
-  PRS: { label: "赞扬", definition: "表达赞许、敬重或正面评价。" },
-  MNT: { label: "维系", definition: "维护关系、问候、致意或延续交往。" },
-  INS: { label: "训导", definition: "提出教诲、规劝或学术指导。" },
-  NEG: { label: "协商", definition: "讨论条件、安排与可协调事项。" },
+  AST: { label: "陈述", definition: "陈述事实、论证观点或评价事物。" },
+  DIR: { label: "指示", definition: "提出建议、询问信息或发出请求。" },
+  EXP: { label: "表达", definition: "表达问候、祝颂、感谢、庆贺或致歉等情感。" },
+  COM: { label: "承诺", definition: "承诺采取行动或提供帮助与资源。" },
 };
 
 type EntityAnnotationStyle = {
@@ -109,13 +106,10 @@ export const annotationStyles: {
     FAM: { accent: "#687d70", background: "rgba(110, 132, 118, 0.24)", hover: "rgba(110, 132, 118, 0.30)", selected: "rgba(110, 132, 118, 0.34)", border: "rgba(110, 132, 118, 0.28)" },
   },
   action: {
-    REQ: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    DSP: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    INF: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    PRS: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    MNT: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    INS: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
-    NEG: { color: "#5f5870", border: "#9c96a6", background: "#f8f6f0", hover: "#efedf2", selected: "#e5e1eb" },
+    AST: { color: "#4a6080", border: "#8fa4bf", background: "#f4f6f9", hover: "#e8edf3", selected: "#dce3ed" },
+    DIR: { color: "#705840", border: "#b09a80", background: "#f9f6f2", hover: "#f0ebe1", selected: "#e8e0d2" },
+    EXP: { color: "#6b5070", border: "#a890af", background: "#f7f4f8", hover: "#efe7f2", selected: "#e6daea" },
+    COM: { color: "#4a6040", border: "#8ea87a", background: "#f4f7f2", hover: "#e8efe3", selected: "#dce6d4" },
   },
 };
 

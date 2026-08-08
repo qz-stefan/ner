@@ -104,13 +104,10 @@ const academic = academicSource as unknown as {
 };
 
 const ACTION_LABELS: Record<ActType, string> = {
-  INF: "告知",
-  PRS: "说服",
-  DSP: "展示",
-  REQ: "请求",
-  MNT: "维系",
-  NEG: "协商",
-  INS: "训诫",
+  AST: "陈述",
+  DIR: "指示",
+  EXP: "表达",
+  COM: "承诺",
 };
 
 const TYPE_ORDER: PathCode[] = ["A", "B", "C", "D"];
@@ -232,7 +229,7 @@ function formatFeatureValue(feature: FeatureKey, value: number) {
 
 function collapsedActs(letterId: string) {
   const acts = [...(dataset.actsByLetter[letterId] ?? [])]
-    .filter((act) => act.type !== "MNT")
+    .filter((act) => act.type !== "EXP")
     .sort((a, b) => a.start - b.start);
   return acts.filter(
     (act, index) => index === 0 || act.type !== acts[index - 1].type,
@@ -241,7 +238,7 @@ function collapsedActs(letterId: string) {
 
 function firstRequest(letterId: string) {
   return [...(dataset.actsByLetter[letterId] ?? [])]
-    .filter((act) => act.type === "REQ")
+    .filter((act) => act.type === "DIR")
     .sort((a, b) => a.start - b.start)[0] ?? null;
 }
 
@@ -529,7 +526,7 @@ function EvidencePanel({
                   {acts.map((act, actIndex) => (
                     <span className="contents" key={act.id}>
                       {actIndex > 0 && <span className="text-[10px] text-[var(--line-dark)]">→</span>}
-                      <span className={`text-[10px] ${act.type === "REQ" ? "border-b border-[var(--purple)] text-[var(--purple)]" : "text-[var(--muted)]"}`}>{ACTION_LABELS[act.type]}</span>
+                      <span className={`text-[10px] ${act.type === "DIR" ? "border-b border-[var(--purple)] text-[var(--purple)]" : "text-[var(--muted)]"}`}>{ACTION_LABELS[act.type]}</span>
                     </span>
                   ))}
                 </div>

@@ -60,26 +60,20 @@ const POSITION_META: Record<Position, { label: string; phrase: string; code: str
   4: { label: "后两步", phrase: "请求后第2个行动", code: "+2" },
 };
 
-const ACTION_ORDER: StepType[] = ["INF", "PRS", "DSP", "REQ", "MNT", "NEG", "INS", "NONE"];
+const ACTION_ORDER: StepType[] = ["AST", "DIR", "EXP", "COM", "NONE"];
 const ACTION_LABELS: Record<StepType, string> = {
-  INF: "告知",
-  PRS: "赞扬",
-  DSP: "展示",
-  REQ: "连续请求",
-  MNT: "维系",
-  NEG: "协商",
-  INS: "训导",
+  AST: "陈述",
+  DIR: "连续请求",
+  EXP: "表达",
+  COM: "承诺",
   NONE: "无行动",
 };
 
 const ACTION_MEANINGS: Record<StepType, string> = {
-  INF: "交代事实、进展或背景",
-  PRS: "先给予肯定或赞许",
-  DSP: "先展示材料或成果",
-  REQ: "连续提出另一项请求",
-  MNT: "维持关系或表达关切",
-  NEG: "协商条件与处理方式",
-  INS: "给出指示或规劝",
+  AST: "交代事实、进展或背景",
+  DIR: "连续提出另一项请求",
+  EXP: "维持关系或表达关切",
+  COM: "协商条件与处理方式",
   NONE: "没有出现其他已标注行动",
 };
 
@@ -117,7 +111,7 @@ function makeEpisodes(): RequestEpisode[] {
     if (!letter) return [];
     const acts = [...rawActs].sort((a, b) => a.start - b.start);
     return acts.flatMap((request, index) => {
-      if (request.type !== "REQ") return [];
+      if (request.type !== "DIR") return [];
       const step = (offset: number): EpisodeStep => {
         const act = acts[index + offset] ?? null;
         return { type: act?.type ?? "NONE", act };
@@ -125,7 +119,7 @@ function makeEpisodes(): RequestEpisode[] {
       const steps: RequestEpisode["steps"] = [
         step(-2),
         step(-1),
-        { type: "REQ", act: request },
+        { type: "DIR", act: request },
         step(1),
         step(2),
       ];
@@ -564,7 +558,7 @@ function EpisodeLetter({ episode, selected }: { episode: RequestEpisode; selecte
       </div>
       <div className="flex flex-wrap items-center justify-between gap-3 border-t border-[var(--line)] pt-3">
         <p className="text-[11px] text-[var(--muted)]">
-          {episode.request.subtype ?? "请求"} · {MODE_LABELS[episode.request.mode] ?? episode.request.mode ?? "表达方式未标注"}
+          {episode.request.subtype ?? "请求"} · {MODE_LABELS[episode.request.mode as keyof typeof MODE_LABELS] ?? episode.request.mode ?? "表达方式未标注"}
         </p>
         <Link className="text-[12px] text-[var(--purple)] hover:underline" href={sourceHref(episode)}>
           打开原信条目 →
@@ -697,7 +691,7 @@ export function RequestComparisonPage() {
   }, []);
   const [recipient, setRecipient] = useState("缪荃孙");
   const [domain, setDomain] = useState<EventType | "ALL">("BIB");
-  const [selected, setSelected] = useState<SelectedCell>({ position: 1, type: "INF" });
+  const [selected, setSelected] = useState<SelectedCell>({ position: 1, type: "AST" });
   const [screen, setScreen] = useState<Screen>("overview");
   const [showPaths, setShowPaths] = useState(false);
   const [showAllTypical, setShowAllTypical] = useState(false);

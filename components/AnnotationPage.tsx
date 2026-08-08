@@ -1,22 +1,21 @@
-"use client";
-
-import { useState } from "react";
-import { AnnotationLayerSidebar } from "./AnnotationLayerSidebar";
 import { FeaturedLetterViewer } from "./FeaturedLetterViewer";
-import { LetterSearchBar } from "./LetterSearchBar";
-import { LetterSearchResults } from "./LetterSearchResults";
-import type { SearchScope } from "@/lib/types";
-
 export function AnnotationPage() {
-  const [search, setSearch] = useState<{ query: string; scope: SearchScope }>({ query: "", scope: "all" });
   return (
-    <main>
-      <div className="search-band"><div className="site-container"><LetterSearchBar initialValue={search.query} initialScope={search.scope} onSearch={(query, scope) => setSearch({ query, scope })} /></div></div>
-      <div className="site-container annotation-layout">
-        <AnnotationLayerSidebar />
-        <div className="annotation-main">
-          {search.query ? <LetterSearchResults query={search.query} scope={search.scope} onClear={() => setSearch((current) => ({ ...current, query: "" }))} /> : <FeaturedLetterViewer />}
-        </div>
+    <main className="annotation-system-page">
+      <div className="site-container annotation-system-shell">
+        <header className="annotation-system-header">
+          <div className="annotation-system-title">
+            <span>ANNOTATION SYSTEM</span>
+            <h1>三层标注体系</h1>
+          </div>
+        </header>
+
+        <section
+          className="annotation-primary-panel"
+          aria-label="阅读标注书信"
+        >
+          <FeaturedLetterViewer />
+        </section>
       </div>
     </main>
   );

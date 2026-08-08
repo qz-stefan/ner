@@ -6,14 +6,18 @@
     "node": ">=22.13.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+    "dev": "next dev --webpack",
+    "build": "next build --webpack",
+    "build:github": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/ner NEXT_PUBLIC_SITE_URL=https://zmiss0321-sudo.github.io/ner next build --webpack",
     "start": "next start",
     "dev:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
     "start:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext start",
     "test": "npm run build && node --test tests/rendered-html.test.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "data:classify": "node --experimental-strip-types scripts/classify-entities.ts",
+    "data:free-analysis": "node scripts/build-free-analysis-data.mjs",
+    "data:refresh": "node scripts/build-data.mjs && npm run data:classify && npm run data:free-analysis",
     "db:generate": "drizzle-kit generate"
   },
   "dependencies": {

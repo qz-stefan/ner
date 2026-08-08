@@ -36,7 +36,7 @@ interface RequestEpisode {
   id: string;
   letter: Letter;
   request: ActMention;
-  steps: [StepType, StepType, "REQ", StepType, StepType];
+  steps: [StepType, StepType, "DIR", StepType, StepType];
   acts: [ActMention | null, ActMention | null, ActMention, ActMention | null, ActMention | null];
 }
 
@@ -51,24 +51,18 @@ const academic = academicSource as unknown as {
 };
 
 const ACTION_LABELS: Record<StepType, string> = {
-  INF: "告知",
-  PRS: "赞扬",
-  DSP: "展示",
-  REQ: "请求",
-  MNT: "维系",
-  NEG: "协商",
-  INS: "训导",
+  AST: "陈述",
+  DIR: "请求",
+  EXP: "表达",
+  COM: "承诺",
   NONE: "无行动",
 };
 
 const ACTION_MEANINGS: Record<StepType, string> = {
-  INF: "交代事实、进展或通信背景",
-  PRS: "通过肯定、称许或评价建立语境",
-  DSP: "展示书籍、材料或阶段性成果",
-  REQ: "连续提出另一项需要办理的事项",
-  MNT: "补充问候、关切或关系维系",
-  NEG: "协商条件、时机与处理方式",
-  INS: "给出指示、规劝或行动安排",
+  AST: "交代事实、进展或通信背景",
+  DIR: "连续提出另一项需要办理的事项",
+  EXP: "补充问候、关切或关系维系",
+  COM: "协商条件、时机与处理方式",
   NONE: "该位置没有其他已标注行动",
 };
 
@@ -117,7 +111,7 @@ const VIEW_LABELS = ["请求类型总览", "通信行动结构", "请求前后�
 const TYPE_ORDER: PathCode[] = ["A", "B", "C", "D"];
 const POSITIONS: Position[] = [0, 1, 3, 4];
 const POSITION_LABELS: Record<Position, string> = { 0: "前二步", 1: "前一步", 3: "后一步", 4: "后二步" };
-const MATRIX_ACTIONS: StepType[] = ["INF", "PRS", "DSP", "REQ", "MNT", "NEG", "INS", "NONE"];
+const MATRIX_ACTIONS: StepType[] = ["AST", "DIR", "EXP", "COM", "NONE"];
 const letterMap = new Map(dataset.letters.map((letter) => [letter.id, letter]));
 const assignmentMap = new Map(clustering.assignments.map((assignment) => [assignment.letterId, assignment]));
 
@@ -129,7 +123,7 @@ function cleanText(text: string | null | undefined, max = 74) {
 
 function firstRequest(letterId: string) {
   return [...(dataset.actsByLetter[letterId] ?? [])]
-    .filter((act) => act.type === "REQ")
+    .filter((act) => act.type === "DIR")
     .sort((a, b) => a.start - b.start)[0] ?? null;
 }
 
@@ -154,7 +148,7 @@ function makeEpisodes(): RequestEpisode[] {
     if (!letter) return [];
     const acts = [...rawActs].sort((a, b) => a.start - b.start);
     return acts.flatMap((act, index) => {
-      if (act.type !== "REQ") return [];
+      if (act.type !== "DIR") return [];
       const beforeTwo = acts[index - 2] ?? null;
       const beforeOne = acts[index - 1] ?? null;
       const afterOne = acts[index + 1] ?? null;
@@ -163,7 +157,7 @@ function makeEpisodes(): RequestEpisode[] {
         id: act.id,
         letter,
         request: act,
-        steps: [beforeTwo?.type ?? "NONE", beforeOne?.type ?? "NONE", "REQ", afterOne?.type ?? "NONE", afterTwo?.type ?? "NONE"],
+        steps: [beforeTwo?.type ?? "NONE", beforeOne?.type ?? "NONE", "DIR", afterOne?.type ?? "NONE", afterTwo?.type ?? "NONE"],
         acts: [beforeTwo, beforeOne, act, afterOne, afterTwo],
       } as RequestEpisode];
     });
@@ -187,7 +181,7 @@ const TOP_PATH = groupPaths(EPISODES)[0];
 
 function compactActs(letterId: string) {
   const acts = [...(dataset.actsByLetter[letterId] ?? [])]
-    .filter((act) => act.type !== "MNT")
+    .filter((act) => act.type !== "EXP")
     .sort((a, b) => a.start - b.start);
   return acts.filter((act, index) => index === 0 || act.type !== acts[index - 1].type).slice(0, 6);
 }
@@ -283,7 +277,7 @@ function RequestTypeOverview() {
 }
 
 function CommunicationStructure() {
-  const [selected, setSelected] = useState<{ position: Position; type: StepType }>({ position: 1, type: "INF" });
+  const [selected, setSelected] = useState<{ position: Position; type: StepType }>({ position: 1, type: "AST" });
   const counts = useMemo(() => {
     const map = new Map<string, number>();
     POSITIONS.forEach((position) => MATRIX_ACTIONS.forEach((type) => {
@@ -336,7 +330,7 @@ function CommunicationStructure() {
       <aside className="flex min-h-[430px] flex-col border-y border-[var(--line-dark)] py-5" aria-live="polite">
         <p className="text-[10px] tracking-[.14em] text-[var(--blue)]">当前行动结构</p>
         <div className="mt-4 flex flex-wrap items-center gap-1.5 text-[11px] leading-6">
-          {path.path.split("→").map((code, index) => <span className="contents" key={`${code}-${index}`}>{index > 0 && <i className="not-italic text-[var(--line-dark)]">→</i>}<span className={code === "REQ" ? "text-[var(--purple)]" : code === "NONE" ? "text-[var(--muted)]" : "text-[var(--ink)]"}>{ACTION_LABELS[code as StepType]}</span></span>)}
+          {path.path.split("→").map((code, index) => <span className="contents" key={`${code}-${index}`}>{index > 0 && <i className="not-italic text-[var(--line-dark)]">→</i>}<span className={code === "DIR" ? "text-[var(--purple)]" : code === "NONE" ? "text-[var(--muted)]" : "text-[var(--ink)]"}>{ACTION_LABELS[code as StepType]}</span></span>)}
         </div>
         <dl className="mt-5 grid grid-cols-2 border-y border-[var(--line)] py-4">
           <div><dt className="text-[9px] text-[var(--muted)]">当前位置出现</dt><dd className="mt-1 text-[23px]">{matched.length}<small className="ml-1 text-[10px] text-[var(--muted)]">次</small></dd></div>
@@ -354,7 +348,7 @@ function CommunicationStructure() {
 }
 
 function BeforeAfterDistribution() {
-  const [selected, setSelected] = useState<{ stage: "before" | "after"; type: StepType }>({ stage: "before", type: "INF" });
+  const [selected, setSelected] = useState<{ stage: "before" | "after"; type: StepType }>({ stage: "before", type: "AST" });
   const distributions = useMemo(() => {
     const summarize = (positions: number[]) => MATRIX_ACTIONS.filter((type) => type !== "NONE").map((type) => ({
       type,

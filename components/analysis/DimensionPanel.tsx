@@ -8,22 +8,16 @@ import type { EntityType } from "@/lib/types";
 import type {
   AnalysisConfig,
   DimensionKey,
-  Filter,
   MetricId,
   ChartType,
 } from "@/lib/analysis/types";
-import { FilterRow } from "./FilterRow";
 import type { SecondaryCategory } from "@/lib/topic-config";
 
 interface DimensionPanelProps {
   config: AnalysisConfig;
   onChange: (config: AnalysisConfig) => void;
   onAnalyze: () => void;
-  unknownYearCount: number;
-  cacheEpoch: number;
 }
-
-let filterIdCounter = 0;
 
 const fieldClass =
   "h-[52px] w-full border border-[var(--line-dark)] bg-[var(--surface)] px-3 font-serif text-[16px] text-[var(--ink)] outline-none transition focus:border-[var(--purple)] focus-visible:ring-1 focus-visible:ring-[var(--purple)] disabled:cursor-not-allowed disabled:opacity-55";
@@ -202,7 +196,6 @@ export function DimensionPanel({
   config,
   onChange,
   onAnalyze,
-  unknownYearCount,
 }: DimensionPanelProps) {
   var parsed = parseConfig(config);
   var layer = parsed.layer;
@@ -303,31 +296,8 @@ export function DimensionPanel({
     onChange(buildConfig({ metric: metric }, layer, typeKey, selectedSubtypes, groupByKey));
   };
 
-  // ── filters ───────────────────────────────────────────────
-
   var update = function (patch: Partial<AnalysisConfig>) {
     onChange(Object.assign({}, config, patch));
-  };
-
-  var handleAddFilter = function () {
-    filterIdCounter += 1;
-    var filter: Filter = {
-      id: "filter_" + Date.now() + "_" + filterIdCounter,
-      dimension: "recipient",
-      operator: "equals",
-      value: "",
-    };
-    update({ filters: config.filters.concat([filter]) });
-  };
-
-  var handleUpdateFilter = function (updated: Filter) {
-    update({
-      filters: config.filters.map(function (f) { return f.id === updated.id ? updated : f; }),
-    });
-  };
-
-  var handleRemoveFilter = function (id: string) {
-    update({ filters: config.filters.filter(function (f) { return f.id !== id; }) });
   };
 
   // ── Analysis statement ────────────────────────────────────
@@ -553,66 +523,6 @@ export function DimensionPanel({
             {statement}
           </p>
         </div>
-
-        {/* Filters */}
-        <section aria-labelledby="filter-heading" className="pt-2">
-          <div className="mb-3 flex items-center justify-between gap-4">
-            <div>
-              <h2
-                id="filter-heading"
-                className="text-[17px] font-semibold tracking-[.04em] text-[var(--ink)]"
-              >
-                {"筛选条件"}
-              </h2>
-              <p className="mt-1 text-[15px] leading-6 text-[var(--muted)]">
-                {"可选，多条条件按“且”关系应用"}
-              </p>
-            </div>
-            <span className="text-[15px] text-[#9a949a]">
-              {config.filters.length + " 条"}
-            </span>
-          </div>
-
-          {config.filters.length ? (
-            <div className="grid gap-3 lg:grid-cols-2">
-              {config.filters.map(function (filter) {
-                return (
-                  <FilterRow
-                    key={filter.id}
-                    filter={filter}
-                    onUpdate={handleUpdateFilter}
-                    onRemove={handleRemoveFilter}
-                  />
-                );
-              })}
-            </div>
-          ) : (
-            <p className="border border-dashed border-[var(--line)] px-3 py-3 text-center text-[15px] text-[#9a949a]">
-              {"当前显示全部数据"}
-            </p>
-          )}
-
-          <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
-            <button
-              type="button"
-              onClick={handleAddFilter}
-              className="border border-[var(--line-dark)] bg-transparent px-3 py-2 text-[15px] font-serif text-[var(--purple)] transition hover:border-[var(--purple)] hover:bg-[var(--purple-pale)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--purple)]"
-            >
-              {"＋ 添加筛选"}
-            </button>
-            <label className="flex cursor-pointer items-center gap-2 text-[15px] text-[var(--ink)]">
-              <input
-                type="checkbox"
-                checked={config.excludeUnknownYear}
-                onChange={function (e) {
-                  update({ excludeUnknownYear: e.target.checked });
-                }}
-                className="size-4 accent-[var(--purple)]"
-              />
-              {"排除无年份书信（" + unknownYearCount + " 封）"}
-            </label>
-          </div>
-        </section>
 
         {/* Start button */}
         <div className="flex flex-col items-start justify-between gap-3 pt-2 sm:flex-row sm:items-center">

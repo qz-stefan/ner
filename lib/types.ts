@@ -1,6 +1,6 @@
 export type EntityType = "PER" | "LOC" | "BOK" | "VER" | "TIM" | "OFF" | "ORG" | "KIN" | "AST";
 export type EventType = "BIB" | "ACA" | "SOC" | "POL" | "FAM";
-export type ActType = "REQ" | "DSP" | "INF" | "PRS" | "MNT" | "INS" | "NEG";
+export type ActType = "AST" | "DIR" | "EXP" | "COM";
 
 export interface Letter {
   id: string;
@@ -56,7 +56,7 @@ export interface ActMention {
   letterId: string;
   type: ActType;
   subtype: string | null;
-  mode: string;
+  mode?: string;
   start: number;
   end: number;
   originalText: string;
@@ -65,9 +65,29 @@ export interface ActMention {
   addressee: string[];
   orientation: string | null;
   contentDomains: string[];
-  eventLinks: { eventId: string; relation: string; confidence: string }[];
+  eventLinks: ActEventLink[];
   eventLinkStatus: string | null;
   annotationStatus: string;
+  /** JSONL source fields */
+  actGroupId: string | null;
+  actGroupType: string | null;
+  actGroupLabel: string | null;
+  contextSpan: [number, number] | null;
+  quoteSpan: [number, number] | null;
+  quoteType: string | null;
+  orientationSubtype: string | null;
+  orientationEvidence: string | null;
+  contentDomainEvidence: string | null;
+  entityLinks: string[];
+  noEventReason: string | null;
+}
+
+export interface ActEventLink {
+  eventId: string;
+  relation: string;
+  confidence: string;
+  evidenceSpan: [number, number] | null;
+  uncertaintyNote: string | null;
 }
 
 export interface Dataset {

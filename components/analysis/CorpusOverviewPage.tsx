@@ -13,16 +13,13 @@ const END_YEAR = 1926;
 const YEARS = Array.from({ length: END_YEAR - START_YEAR + 1 }, (_, index) => START_YEAR + index);
 const ENTITY_ORDER: EntityType[] = ["PER", "LOC", "BOK", "VER", "TIM", "OFF", "ORG", "KIN", "AST"];
 const EVENT_ORDER: EventType[] = ["SOC", "BIB", "ACA", "POL", "FAM"];
-const ACTION_ORDER: ActType[] = ["INF", "PRS", "MNT", "REQ", "DSP", "NEG"];
+const ACTION_ORDER: ActType[] = ["AST", "DIR", "EXP", "COM"];
 
 const ACTION_LABELS: Record<ActType, string> = {
-  INF: "告知",
-  PRS: "说服",
-  MNT: "维系",
-  REQ: "请求",
-  DSP: "展示",
-  NEG: "协商",
-  INS: "训导",
+  AST: "陈述",
+  DIR: "指示",
+  EXP: "表达",
+  COM: "承诺",
 };
 
 const ENTITY_COLORS: Record<EntityType, string> = {
@@ -31,7 +28,7 @@ const ENTITY_COLORS: Record<EntityType, string> = {
 };
 
 const ACTION_COLORS: Record<ActType, string> = {
-  INF: "#526f67", PRS: "#799087", MNT: "#a2afa7", REQ: "#8f6d5d", DSP: "#6d7185", NEG: "#ad9a77", INS: "#8e8173",
+  AST: "#526f67", DIR: "#8f6d5d", EXP: "#6d7185", COM: "#ad9a77",
 };
 
 const EVENT_COLORS: Record<EventType, string> = {

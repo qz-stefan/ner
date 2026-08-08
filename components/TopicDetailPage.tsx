@@ -208,7 +208,7 @@ export function TopicDetailPage({ slug }: { slug: string }) {
     <main className="topic-detail-page site-container">
       {/* 1. 返回链接 */}
       <Link className="back-link" href="/topics">
-        ← 返回实体分类检索
+        ← 返回专项知识索引
       </Link>
 
       {/* 2. 紧凑型专题标题区 */}

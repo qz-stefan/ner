@@ -95,7 +95,7 @@ const PATH_META: Record<PathCode, {
 };
 
 const STEP_LABELS: Record<StepType, string> = {
-  INF: "告知", PRS: "赞扬", DSP: "展示", REQ: "连续请求", MNT: "维系", NEG: "协商", INS: "训导", NONE: "无行动",
+  AST: "陈述", DIR: "连续请求", EXP: "表达", COM: "承诺", NONE: "无行动",
 };
 
 const FEATURE_LABELS: Record<FeatureKey, string> = {
@@ -113,9 +113,8 @@ const CURATED_TYPE_LETTERS: Record<PathCode, string[]> = {
 };
 
 const ACTION_MEANINGS: Record<StepType, string> = {
-  INF: "交代事实、进展或背景", PRS: "先给予肯定或赞许", DSP: "先展示材料或成果",
-  REQ: "连续提出另一项请求", MNT: "维持关系或表达关切", NEG: "协商条件与处理方式",
-  INS: "给出指示或规劝", NONE: "没有出现其他已标注行动",
+  AST: "交代事实、进展或背景", DIR: "连续提出另一项请求", EXP: "维持关系或表达关切",
+  COM: "协商条件与处理方式", NONE: "没有出现其他已标注行动",
 };
 
 // ── 工具函数 ────────────────────────────────────────────────────
@@ -165,12 +164,12 @@ function makeEpisodes(): RequestEpisode[] {
     if (!letter) return [];
     const acts = [...rawActs].sort((a, b) => a.start - b.start);
     return acts.flatMap((request, index) => {
-      if (request.type !== "REQ") return [];
+      if (request.type !== "DIR") return [];
       const step = (offset: number) => {
         const act = acts[index + offset] ?? null;
         return { type: (act?.type ?? "NONE") as StepType, act };
       };
-      const steps: RequestEpisode["steps"] = [step(-2), step(-1), { type: "REQ", act: request }, step(1), step(2)];
+      const steps: RequestEpisode["steps"] = [step(-2), step(-1), { type: "DIR", act: request }, step(1), step(2)];
       return [{
         id: request.id, letter, request, recipient: letter.recipient,
         domain: linkedDomain(letterId, request), steps,
@@ -395,7 +394,7 @@ function TypicalLettersModule({ typeCode, episodes }: { typeCode: PathCode; epis
                       <p className="text-[10px] tracking-[.1em] text-[var(--muted)]">白话解释</p>
                       <p className="mt-1 text-[12px] leading-6 text-[var(--ink)]">
                         {ep.steps.filter(s => s.type !== "NONE" && s.act).map((s, i) => {
-                          const label = s.type === "REQ" ? "提出请求" : ACTION_MEANINGS[s.type];
+                          const label = s.type === "DIR" ? "提出请求" : ACTION_MEANINGS[s.type];
                           const text = clip(s.act?.originalText, 60);
                           return <span key={i}>{i > 0 ? "；然后" : ""}{label}（"{text}"）</span>;
                         })}
