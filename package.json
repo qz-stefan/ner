@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "next dev --webpack",
     "build": "next build --webpack",
-    "build:github": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/ner NEXT_PUBLIC_SITE_URL=https://zmiss0321-sudo.github.io/ner next build --webpack",
+    "build:github": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/ner NEXT_PUBLIC_SITE_URL=https://qz-stefan.github.io/ner next build --webpack",
     "start": "next start",
     "dev:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext dev",
     "build:sites": "WRANGLER_LOG_PATH=.wrangler/wrangler.log vinext build",
